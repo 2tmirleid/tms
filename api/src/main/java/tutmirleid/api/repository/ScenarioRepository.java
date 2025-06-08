@@ -23,4 +23,7 @@ public interface ScenarioRepository extends CrudRepository<ScenarioEntity, Long>
                         ORDER BY s.id, ss.id
             """, nativeQuery = true)
     List<ScenarioWithStepsDTO> getScenarioWithSteps();
+
+    @Override
+    List<ScenarioEntity> findAll();
 }

@@ -1,6 +1,6 @@
 <template>
   <section class="scenario-list">
-    <div class="scenario-list-header">
+    <div class="scenario-list__header">
       header
     </div>
 
@@ -9,10 +9,12 @@
           class="scenario-preview"
           v-for="(scenario, index) in scenarios"
           :key="index"
+
+          @click="$emit('select', scenario)"
       >
-        <a :href="scenario.id">
-          <span>{{ scenario.title }}</span><span id="id">#{{ scenario.id }}</span>
-        </a>
+
+        <span>{{ scenario.title }}</span><span id="id">#{{ scenario.id }}</span>
+
       </li>
     </ul>
   </section>
@@ -25,15 +27,26 @@ export default {
   data() {
     return {
       scenarios: [],
+      scenario: {}
     }
   },
   methods: {
     async getScenarios() {
-      const scenarioService = new ScenarioMethods();
+      const scenarioMethods = new ScenarioMethods();
 
       try {
-        const response = await scenarioService.getScenariosList();
+        const response = await scenarioMethods.getScenariosList();
         this.scenarios = response.data;
+      } catch (error) {
+        console.error("Error while getting scenarios: ", error);
+      }
+    },
+    async getScenarioByID(id) {
+      const scenarioMethods = new ScenarioMethods();
+
+      try {
+        const response = await scenarioMethods.getScenarioByID(id);
+        this.scenario = response.data;
       } catch (error) {
         console.error("Error while getting scenarios: ", error);
       }
@@ -47,9 +60,12 @@ export default {
 
 <style scoped>
 .scenario-list {
-  width: 600px;
+  width: 40%;
   height: calc(100vh - 60px);
-  border: 1px solid teal;
+  border: 1px solid #e8edf1;
+  background-color: #FFFFFF;
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
 
   .scenarios {
     padding: 18px 18px 18px 18px;
@@ -61,16 +77,14 @@ export default {
     .scenario-preview {
       padding: 5px 5px 5px 5px;
       border-radius: 5px;
+      font-family: Poppins, sans-serif;
+      font-size: 14px;
+      color: #000000;
 
-      a {
-        text-decoration: none;
-        font-family: Poppins, sans-serif;
-        font-size: 14px;
-        color: #000000;
+      display: flex;
+      gap: 10px;
 
-        display: flex;
-        gap: 10px;
-      }
+      cursor: pointer;
 
       #id {
         color: gray;
@@ -83,8 +97,8 @@ export default {
   }
 }
 
-.scenario-list-header {
+.scenario-list__header {
   height: 150px;
-  border-bottom: 1px solid teal;
+  border-bottom: 1px solid #e8edf1;
 }
 </style>

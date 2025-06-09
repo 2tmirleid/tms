@@ -7,7 +7,9 @@ import tutmirleid.api.model.Scenario;
 import tutmirleid.api.repository.ScenarioRepository;
 import tutmirleid.api.utils.exception.ScenarioNotFoundException;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScenarioService {
@@ -29,6 +31,13 @@ public class ScenarioService {
         ifSteps(scenarioEntity);
 
         scenarioRepository.save(scenarioEntity);
+    }
+
+    public List<Scenario> getScenarios() {
+        return scenarioRepository.findAll()
+                .stream()
+                .map(Scenario::toModel)
+                .collect(Collectors.toList());
     }
 
     public Scenario getScenarioWithSteps(Long id) throws ScenarioNotFoundException {

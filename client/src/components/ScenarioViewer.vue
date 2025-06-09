@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .scenario-viewer {
-  width: 100%;
+  width: 60%;
   border-top: 1px solid #e8edf1;
   border-right: 1px solid #e8edf1;
   border-bottom: 1px solid #e8edf1;

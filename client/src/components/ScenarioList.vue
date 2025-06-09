@@ -17,13 +17,18 @@
 
       </li>
     </ul>
+
+    <ScenarioCreator @scenario-created="handleScenarioCreated"/>
   </section>
 </template>
 
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import ScenarioCreator from "@/components/ScenarioCreator.vue";
 
 export default {
+  components: {ScenarioCreator},
+
   data() {
     return {
       scenarios: [],
@@ -41,15 +46,8 @@ export default {
         console.error("Error while getting scenarios: ", error);
       }
     },
-    async getScenarioByID(id) {
-      const scenarioMethods = new ScenarioMethods();
-
-      try {
-        const response = await scenarioMethods.getScenarioByID(id);
-        this.scenario = response.data;
-      } catch (error) {
-        console.error("Error while getting scenarios: ", error);
-      }
+    async handleScenarioCreated() {
+      await this.getScenarios();
     }
   },
   mounted() {
@@ -67,17 +65,19 @@ export default {
   border-bottom-left-radius: 20px;
   border-top-left-radius: 20px;
 
+  display: flex;
+  flex-direction: column;
+
   .scenarios {
+    flex: 1;
+    overflow-y: auto;
     padding: 18px 18px 18px 18px;
     list-style: none;
-
-    display: flex;
-    flex-direction: column;
 
     .scenario-preview {
       padding: 5px 5px 5px 5px;
       border-radius: 5px;
-      font-family: Poppins, sans-serif;
+      font-family: "JetBrains Mono", sans-serif;
       font-size: 14px;
       color: #000000;
 
@@ -98,6 +98,7 @@ export default {
 }
 
 .scenario-list__header {
+  flex-shrink: 0;
   height: 150px;
   border-bottom: 1px solid #e8edf1;
 }

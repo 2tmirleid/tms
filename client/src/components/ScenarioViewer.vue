@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .scenario-viewer {
-  width: 100%;
+  width: 60%;
   border-top: 1px solid #e8edf1;
   border-right: 1px solid #e8edf1;
   border-bottom: 1px solid #e8edf1;
@@ -104,7 +104,7 @@ export default {
   }
 
   padding-top: 25px;
-  font-family: Poppins, sans-serif;
+  font-family: "JetBrains Mono", sans-serif;
 
   display: flex;
   flex-direction: column;
@@ -178,7 +178,7 @@ export default {
 
   h3 {
     font-weight: normal;
-    font-family: Poppins, sans-serif;
+    font-family: "JetBrains Mono", sans-serif;
     color: #000000;
   }
 

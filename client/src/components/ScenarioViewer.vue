@@ -73,10 +73,21 @@ export default {
       } catch (error) {
         console.error("Error while getting scenarios: ", error);
       }
-    }
+    },
   },
-  mounted() {
-    this.getScenarioByID(this.scenario.id);
+  // mounted() {
+  //   this.getScenarioByID(this.scenario.id);
+  // },
+  watch: {
+    'scenario.id': {
+      immediate: true,
+      deep: true,
+      handler(newID) {
+        if (newID) {
+          this.getScenarioByID(newID);
+        }
+      }
+    }
   }
 }
 </script>
@@ -142,6 +153,8 @@ export default {
     }
 
     tbody {
+      font-size: 15px;
+
       tr {
         display: flex;
         justify-content: space-between;

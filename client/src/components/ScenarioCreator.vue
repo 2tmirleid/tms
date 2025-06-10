@@ -71,7 +71,7 @@ export default {
   font-size: 15px;
   font-weight: normal;
 
-  background: none;
+  background: #FFFFFF;
   border: 1px solid #e8edf1;
   border-radius: 10px;
 
@@ -108,7 +108,7 @@ export default {
   font-size: 15px;
   font-weight: normal;
 
-  background: none;
+  background: #FFFFFF;
   border: 1px solid #e8edf1;
   border-radius: 10px;
 

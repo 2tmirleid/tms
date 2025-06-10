@@ -11,10 +11,30 @@
           :key="index"
 
           @click="$emit('select', scenario)"
+          @dblclick="handleTitleDbClick(scenario.id)"
       >
+        <span
+            v-if="editedTitleID !== scenario.id"
+            class="title"
+        >
+          {{ scenario.title }}
+          <span
+              class="id"
+          >
+            #{{ scenario.id }}
+          </span>
+        </span>
 
-        <span>{{ scenario.title }}</span><span id="id">#{{ scenario.id }}</span>
-
+        <input
+            v-else
+            type="text"
+            ref="scenarioInput"
+            v-model="updatedScenarioTitle"
+            class="new-scenario-title"
+            :placeholder="scenario.title"
+            @blur="editedTitleID = 0"
+            @keyup.enter="updateScenarioTitle(scenario.id)"
+        />
       </li>
     </ul>
 
@@ -32,7 +52,10 @@ export default {
   data() {
     return {
       scenarios: [],
-      scenario: {}
+      scenario: {},
+      isNewTitle: false,
+      editedTitleID: 0,
+      updatedScenarioTitle: ''
     }
   },
   methods: {
@@ -48,6 +71,34 @@ export default {
     },
     async handleScenarioCreated() {
       await this.getScenarios();
+    },
+    handleTitleDbClick(id) {
+      this.editedTitleID = id;
+      this.isNewTitle = true;
+
+      this.$nextTick(() => {
+        if (this.$refs.scenarioInput && this.$refs.scenarioInput[0]) {
+          this.$refs.scenarioInput[0].focus();
+        }
+      });
+    },
+    async updateScenarioTitle(id) {
+      try {
+        const scenarioMethods = new ScenarioMethods();
+
+        await scenarioMethods.updateScenarioTitle(id, this.updatedScenarioTitle);
+
+        this.isNewTitle = false;
+        this.editedTitleID = 0;
+        this.updatedScenarioTitle = '';
+
+        await this.getScenarios();
+
+        this.$emit('scenario-updated', id);
+
+      } catch (e) {
+        console.error("Error while saving new title: ", e);
+      }
     }
   },
   mounted() {
@@ -86,7 +137,12 @@ export default {
 
       cursor: pointer;
 
-      #id {
+      .title {
+        display: flex;
+        gap: 10px;
+      }
+
+      .id {
         color: gray;
       }
     }
@@ -95,6 +151,25 @@ export default {
       background-color: #edf1f5;
     }
   }
+}
+
+.new-scenario-title {
+  width: 40%;
+
+  padding: 5px 5px 5px 10px;
+
+  font-family: "JetBrains Mono", sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+
+  background: #FFFFFF;
+  border: 1px solid #e8edf1;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+  outline: none;
 }
 
 .scenario-list__header {

@@ -57,7 +57,7 @@ public class ScenarioController extends BaseController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Object> updateScenario(@PathVariable Long id,
                                                  @RequestBody ScenarioEntity scenarioEntity) {
         try {
@@ -67,7 +67,7 @@ public class ScenarioController extends BaseController {
         } catch (ScenarioNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Something went wrong...");
+            return ResponseEntity.badRequest().body("Something went wrong... " + e);
         }
     }
 

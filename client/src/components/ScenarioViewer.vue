@@ -6,43 +6,117 @@
     </div>
 
     <div class="scenario-viewer__content">
-      <div class="description">
-        <h4>Описание</h4>
+      <div class="description field">
+        <div class="content">
+          <h4>Описание</h4>
 
-        <p>
-          {{ localScenario.description }}
-        </p>
+          <p v-if="!isEdit.description">
+            {{ localScenario.description }}
+          </p>
+
+          <FieldRedactor
+              v-else
+              name="description"
+              v-model="updatedValue"
+              @keyup.enter="updateScenario"
+              :defaultValue="localScenario.description"
+              @blur="isEdit.description = false"
+          />
+        </div>
+
+        <img
+            v-if="!isEdit.description"
+            id="edit"
+            src="@/public/edit.svg"
+            alt="Редактировать"
+            @click="isEdit.description = true"
+        >
       </div>
 
-      <div class="precondition">
-        <h4>Предусловие</h4>
+      <div class="precondition field">
+        <div class="content">
+          <h4>Предусловие</h4>
 
-        <p>
-          {{ localScenario.precondition }}
-        </p>
+          <p v-if="!isEdit.precondition">
+            {{ localScenario.precondition }}
+          </p>
+
+          <FieldRedactor
+              v-else
+              name="precondition"
+              v-model="updatedValue"
+              @keyup.enter="updateScenario"
+              :defaultValue="localScenario.precondition"
+              @blur="isEdit.precondition = false"
+          />
+        </div>
+
+        <img
+            v-if="!isEdit.precondition"
+            id="edit"
+            src="@/public/edit.svg"
+            alt="Редактировать"
+            @click="isEdit.precondition = true"
+        >
       </div>
 
-      <div class="scenario">
-        <h4>Сценарий</h4>
+      <div class="scenario field">
+        <div class="content">
+          <h4>Сценарий</h4>
 
-        <table>
-          <thead>
-          <tr>
-            <th>Шаг</th>
-            <th>Ожидаемый результат</th>
-          </tr>
-          </thead>
+          <table>
+            <thead>
+            <tr>
+              <th>Шаг</th>
+              <th>Ожидаемый результат</th>
+            </tr>
+            </thead>
 
-          <tbody>
-          <tr
-              v-for="(step, index) in localScenario.steps"
-              :key="index"
+            <tbody>
+            <tr
+                v-for="(step, index) in localScenario.steps"
+                :key="index"
+            >
+              <th>{{ step.step }}</th>
+              <td>{{ step.expectedResult }}</td>
+            </tr>
+
+            <tr
+                v-if="isEdit.scenario"
+                class="temp_step_and_expected-result"
+            >
+              <th>
+                <input
+                    type="text"
+                    name="step"
+                    placeholder="Шаг"
+                    v-model="newStep.step"
+                    @keyup.enter="submitStep"
+                    @blur="handleUpdateScenario"
+                >
+              </th>
+              <td>
+                <input
+                    type="text"
+                    name="expectedResult"
+                    placeholder="Ожидаемый результат"
+                    v-model="newStep.expectedResult"
+                    @keyup.enter="submitStep"
+                    @blur="handleUpdateScenario"
+                >
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <button
+              class="addStep"
+              @click="handleUpdateScenario"
+              :class="{'active' : isEdit.scenario}"
           >
-            <th>{{ step.step }}</th>
-            <td>{{ step.expectedResult }}</td>
-          </tr>
-          </tbody>
-        </table>
+            <img src="@/public/add.svg" alt="Добавить шаг">
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -50,8 +124,10 @@
 
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import FieldRedactor from "@/components/UI/FieldRedactor.vue";
 
 export default {
+  components: {FieldRedactor},
   props: {
     scenario: {
       type: Object,
@@ -60,7 +136,17 @@ export default {
   },
   data() {
     return {
-      localScenario: {}
+      localScenario: {},
+      isEdit: {
+        description: false,
+        precondition: false,
+        scenario: false
+      },
+      updatedValue: '',
+      newStep: {
+        step: '',
+        expectedResult: ''
+      }
     }
   },
   methods: {
@@ -72,6 +158,64 @@ export default {
         this.localScenario = response.data;
       } catch (error) {
         console.error("Error while getting scenarios: ", error);
+      }
+    },
+    async updateScenario(event) {
+      const field = event.target.name;
+      const value = event.target.value;
+
+      const scenarioMethods = new ScenarioMethods();
+
+      try {
+        const response = await scenarioMethods.updateScenario(
+            this.localScenario.id,
+            field,
+            value
+        );
+
+        this.isEdit[field] = false;
+        await this.getScenarioByID(this.localScenario.id);
+      } catch (error) {
+        console.error("Error while getting scenarios: ", error);
+      }
+    },
+    handleUpdateScenario() {
+      this.isEdit.scenario = !this.isEdit.scenario;
+    },
+    async submitStep() {
+      const { step, expectedResult } = this.newStep;
+
+      if (!step.trim()) {
+        alert("Поле 'Шаг' не может быть пустым.");
+        return;
+      }
+
+      const updatedSteps = [
+        ...this.localScenario.steps,
+        {
+          step: step.trim(),
+          expectedResult: expectedResult?.trim() || ""
+        }
+      ];
+
+      const scenarioMethods = new ScenarioMethods();
+
+      try {
+        await scenarioMethods.updateScenario(
+            this.localScenario.id,
+            'steps',
+            updatedSteps
+        );
+
+        // Очистить временные поля и выйти из режима редактирования
+        this.newStep.step = '';
+        this.newStep.expectedResult = '';
+        this.isEdit.scenario = false;
+
+        // Обновить локальный сценарий
+        await this.getScenarioByID(this.localScenario.id);
+      } catch (error) {
+        console.error("Ошибка при добавлении шага:", error);
       }
     },
   },
@@ -197,6 +341,66 @@ export default {
 
   #id {
     color: gray;
+  }
+}
+
+.field {
+  display: flex;
+  gap: 20px;
+}
+
+#edit {
+  cursor: pointer;
+}
+
+.addStep {
+  position: relative;
+  bottom: 10px;
+  right: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 32px;
+  height: 32px;
+
+  border: 1px solid #e8edf1;
+  border-radius: 50%;
+
+  background: #FFFFFF;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+
+  cursor: pointer;
+}
+
+.addStep:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.addStep.active {
+  transform: rotate(43deg);
+}
+
+.scenario {
+  position: relative;
+  display: inline-block;
+}
+
+.temp_step_and_expected-result {
+  th,
+  td {
+    input {
+      width: 95%;
+      height: 100%;
+      font-family: "JetBrains Mono", sans-serif;
+      font-size: 15px;
+      background: none;
+      border: none;
+      outline: none;
+    }
   }
 }
 </style>

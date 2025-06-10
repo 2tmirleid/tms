@@ -86,7 +86,7 @@ export default {
       try {
         const scenarioMethods = new ScenarioMethods();
 
-        await scenarioMethods.updateScenarioTitle(id, this.updatedScenarioTitle);
+        await scenarioMethods.updateScenario(id, 'title', this.updatedScenarioTitle);
 
         this.isNewTitle = false;
         this.editedTitleID = 0;
@@ -159,7 +159,7 @@ export default {
   padding: 5px 5px 5px 10px;
 
   font-family: "JetBrains Mono", sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: normal;
 
   background: #FFFFFF;

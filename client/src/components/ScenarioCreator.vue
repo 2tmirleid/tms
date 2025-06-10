@@ -6,7 +6,7 @@
         @click="activateNewScenario"
         key="button"
     >
-      <img src="@/public/addScenario.svg" alt="Добавить сценарий"/>
+      <img src="../public/add.svg" alt="Добавить сценарий"/>
       Сценарий
     </button>
   </transition>

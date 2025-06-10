@@ -24,6 +24,7 @@ public class ScenarioEntity {
     private String precondition;
 
     @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private List<ScenarioStepEntity> steps;
 
     public ScenarioEntity() {}

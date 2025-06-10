@@ -9,11 +9,24 @@ const selectedScenario = ref(null);
 function handleScenarioSelect(scenario) {
   selectedScenario.value = scenario;
 }
+
+function handleScenarioUpdated(updatedScenarioId) {
+
+  console.log("Updated scenario ID received:", updatedScenarioId);
+
+  if (selectedScenario.value && selectedScenario.value.id === updatedScenarioId) {
+    // Создаем новый объект, чтобы форсировать обновление
+    selectedScenario.value = { ...selectedScenario.value };
+  }
+}
 </script>
 
 <template>
   <main>
-    <ScenarioList @select="handleScenarioSelect"/>
+    <ScenarioList
+        @select="handleScenarioSelect"
+        @scenario-updated="handleScenarioUpdated"
+    />
     <ScenarioViewer
         v-if="selectedScenario"
         :key="selectedScenario.id"

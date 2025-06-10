@@ -17,4 +17,12 @@ export class ScenarioMethods extends BaseMethods {
 
         await axios.post(`${this.BASE_URI}/scenarios/create`, body);
     }
+
+    async updateScenarioTitle(id, title) {
+        const body = {
+            "title": title
+        }
+
+        await axios.patch(`${this.BASE_URI}/scenarios/${id}`, body)
+    }
 }

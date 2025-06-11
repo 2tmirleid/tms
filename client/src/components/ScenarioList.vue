@@ -37,11 +37,11 @@
 </template>
 
 <script>
-import { ScenarioMethods } from "@/api/scenarioMethods.js";
+import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ScenarioCreator from "@/components/ScenarioCreator.vue";
 
 export default {
-  components: { ScenarioCreator },
+  components: {ScenarioCreator},
 
   data: () => ({
     scenarios: [],
@@ -102,11 +102,6 @@ export default {
 
 <style scoped>
 .scenario-list {
-  --border-color: #e8edf1;
-  --hover-bg: #edf1f5;
-  --id-color: #6c757d;
-  --font-primary: "JetBrains Mono", monospace, sans-serif;
-
   width: 40%;
   height: calc(100vh - 60px);
   border: 1px solid var(--border-color);

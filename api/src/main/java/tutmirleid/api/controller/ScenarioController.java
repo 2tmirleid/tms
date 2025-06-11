@@ -25,7 +25,7 @@ public class ScenarioController extends BaseController {
 
             return ResponseEntity.ok(scenarios);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Something went wrong...");
+            return ResponseEntity.badRequest().body(e);
         }
     }
 
@@ -38,12 +38,12 @@ public class ScenarioController extends BaseController {
         } catch (ScenarioNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Something went wrong...");
+            return ResponseEntity.badRequest().body(e);
         }
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createScenario(@RequestBody ScenarioEntity scenarioEntity) throws Exception {
+    public ResponseEntity<Object> createScenario(@RequestBody ScenarioEntity scenarioEntity) throws Exception {
         try {
             if (scenarioEntity.getTitle().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("Scenario title can not be null");
@@ -51,9 +51,9 @@ public class ScenarioController extends BaseController {
 
             this.scenarioService.createScenario(scenarioEntity);
 
-            return ResponseEntity.ok("Scenario has been created successful!");
+            return ResponseEntity.ok("Scenario has been created successfully!");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Something went wrong...");
+            return ResponseEntity.badRequest().body(e);
         }
     }
 
@@ -67,7 +67,7 @@ public class ScenarioController extends BaseController {
         } catch (ScenarioNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Something went wrong... " + e);
+            return ResponseEntity.badRequest().body(e);
         }
     }
 
@@ -76,11 +76,11 @@ public class ScenarioController extends BaseController {
         try {
             scenarioService.deleteScenario(id);
 
-            return ResponseEntity.ok("Scenario has been deleted successful!");
+            return ResponseEntity.ok("Scenario has been deleted successfully!");
         } catch (ScenarioNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Something went wrong...");
+            return ResponseEntity.badRequest().body(e);
         }
     }
 }

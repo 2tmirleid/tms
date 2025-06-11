@@ -6,7 +6,7 @@
         @click="activateNewScenario"
         key="button"
     >
-      <img src="../public/add.svg" alt="Добавить сценарий"/>
+      <AddIcon/>
       Сценарий
     </button>
   </transition>
@@ -14,13 +14,14 @@
   <transition name="fade-slide">
     <input
         v-if="isNewScenario"
-        ref="scenarioInput"
         class="new-scenario"
-        v-model="newScenarioName"
         type="text"
         placeholder="Название сценария"
-        @blur="isNewScenario = false"
+        ref="scenarioInput"
+        v-model="newScenarioName"
+        @blur="cancelSaving"
         @keyup.enter="saveScenario"
+        @keyup.esc="cancelSaving"
         key="input"
     />
   </transition>
@@ -28,12 +29,15 @@
 
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import AddIcon from "@/components/UI/Icons/AddIcon.vue";
 
 export default {
+  components: {AddIcon},
   data() {
     return {
       isNewScenario: false,
-      newScenarioName: ''
+      newScenarioName: '',
+      scenarioMethods: new ScenarioMethods()
     };
   },
   methods: {
@@ -43,16 +47,18 @@ export default {
         this.$refs.scenarioInput.focus();
       });
     },
+    cancelSaving() {
+      this.newScenarioName = '';
+      this.isNewScenario = false;
+    },
     async saveScenario() {
       try {
-        const scenarioMethods = new ScenarioMethods();
+        const body = { "title": this.newScenarioName }
 
-        await scenarioMethods.createScenario(this.newScenarioName);
+        await this.scenarioMethods.createScenario(body);
 
         this.$emit('scenario-created');
-
-        this.newScenarioName = '';
-        this.isNewScenario = false;
+        this.cancelSaving();
       } catch (e) {
         console.error("Error while creating scenario: ", e);
       }
@@ -64,24 +70,17 @@ export default {
 <style scoped>
 .new-scenario {
   width: 20%;
-
-  padding: 5px 10px 5px 10px;
-
-  font-family: "JetBrains Mono", sans-serif;
+  padding: 5px 10px;
+  font-family: var(--font-primary);
   font-size: 15px;
   font-weight: normal;
-
   background: #FFFFFF;
-  border: 1px solid #e8edf1;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-
   z-index: 999;
-
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
-
   outline: none;
-
   position: fixed;
   bottom: 40px;
   left: 25%;
@@ -90,30 +89,23 @@ export default {
 
 .scenario-creator {
   cursor: pointer;
-
   position: fixed;
   bottom: 40px;
   left: 25%;
   transform: translateX(-50%);
-
   display: flex;
   align-content: center;
   align-items: center;
   justify-content: center;
   gap: 10px;
-
-  padding: 5px 10px 5px 5px;
-
-  font-family: "JetBrains Mono", sans-serif;
+  padding: 5px 10px;
+  font-family: var(--font-primary);
   font-size: 15px;
   font-weight: normal;
-
   background: #FFFFFF;
-  border: 1px solid #e8edf1;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-
   z-index: 999;
-
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 }

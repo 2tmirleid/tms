@@ -6,175 +6,163 @@
 
     <ul class="scenarios">
       <li
+          v-for="scenario in scenarios"
+          :key="scenario.id"
           class="scenario-preview"
-          v-for="(scenario, index) in scenarios"
-          :key="index"
-
           @click="$emit('select', scenario)"
-          @dblclick="handleTitleDbClick(scenario.id)"
+          @dblclick="startEditTitle(scenario)"
       >
-        <span
-            v-if="editedTitleID !== scenario.id"
-            class="title"
-        >
-          {{ scenario.title }}
-          <span
-              class="id"
-          >
-            #{{ scenario.id }}
+        <template v-if="editedTitleID !== scenario.id">
+          <span class="title">
+            {{ scenario.title }}
+            <span class="id">#{{ scenario.id }}</span>
           </span>
-        </span>
+        </template>
 
         <input
             v-else
-            type="text"
-            ref="scenarioInput"
+            ref="titleInput"
             v-model="updatedScenarioTitle"
             class="new-scenario-title"
             :placeholder="scenario.title"
-            @blur="editedTitleID = 0"
-            @keyup.enter="updateScenarioTitle(scenario.id)"
+            @blur="cancelEdit"
+            @keyup.enter="saveTitle(scenario.id)"
+            @keyup.esc="cancelEdit"
         />
       </li>
     </ul>
 
-    <ScenarioCreator @scenario-created="handleScenarioCreated"/>
+    <ScenarioCreator @scenario-created="refreshScenarios"/>
   </section>
 </template>
 
 <script>
-import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import { ScenarioMethods } from "@/api/scenarioMethods.js";
 import ScenarioCreator from "@/components/ScenarioCreator.vue";
 
 export default {
-  components: {ScenarioCreator},
+  components: { ScenarioCreator },
 
-  data() {
-    return {
-      scenarios: [],
-      scenario: {},
-      isNewTitle: false,
-      editedTitleID: 0,
-      updatedScenarioTitle: ''
-    }
-  },
+  data: () => ({
+    scenarios: [],
+    editedTitleID: 0,
+    updatedScenarioTitle: '',
+    scenarioMethods: new ScenarioMethods()
+  }),
+
   methods: {
-    async getScenarios() {
-      const scenarioMethods = new ScenarioMethods();
-
+    async refreshScenarios() {
       try {
-        const response = await scenarioMethods.getScenariosList();
+        const response = await this.scenarioMethods.getScenariosList();
         this.scenarios = response.data;
       } catch (error) {
-        console.error("Error while getting scenarios: ", error);
+        console.error("Fetch scenarios error:", error);
       }
     },
-    async handleScenarioCreated() {
-      await this.getScenarios();
-    },
-    handleTitleDbClick(id) {
-      this.editedTitleID = id;
-      this.isNewTitle = true;
+
+    startEditTitle(scenario) {
+      this.editedTitleID = scenario.id;
+      this.updatedScenarioTitle = scenario.title;
 
       this.$nextTick(() => {
-        if (this.$refs.scenarioInput && this.$refs.scenarioInput[0]) {
-          this.$refs.scenarioInput[0].focus();
+        if (this.$refs.titleInput?.length) {
+          const input = this.$refs.titleInput[0];
+          input.focus();
         }
       });
     },
-    async updateScenarioTitle(id) {
+
+    cancelEdit() {
+      this.editedTitleID = 0;
+      this.updatedScenarioTitle = '';
+    },
+
+    async saveTitle(id) {
       try {
-        const scenarioMethods = new ScenarioMethods();
+        await this.scenarioMethods.updateScenario(
+            id,
+            'title',
+            this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title
+        );
 
-        await scenarioMethods.updateScenario(id, 'title', this.updatedScenarioTitle);
-
-        this.isNewTitle = false;
-        this.editedTitleID = 0;
-        this.updatedScenarioTitle = '';
-
-        await this.getScenarios();
-
+        await this.refreshScenarios();
         this.$emit('scenario-updated', id);
-
-      } catch (e) {
-        console.error("Error while saving new title: ", e);
+        this.cancelEdit();
+      } catch (error) {
+        console.error("Update title error:", error);
       }
     }
   },
+
   mounted() {
-    this.getScenarios();
+    this.refreshScenarios();
   }
 }
 </script>
 
 <style scoped>
 .scenario-list {
+  --border-color: #e8edf1;
+  --hover-bg: #edf1f5;
+  --id-color: #6c757d;
+  --font-primary: "JetBrains Mono", monospace, sans-serif;
+
   width: 40%;
   height: calc(100vh - 60px);
-  border: 1px solid #e8edf1;
+  border: 1px solid var(--border-color);
   background-color: #FFFFFF;
-  border-bottom-left-radius: 20px;
-  border-top-left-radius: 20px;
+  border-radius: 20px 0 0 20px;
 
   display: flex;
   flex-direction: column;
-
-  .scenarios {
-    flex: 1;
-    overflow-y: auto;
-    padding: 18px 18px 18px 18px;
-    list-style: none;
-
-    .scenario-preview {
-      padding: 5px 5px 5px 5px;
-      border-radius: 5px;
-      font-family: "JetBrains Mono", sans-serif;
-      font-size: 14px;
-      color: #000000;
-
-      display: flex;
-      gap: 10px;
-
-      cursor: pointer;
-
-      .title {
-        display: flex;
-        gap: 10px;
-      }
-
-      .id {
-        color: gray;
-      }
-    }
-
-    .scenario-preview:hover {
-      background-color: #edf1f5;
-    }
-  }
-}
-
-.new-scenario-title {
-  width: 40%;
-
-  padding: 5px 5px 5px 10px;
-
-  font-family: "JetBrains Mono", sans-serif;
-  font-size: 14px;
-  font-weight: normal;
-
-  background: #FFFFFF;
-  border: 1px solid #e8edf1;
-  border-radius: 10px;
-
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-
-  outline: none;
 }
 
 .scenario-list__header {
   flex-shrink: 0;
   height: 150px;
-  border-bottom: 1px solid #e8edf1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.scenarios {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+  list-style: none;
+}
+
+.scenario-preview {
+  display: flex;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+  gap: 10px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.scenario-preview .title {
+  display: flex;
+  gap: 10px;
+}
+
+.scenario-preview .title .id {
+  color: var(--id-color);
+}
+
+.scenario-preview:hover {
+  background-color: var(--hover-bg);
+}
+
+.new-scenario-title {
+  width: 100%;
+
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: normal;
+
+  background: none;
+  border: none;
+  outline: none;
 }
 </style>

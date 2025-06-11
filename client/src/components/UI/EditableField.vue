@@ -164,19 +164,32 @@ export default {
 
 .save-btn, .cancel-btn {
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
+  font-family: var(--font-primary);
+  transition: all 0.2s ease;
 }
 
 .save-btn {
   background-color: #4CAF50;
   color: white;
-  border: none;
+  border: 1px solid #4CAF50;
+}
+
+.save-btn:hover {
+  background-color: #43a047;
+  border-color: #43a047;
 }
 
 .cancel-btn {
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: #f8f9fa;
+  border: 1px solid #e8edf1;
+  color: #6c757d;
+}
+
+.cancel-btn:hover {
+  background-color: #e8edf1;
+  border-color: #dae0e5;
 }
 </style>

@@ -38,7 +38,7 @@
 
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
-import ScenarioCreator from "@/components/ScenarioCreator.vue";
+import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
 
 export default {
   components: {ScenarioCreator},
@@ -79,11 +79,9 @@ export default {
 
     async saveTitle(id) {
       try {
-        await this.scenarioMethods.updateScenario(
-            id,
-            'title',
-            this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title
-        );
+        const body = { "title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title }
+
+        await this.scenarioMethods.updateScenario(id, body);
 
         await this.refreshScenarios();
         this.$emit('scenario-updated', id);

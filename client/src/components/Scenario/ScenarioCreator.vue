@@ -6,7 +6,7 @@
         @click="activateNewScenario"
         key="button"
     >
-      <img src="../public/add.svg" alt="Добавить сценарий"/>
+      <AddIcon/>
       Сценарий
     </button>
   </transition>
@@ -29,8 +29,10 @@
 
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import AddIcon from "@/components/UI/Icons/AddIcon.vue";
 
 export default {
+  components: {AddIcon},
   data() {
     return {
       isNewScenario: false,
@@ -51,7 +53,9 @@ export default {
     },
     async saveScenario() {
       try {
-        await this.scenarioMethods.createScenario(this.newScenarioName);
+        const body = { "title": this.newScenarioName }
+
+        await this.scenarioMethods.createScenario(body);
 
         this.$emit('scenario-created');
         this.cancelSaving();

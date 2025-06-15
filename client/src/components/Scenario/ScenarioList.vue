@@ -1,8 +1,9 @@
 <template>
   <section class="scenario-list">
-    <div class="scenario-list__header">
-      header
-    </div>
+    <ScenarioListHeader
+        @refresh-scenarios-list="refreshScenarios"
+        @found-scenario="handleFoundScenario"
+    />
 
     <ul class="scenarios">
       <li
@@ -45,9 +46,10 @@
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
+import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
 
 export default {
-  components: {DeleteButton, ScenarioCreator},
+  components: {ScenarioListHeader, DeleteButton, ScenarioCreator},
 
   data: () => ({
     scenarios: [],
@@ -67,7 +69,10 @@ export default {
         console.error("Fetch scenarios error:" + error);
       }
     },
-
+    async handleFoundScenario(scenario) {
+      this.scenarios.length = 0;
+      this.scenarios.push(scenario.data);
+    },
     startEditTitle(scenario) {
       this.editedTitleID = scenario.id;
       this.updatedScenarioTitle = scenario.title;
@@ -139,12 +144,6 @@ export default {
 
   display: flex;
   flex-direction: column;
-}
-
-.scenario-list__header {
-  flex-shrink: 0;
-  height: 150px;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .scenarios {

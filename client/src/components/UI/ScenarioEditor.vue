@@ -36,6 +36,9 @@
         <td
             class="scenario-result"
             @dblclick="startEditStep(step, 'expectedResult')"
+            @mouseenter="toggleShowDeleteIcon"
+            @mousedown="toggleShowDeleteIcon"
+            @mouseleave="toggleShowDeleteIcon"
         >
           <input
               v-if="edit.active && step.id === edit.editableStepID && edit.editingField === 'expectedResult'"
@@ -50,6 +53,7 @@
             {{ step.expectedResult }}
           </div>
         </td>
+        <DeleteButton v-if="showDeleteIcon" @click="deleteStep(step.id)"/>
       </tr>
 
       <tr v-if="add" class="scenario-row temp-step">
@@ -83,9 +87,11 @@
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
+import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 
 export default {
   components: {
+    DeleteButton,
     AddStepButton,
   },
   props: {
@@ -116,6 +122,7 @@ export default {
         step: "",
         expectedResult: "",
       },
+      showDeleteIcon: false,
     };
   },
   methods: {
@@ -209,6 +216,21 @@ export default {
         alert("Не удалось сохранить изменения");
       }
     },
+    toggleShowDeleteIcon() {
+      setTimeout(() => {
+        this.showDeleteIcon = !this.showDeleteIcon;
+      }, 1000);
+    },
+    async deleteStep(id) {
+      try {
+        await this.scenarioMethods.deleteStep(id);
+
+        this.$emit('scenario-updated', this.scenarioID);
+      } catch(error) {
+        console.error("Ошибка при удалении шага:" + error);
+        alert("Не удалось удалить шаг");
+      }
+    }
   },
 };
 </script>

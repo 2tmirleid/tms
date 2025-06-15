@@ -17,4 +17,8 @@ export class ScenarioMethods extends BaseMethods {
     async updateScenario(id, body) {
         await axios.patch(`${this.BASE_URI}/scenarios/${id}`, body);
     }
+
+    async deleteStep(id) {
+        await axios.delete(`${this.BASE_URI}/scenarios/steps/${id}`);
+    }
 }

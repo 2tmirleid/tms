@@ -36,7 +36,7 @@
         <td
             class="scenario-result"
             @dblclick="startEditStep(step, 'expectedResult')"
-            @mouseenter="toggleShowDeleteIcon"
+            @mouseenter="toggleShowDeleteIcon(step.id)"
             @mousedown="toggleShowDeleteIcon"
             @mouseleave="toggleShowDeleteIcon"
         >
@@ -53,7 +53,10 @@
             {{ step.expectedResult }}
           </div>
         </td>
-        <DeleteButton v-if="showDeleteIcon" @click="deleteStep(step.id)"/>
+        <DeleteButton
+            v-if="showDeleteIcon && deletingStepID === step.id"
+            @click="deleteStep(step.id)"
+        />
       </tr>
 
       <tr v-if="add" class="scenario-row temp-step">
@@ -122,6 +125,7 @@ export default {
         step: "",
         expectedResult: "",
       },
+      deletingStepID: 0,
       showDeleteIcon: false,
     };
   },
@@ -216,8 +220,9 @@ export default {
         alert("Не удалось сохранить изменения");
       }
     },
-    toggleShowDeleteIcon() {
+    toggleShowDeleteIcon(id) {
       setTimeout(() => {
+        this.deletingStepID = id;
         this.showDeleteIcon = !this.showDeleteIcon;
       }, 1000);
     },
@@ -225,6 +230,7 @@ export default {
       try {
         await this.scenarioMethods.deleteStep(id);
 
+        this.deletingStepID = 0;
         this.$emit('scenario-updated', this.scenarioID);
       } catch(error) {
         console.error("Ошибка при удалении шага:" + error);

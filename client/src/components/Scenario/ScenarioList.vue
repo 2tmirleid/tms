@@ -11,6 +11,9 @@
           class="scenario-preview"
           @click="$emit('select', scenario)"
           @dblclick="startEditTitle(scenario)"
+          @mouseenter="toggleShowDeleteIcon(scenario.id)"
+          @mousedown="toggleShowDeleteIcon"
+          @mouseleave="toggleShowDeleteIcon"
       >
         <template v-if="editedTitleID !== scenario.id">
           <span class="title">
@@ -29,6 +32,8 @@
             @keyup.enter="saveTitle(scenario.id)"
             @keyup.esc="cancelEdit"
         />
+
+        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID" @click.stop="deleteScenario(scenario.id)"/>
       </li>
     </ul>
 
@@ -39,14 +44,17 @@
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
+import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 
 export default {
-  components: {ScenarioCreator},
+  components: {DeleteButton, ScenarioCreator},
 
   data: () => ({
     scenarios: [],
     editedTitleID: 0,
+    deletingTitleID: 0,
     updatedScenarioTitle: '',
+    showDeleteIcon: false,
     scenarioMethods: new ScenarioMethods()
   }),
 
@@ -56,7 +64,7 @@ export default {
         const response = await this.scenarioMethods.getScenariosList();
         this.scenarios = response.data;
       } catch (error) {
-        console.error("Fetch scenarios error:", error);
+        console.error("Fetch scenarios error:" + error);
       }
     },
 
@@ -87,7 +95,25 @@ export default {
         this.$emit('scenario-updated', id);
         this.cancelEdit();
       } catch (error) {
-        console.error("Update title error:", error);
+        console.error("Update title error:" +  error);
+      }
+    },
+
+    toggleShowDeleteIcon(id) {
+      setTimeout(() => {
+        this.deletingTitleID = id;
+        this.showDeleteIcon = !this.showDeleteIcon;
+      }, 1000);
+    },
+    async deleteScenario(id) {
+      try {
+        await this.scenarioMethods.deleteScenario(id);
+
+        this.deletingTitleID = 0;
+        await this.refreshScenarios();
+      } catch(error) {
+        console.error("Ошибка при удалении шага:" + error);
+        alert("Не удалось удалить шаг");
       }
     }
   },
@@ -100,6 +126,11 @@ export default {
 
 <style scoped>
 .scenario-list {
+  --border-color: #e8edf1;
+  --hover-bg: #edf1f5;
+  --id-color: #6c757d;
+  --font-primary: "JetBrains Mono", monospace, sans-serif;
+
   width: 40%;
   height: calc(100vh - 60px);
   border: 1px solid var(--border-color);
@@ -125,6 +156,7 @@ export default {
 
 .scenario-preview {
   display: flex;
+  justify-content: space-between;
   font-family: var(--font-primary);
   font-size: 14px;
   padding: 5px;
@@ -158,4 +190,5 @@ export default {
   border: none;
   outline: none;
 }
+
 </style>

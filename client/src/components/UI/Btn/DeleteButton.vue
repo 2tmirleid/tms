@@ -12,7 +12,6 @@ import DeleteIcon from "@/components/UI/Icons/DeleteIcon.vue";
   background: none;
   border: none;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
+  padding: 5px;
 }
 </style>

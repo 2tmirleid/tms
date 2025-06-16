@@ -1,5 +1,9 @@
 .idea
 .env.template
 .vscode
-application.properties.template
+*application.properties.template
 HELP.md
+*.iml
+.git
+.gitignore
+.gitattributes

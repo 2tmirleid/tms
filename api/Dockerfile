@@ -11,9 +11,6 @@ RUN ./gradlew dependencies -x test
 
 COPY src/ src/
 
-# Сборка fat JAR-а
 RUN ./gradlew bootJar -x test
 
-# Узнай фактическое имя jar-файла (возможно с версией)
-# или используй шаблон *.jar (если он один)
 CMD ["sh", "-c", "java -jar build/libs/*.jar"]

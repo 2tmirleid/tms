@@ -1,0 +1,4 @@
+.idea
+.env.template
+.vscode
+/node_modules

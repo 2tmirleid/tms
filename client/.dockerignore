@@ -2,3 +2,6 @@
 .env.template
 .vscode
 /node_modules
+.gitignore
+.git
+*.iml

@@ -1,0 +1,51 @@
+version: '3.0'
+
+volumes:
+  client:
+    driver: local
+  api:
+    driver: local
+
+services:
+  client:
+    container_name: ${COMPOSE_PROJECT_NAME}-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./client:/client
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    depends_on:
+      - postgres
+    restart: on-failure
+  api:
+    container_name: ${COMPOSE_PROJECT_NAME}-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - api:/api/api
+    ports:
+      - "8080:8080"
+    command: sh -c "java -jar build/libs/*.jar"
+    depends_on:
+      - postgres
+    restart: on-failure
+  postgres:
+    container_name: postgres
+    image: ${DBMS}:${DBMS_VERSION}
+    env_file:
+      - .env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - /var/lib/postgresql/data
+    restart: on-failure

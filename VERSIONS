@@ -1,0 +1,4 @@
+0.0.1 [2025-06-16] - First docker build for alpha test.
+    Features:
+        1. Experimental design
+        2. Basic CRUD operations

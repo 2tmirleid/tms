@@ -11,7 +11,7 @@ import tutmirleid.api.utils.exception.ScenarioNotFoundException;
 
 @RestController()
 @RequestMapping(BaseController.API_URI + "/scenarios/steps")
-public class StepController extends BaseController{
+public class StepController extends BaseController {
     private final StepService stepService;
 
     public StepController(StepService stepService) {

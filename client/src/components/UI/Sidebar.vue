@@ -6,14 +6,16 @@
         @mouseover="hoverToggle = true"
         @mouseleave="hoverToggle = false"
     >
-      <span v-if="hoverToggle">
-        <UncollapseButton v-if="collapsed"/>
-        <CollapseButton v-else/>
-      </span>
+      <transition name="fade" mode="out-in">
+        <span v-if="hoverToggle" key="toggle-icon">
+          <UncollapseButton v-if="collapsed"/>
+          <CollapseButton v-else/>
+        </span>
+      </transition>
     </div>
 
     <div class="pages-wrapper">
-      <ul class="pages">
+      <transition-group name="slide" tag="ul" class="pages">
         <li
             v-for="page in pages"
             :key="page.id"
@@ -21,28 +23,30 @@
             :class="{ 'active' : $route.path.includes(page.alias.toLowerCase()) }"
         >
           <router-link :to="page.link">
-          <span v-if="collapsed">
-            <component :is="buttonComponents[page.alias]"/>
-          </span>
+            <span v-if="collapsed">
+              <component :is="buttonComponents[page.alias]"/>
+            </span>
             <span v-else>{{ page.title }}</span>
           </router-link>
         </li>
-      </ul>
+      </transition-group>
 
       <div class="auth">
-        <div v-if="isAuth" class="logout">
-          <router-link to="/logout">
-            <LogoutButton v-if="collapsed"/>
-            <span v-else>Выйти</span>
-          </router-link>
-        </div>
+        <transition name="fade" mode="out-in">
+          <div v-if="isAuth" class="logout" key="logout">
+            <router-link to="/logout">
+              <LogoutButton v-if="collapsed"/>
+              <span v-else>Выйти</span>
+            </router-link>
+          </div>
 
-        <div v-else class="login">
-          <router-link to="/login">
-            <LoginButton v-if="collapsed"/>
-            <span v-else>Войти</span>
-          </router-link>
-        </div>
+          <div v-else class="login" key="login">
+            <router-link to="/login">
+              <LoginButton v-if="collapsed"/>
+              <span v-else>Войти</span>
+            </router-link>
+          </div>
+        </transition>
       </div>
     </div>
   </section>
@@ -202,5 +206,38 @@ export default {
 .sidebar-toggle span {
   font-weight: 1000;
   color: var(--text-color);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Анимация slide (для списка страниц) */
+.slide-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.slide-move {
+  transition: transform 0.3s ease;
 }
 </style>

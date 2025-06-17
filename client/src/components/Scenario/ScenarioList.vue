@@ -34,7 +34,8 @@
             @keyup.esc="cancelEdit"
         />
 
-        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID" @click.stop="deleteScenario(scenario.id)"/>
+        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID"
+                      @click.stop="deleteScenario(scenario.id)"/>
       </li>
     </ul>
 
@@ -92,7 +93,7 @@ export default {
 
     async saveTitle(id) {
       try {
-        const body = { "title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title }
+        const body = {"title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title}
 
         await this.scenarioMethods.updateScenario(id, body);
 
@@ -100,7 +101,7 @@ export default {
         this.$emit('scenario-updated', id);
         this.cancelEdit();
       } catch (error) {
-        console.error("Update title error:" +  error);
+        console.error("Update title error:" + error);
       }
     },
 
@@ -116,7 +117,7 @@ export default {
 
         this.deletingTitleID = 0;
         await this.refreshScenarios();
-      } catch(error) {
+      } catch (error) {
         console.error("Ошибка при удалении шага:" + error);
         alert("Не удалось удалить шаг");
       }

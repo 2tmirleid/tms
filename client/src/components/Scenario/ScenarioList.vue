@@ -18,8 +18,8 @@
       >
         <template v-if="editedTitleID !== scenario.id">
           <span class="title">
-            {{ scenario.title }}
             <span class="id">#{{ scenario.id }}</span>
+            {{ getTrimmedTitle(scenario.title) }}
           </span>
         </template>
 
@@ -34,7 +34,8 @@
             @keyup.esc="cancelEdit"
         />
 
-        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID" @click.stop="deleteScenario(scenario.id)"/>
+        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID"
+                      @click.stop="deleteScenario(scenario.id)"/>
       </li>
     </ul>
 
@@ -55,6 +56,7 @@ export default {
     scenarios: [],
     editedTitleID: 0,
     deletingTitleID: 0,
+    maxTitleLength: 120,
     updatedScenarioTitle: '',
     showDeleteIcon: false,
     scenarioMethods: new ScenarioMethods()
@@ -92,7 +94,7 @@ export default {
 
     async saveTitle(id) {
       try {
-        const body = { "title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title }
+        const body = {"title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title}
 
         await this.scenarioMethods.updateScenario(id, body);
 
@@ -100,7 +102,7 @@ export default {
         this.$emit('scenario-updated', id);
         this.cancelEdit();
       } catch (error) {
-        console.error("Update title error:" +  error);
+        console.error("Update title error:" + error);
       }
     },
 
@@ -116,10 +118,15 @@ export default {
 
         this.deletingTitleID = 0;
         await this.refreshScenarios();
-      } catch(error) {
+      } catch (error) {
         console.error("Ошибка при удалении шага:" + error);
         alert("Не удалось удалить шаг");
       }
+    },
+    getTrimmedTitle(title) {
+      const max = this.maxTitleLength;
+      if (!title || typeof title !== 'string') return '';
+      return title.length > max ? title.slice(0, max) + '...' : title;
     }
   },
 
@@ -166,8 +173,12 @@ export default {
 }
 
 .scenario-preview .title {
-  display: flex;
-  gap: 10px;
+  display: inline-block;
+  width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 
 .scenario-preview .title .id {

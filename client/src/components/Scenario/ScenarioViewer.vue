@@ -2,7 +2,7 @@
   <section class="scenario-viewer">
     <div class="scenario-viewer__header">
       <h3 id="id">#{{ localScenario.id }}</h3>
-      <h3>{{ localScenario.title }}</h3>
+      <h3 id="title">{{ localScenario.title }}</h3>
     </div>
 
     <div class="scenario-viewer__content">
@@ -16,7 +16,7 @@
 
       <EditableField
           :id="localScenario.id"
-          name="precondition"
+          name="precondition" 
           label="Предусловие"
           :value="localScenario.precondition"
           @scenario-updated="handleScenarioUpdated"
@@ -115,6 +115,12 @@ export default {
 
   #id {
     color: gray;
+  }
+
+  #title {
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 }
 </style>

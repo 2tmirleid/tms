@@ -130,12 +130,15 @@ export default {
 
 .field-content {
   font-family: var(--font-primary);
+  max-width: 800px;
 }
 
 .field-content p {
   font-size: 14px;
   line-height: 1.5;
   white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .editor-input {

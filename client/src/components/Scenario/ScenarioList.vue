@@ -114,11 +114,18 @@ export default {
 
 <style scoped>
 .scenario-list {
+  --border-color: #e8edf1;
+  --hover-bg: #edf1f5;
+  --id-color: #6c757d;
+  --font-primary: "JetBrains Mono", monospace, sans-serif;
+
+  position: relative;
   width: 40%;
   height: calc(100vh - 60px);
   border: 1px solid var(--border-color);
   background-color: #FFFFFF;
   border-radius: 20px 0 0 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 
   display: flex;
   flex-direction: column;

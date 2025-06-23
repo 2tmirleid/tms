@@ -116,11 +116,6 @@ export default {
 
 <style scoped>
 .editable-field {
-  --border-color: #e8edf1;
-  --hover-bg: #edf1f5;
-  --id-color: #6c757d;
-  --font-primary: "JetBrains Mono", monospace, sans-serif;
-
   padding-bottom: 25px;
   padding-top: 25px;
 }

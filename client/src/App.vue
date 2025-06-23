@@ -2,8 +2,17 @@
 import {onUnmounted, ref, watch} from 'vue'
 import ScenarioList from "@/components/Scenario/ScenarioList.vue"
 import ScenarioViewer from "@/components/Scenario/ScenarioViewer.vue"
+import "@/assets/main.css";
 
 const selectedScenario = ref(null)
+
+const scenarioListRef = ref(null);
+
+const handleScenarioDeleted = () => {
+  scenarioListRef.value?.refreshScenarios?.();
+  selectedScenario.value = null;
+};
+
 
 const handleScenarioSelect = (scenario) => {
   selectedScenario.value = scenario
@@ -11,7 +20,7 @@ const handleScenarioSelect = (scenario) => {
 
 const handleScenarioUpdated = (updatedScenarioId) => {
   if (selectedScenario.value?.id === updatedScenarioId) {
-    selectedScenario.value = { ...selectedScenario.value }
+    selectedScenario.value = {...selectedScenario.value}
   }
 }
 
@@ -23,6 +32,7 @@ onUnmounted(() => {
 <template>
   <main class="app-container">
     <ScenarioList
+        ref="scenarioListRef"
         @select="handleScenarioSelect"
         @scenario-updated="handleScenarioUpdated"
     />
@@ -32,7 +42,9 @@ onUnmounted(() => {
         :key="selectedScenario.id"
         :scenario="selectedScenario"
         @scenario-updated="handleScenarioUpdated"
+        @scenario-deleted="handleScenarioDeleted"
     />
+
   </main>
 </template>
 

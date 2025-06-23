@@ -2,10 +2,12 @@
   margin: 0;
   padding: 0;
 
-  <!-- Variables -->
+}
+
+:root {
   --border-color: #e8edf1;
   --hover-bg: #edf1f5;
   --id-color: #6c757d;
   --font-primary: "JetBrains Mono", monospace, sans-serif;
-  <!-- Variables End -->
+  --delete-color: #c00000;
 }

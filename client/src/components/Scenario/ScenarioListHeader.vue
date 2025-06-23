@@ -57,9 +57,6 @@ export default {
 
 <style scoped>
 .scenario-list__header {
-  --border-color: #e8edf1;
-  --font-primary: "JetBrains Mono", monospace, sans-serif;
-
   height: 150px;
   border-bottom: 1px solid var(--border-color);
   display: flex;

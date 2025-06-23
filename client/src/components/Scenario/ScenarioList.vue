@@ -12,9 +12,6 @@
           class="scenario-preview"
           @click="$emit('select', scenario)"
           @dblclick="startEditTitle(scenario)"
-          @mouseenter="toggleShowDeleteIcon(scenario.id)"
-          @mousedown="toggleShowDeleteIcon"
-          @mouseleave="toggleShowDeleteIcon"
       >
         <template v-if="editedTitleID !== scenario.id">
           <span class="title">
@@ -33,9 +30,6 @@
             @keyup.enter="saveTitle(scenario.id)"
             @keyup.esc="cancelEdit"
         />
-
-        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID"
-                      @click.stop="deleteScenario(scenario.id)"/>
       </li>
     </ul>
 
@@ -48,9 +42,11 @@ import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
+import ContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
+import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
 
 export default {
-  components: {ScenarioListHeader, DeleteButton, ScenarioCreator},
+  components: {ContextMenu, ContextMenuButton, ScenarioListHeader, DeleteButton, ScenarioCreator},
 
   data: () => ({
     scenarios: [],
@@ -86,12 +82,10 @@ export default {
         }
       });
     },
-
     cancelEdit() {
       this.editedTitleID = 0;
       this.updatedScenarioTitle = '';
     },
-
     async saveTitle(id) {
       try {
         const body = {"title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title}
@@ -105,24 +99,6 @@ export default {
         console.error("Update title error:" + error);
       }
     },
-
-    toggleShowDeleteIcon(id) {
-      setTimeout(() => {
-        this.deletingTitleID = id;
-        this.showDeleteIcon = !this.showDeleteIcon;
-      }, 1000);
-    },
-    async deleteScenario(id) {
-      try {
-        await this.scenarioMethods.deleteScenario(id);
-
-        this.deletingTitleID = 0;
-        await this.refreshScenarios();
-      } catch (error) {
-        console.error("Ошибка при удалении шага:" + error);
-        alert("Не удалось удалить шаг");
-      }
-    },
     getTrimmedTitle(title) {
       const max = this.maxTitleLength;
       if (!title || typeof title !== 'string') return '';
@@ -132,7 +108,7 @@ export default {
 
   mounted() {
     this.refreshScenarios();
-  }
+  },
 }
 </script>
 

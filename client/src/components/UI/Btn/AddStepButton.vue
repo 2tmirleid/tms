@@ -25,7 +25,7 @@ export default {
   align-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid #e8edf1;
+  border: 1px solid var(--border-color);
   border-radius: 50%;
   background: #FFFFFF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

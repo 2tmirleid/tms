@@ -53,10 +53,13 @@
             {{ step.expectedResult }}
           </div>
         </td>
-        <DeleteButton
-            v-if="showDeleteIcon && deletingStepID === step.id"
-            @click="deleteStep(step.id)"
-        />
+
+        <td class="context-menu-cell">
+          <StepContextMenu
+            :stepID="step.id"
+            @delete-step="deleteStep"
+          />
+        </td>
       </tr>
 
       <tr v-if="add" class="scenario-row temp-step">
@@ -91,9 +94,13 @@
 import {ScenarioMethods} from "@/api/scenarioMethods";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
+import StepContextMenuButton from "@/components/UI/Btn/StepContextMenuButton.vue";
+import StepContextMenu from "@/components/UI/StepContextMenu.vue";
 
 export default {
   components: {
+    StepContextMenu,
+    StepContextMenuButton,
     DeleteButton,
     AddStepButton,
   },
@@ -243,11 +250,6 @@ export default {
 
 <style scoped>
 .scenario-editor {
-  --border-color: #e8edf1;
-  --hover-bg: #edf1f5;
-  --id-color: #6c757d;
-  --font-primary: "JetBrains Mono", monospace, sans-serif;
-
   max-width: 700px;
   display: flex;
   flex-direction: column;
@@ -277,12 +279,18 @@ export default {
   text-align: center;
 }
 
+.scenario-row.header td {
+  text-align: center;
+}
+
 .scenario-row td,
 .scenario-row th {
   width: 100%;
   padding: 10px;
   border: 1px solid #e8edf1;
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .scenario-row.temp-step input {
@@ -304,4 +312,5 @@ export default {
   outline: none;
   color: #000000 !important;
 }
+
 </style>

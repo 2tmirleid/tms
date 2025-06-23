@@ -4,7 +4,8 @@ import ScenarioList from "@/components/Scenario/ScenarioList.vue"
 import ScenarioViewer from "@/components/Scenario/ScenarioViewer.vue"
 import Sidebar from "@/components/UI/Sidebar.vue";
 
-const selectedScenario = ref(null)
+const selectedScenario = ref(null);
+const scenarioListRef = ref(null);
 
 const handleScenarioSelect = (scenario) => {
   selectedScenario.value = scenario
@@ -16,6 +17,11 @@ const handleScenarioUpdated = (updatedScenarioId) => {
   }
 }
 
+const handleScenarioDeleted = () => {
+  scenarioListRef.value?.refreshScenarios?.();
+  selectedScenario.value = null;
+};
+
 onUnmounted(() => {
   selectedScenario.value = null
 })
@@ -26,6 +32,7 @@ onUnmounted(() => {
     <Sidebar/>
 
     <ScenarioList
+        ref="scenarioListRef"
         @select="handleScenarioSelect"
         @scenario-updated="handleScenarioUpdated"
     />
@@ -35,6 +42,7 @@ onUnmounted(() => {
         :key="selectedScenario.id"
         :scenario="selectedScenario"
         @scenario-updated="handleScenarioUpdated"
+        @scenario-deleted="handleScenarioDeleted"
     />
   </section>
 </template>

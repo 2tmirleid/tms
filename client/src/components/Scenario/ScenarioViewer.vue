@@ -97,6 +97,7 @@ export default {
   border-top-right-radius: 20px;
 
   padding: 25px 10px 10px 40px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .scenario-viewer__header {

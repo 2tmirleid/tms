@@ -62,7 +62,7 @@ export default {
     async refreshScenarios() {
       try {
         const response = await this.scenarioMethods.getScenariosList();
-        this.scenarios = response.data;
+        this.scenarios = response.data.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.error("Fetch scenarios error:" + error);
       }

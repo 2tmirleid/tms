@@ -1,7 +1,9 @@
 .idea
 .env.template
 .vscode
-/node_modules
-.gitignore
-.git
+*application.properties.template
+HELP.md
 *.iml
+.git
+.gitignore
+.gitattributes

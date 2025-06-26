@@ -38,7 +38,7 @@ onUnmounted(() => {
     />
 
     <ScenarioViewer
-        v-if="selectedScenario"
+        v-if="selectedScenario && selectedScenario.id"
         :key="selectedScenario.id"
         :scenario="selectedScenario"
         @scenario-updated="handleScenarioUpdated"

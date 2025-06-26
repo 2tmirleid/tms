@@ -53,6 +53,12 @@ export default {
     },
     async saveScenario() {
       try {
+        if (this.newScenarioName.length > 255) {
+          alert('Название сценария не может быть больше 255 символов');
+
+          return
+        }
+
         const body = { "title": this.newScenarioName }
 
         await this.scenarioMethods.createScenario(body);
@@ -60,6 +66,7 @@ export default {
         this.$emit('scenario-created');
         this.cancelSaving();
       } catch (e) {
+        alert('Что-то пошло не так...');
         console.error("Error while creating scenario: ", e);
       }
     }
@@ -69,7 +76,7 @@ export default {
 
 <style scoped>
 .new-scenario {
-  width: 20%;
+  width: 50%;
   padding: 5px 10px;
   font-family: var(--font-primary);
   font-size: 15px;
@@ -81,17 +88,17 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
   outline: none;
-  position: fixed;
+  position: absolute;
   bottom: 40px;
-  left: 25%;
+  left: 50%;
   transform: translateX(-50%);
 }
 
 .scenario-creator {
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   bottom: 40px;
-  left: 25%;
+  left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-content: center;

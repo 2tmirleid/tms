@@ -1,0 +1,5 @@
+.idea
+.env.template
+*.iml
+.git
+.gitignore

@@ -12,14 +12,11 @@
           class="scenario-preview"
           @click="$emit('select', scenario)"
           @dblclick="startEditTitle(scenario)"
-          @mouseenter="toggleShowDeleteIcon(scenario.id)"
-          @mousedown="toggleShowDeleteIcon"
-          @mouseleave="toggleShowDeleteIcon"
       >
         <template v-if="editedTitleID !== scenario.id">
           <span class="title">
-            {{ scenario.title }}
             <span class="id">#{{ scenario.id }}</span>
+            {{ getTrimmedTitle(scenario.title) }}
           </span>
         </template>
 
@@ -33,8 +30,6 @@
             @keyup.enter="saveTitle(scenario.id)"
             @keyup.esc="cancelEdit"
         />
-
-        <DeleteButton v-if="showDeleteIcon && scenario.id === deletingTitleID" @click.stop="deleteScenario(scenario.id)"/>
       </li>
     </ul>
 
@@ -47,14 +42,17 @@ import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
+import ContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
+import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
 
 export default {
-  components: {ScenarioListHeader, DeleteButton, ScenarioCreator},
+  components: {ContextMenu, ContextMenuButton, ScenarioListHeader, DeleteButton, ScenarioCreator},
 
   data: () => ({
     scenarios: [],
     editedTitleID: 0,
     deletingTitleID: 0,
+    maxTitleLength: 120,
     updatedScenarioTitle: '',
     showDeleteIcon: false,
     scenarioMethods: new ScenarioMethods()
@@ -64,7 +62,7 @@ export default {
     async refreshScenarios() {
       try {
         const response = await this.scenarioMethods.getScenariosList();
-        this.scenarios = response.data;
+        this.scenarios = response.data.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.error("Fetch scenarios error:" + error);
       }
@@ -84,15 +82,13 @@ export default {
         }
       });
     },
-
     cancelEdit() {
       this.editedTitleID = 0;
       this.updatedScenarioTitle = '';
     },
-
     async saveTitle(id) {
       try {
-        const body = { "title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title }
+        const body = {"title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title}
 
         await this.scenarioMethods.updateScenario(id, body);
 
@@ -100,32 +96,19 @@ export default {
         this.$emit('scenario-updated', id);
         this.cancelEdit();
       } catch (error) {
-        console.error("Update title error:" +  error);
+        console.error("Update title error:" + error);
       }
     },
-
-    toggleShowDeleteIcon(id) {
-      setTimeout(() => {
-        this.deletingTitleID = id;
-        this.showDeleteIcon = !this.showDeleteIcon;
-      }, 1000);
-    },
-    async deleteScenario(id) {
-      try {
-        await this.scenarioMethods.deleteScenario(id);
-
-        this.deletingTitleID = 0;
-        await this.refreshScenarios();
-      } catch(error) {
-        console.error("Ошибка при удалении шага:" + error);
-        alert("Не удалось удалить шаг");
-      }
+    getTrimmedTitle(title) {
+      const max = this.maxTitleLength;
+      if (!title || typeof title !== 'string') return '';
+      return title.length > max ? title.slice(0, max) + '...' : title;
     }
   },
 
   mounted() {
     this.refreshScenarios();
-  }
+  },
 }
 </script>
 
@@ -136,11 +119,13 @@ export default {
   --id-color: #6c757d;
   --font-primary: "JetBrains Mono", monospace, sans-serif;
 
+  position: relative;
   width: 40%;
   height: calc(100vh - 60px);
   border: 1px solid var(--border-color);
   background-color: #FFFFFF;
   border-radius: 20px 0 0 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 
   display: flex;
   flex-direction: column;
@@ -166,8 +151,12 @@ export default {
 }
 
 .scenario-preview .title {
-  display: flex;
-  gap: 10px;
+  display: inline-block;
+  width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 
 .scenario-preview .title .id {

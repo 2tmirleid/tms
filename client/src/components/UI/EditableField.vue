@@ -90,6 +90,12 @@ export default {
       const field = this.name;
       const value = this.localValue;
 
+      if (value.length > 255) {
+        alert(`Значение поля ${field} не может быть больше 255 символов`);
+
+        return
+      }
+
       try {
         const body = {[field]: value};
 
@@ -116,11 +122,6 @@ export default {
 
 <style scoped>
 .editable-field {
-  --border-color: #e8edf1;
-  --hover-bg: #edf1f5;
-  --id-color: #6c757d;
-  --font-primary: "JetBrains Mono", monospace, sans-serif;
-
   padding-bottom: 25px;
   padding-top: 25px;
 }
@@ -135,12 +136,15 @@ export default {
 
 .field-content {
   font-family: var(--font-primary);
+  max-width: 800px;
 }
 
 .field-content p {
   font-size: 14px;
   line-height: 1.5;
   white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .editor-input {

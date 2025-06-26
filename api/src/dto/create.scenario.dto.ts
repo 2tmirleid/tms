@@ -15,7 +15,7 @@ export class CreateScenarioDto {
 
     @IsOptional()
     @IsString({ message: 'Precondition must be string' })
-    @MaxLength(255)
+    @MaxLength(255, { message: 'Precondition cannot be greater than 255 symbols' })
     readonly precondition?: string;
 
     @IsOptional()

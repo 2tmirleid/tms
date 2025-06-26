@@ -90,6 +90,12 @@ export default {
       const field = this.name;
       const value = this.localValue;
 
+      if (value.length > 255) {
+        alert(`Значение поля ${field} не может быть больше 255 символов`);
+
+        return
+      }
+
       try {
         const body = {[field]: value};
 

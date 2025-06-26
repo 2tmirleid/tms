@@ -53,6 +53,12 @@ export default {
     },
     async saveScenario() {
       try {
+        if (this.newScenarioName.length > 255) {
+          alert('Название сценария не может быть больше 255 символов');
+
+          return
+        }
+
         const body = { "title": this.newScenarioName }
 
         await this.scenarioMethods.createScenario(body);
@@ -60,6 +66,7 @@ export default {
         this.$emit('scenario-created');
         this.cancelSaving();
       } catch (e) {
+        alert('Что-то пошло не так...');
         console.error("Error while creating scenario: ", e);
       }
     }

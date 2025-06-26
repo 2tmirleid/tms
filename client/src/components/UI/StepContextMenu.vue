@@ -68,14 +68,12 @@ export default {
       this.showDropdown = false;
     },
     async sendEmitByAlias(alias) {
-      console.log('works')
       this.$emit(`${alias}-step`, this.stepID);
       this.hideContextMenu();
     }
   },
   mounted() {
     this.getOptions()
-    console.log(this.stepID)
   }
 }
 </script>

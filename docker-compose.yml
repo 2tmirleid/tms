@@ -33,7 +33,7 @@ services:
       - api:/api/api
     ports:
       - ${API_PORT}:${API_PORT}
-    command: sh -c "java -jar build/libs/*.jar"
+    command: npm run start:dev
     depends_on:
       - postgres
     restart: unless-stopped

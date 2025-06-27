@@ -1,16 +1,12 @@
-FROM eclipse-temurin:21-jdk
+FROM node:22.16.0
 
 WORKDIR /api
 
-COPY gradlew .
-COPY gradle/ gradle/
-COPY build.gradle .
-COPY settings.gradle .
+COPY package.json package-lock.json* ./
 
-RUN ./gradlew dependencies -x test
+RUN rm -rf node_modules package-lock.json || true
+RUN npm install
 
-COPY src/ src/
+COPY . .
 
-RUN ./gradlew bootJar -x test
-
-CMD ["sh", "-c", "java -jar build/libs/*.jar"]
+CMD ["npm", "run", "start:dev"]

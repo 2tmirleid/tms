@@ -1,4 +1,12 @@
-import {AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import {ScenarioStepEntity} from "./scenario.step.entity";
 
 
@@ -33,6 +41,16 @@ export class ScenarioEntity {
         eager: true,
     })
     steps: ScenarioStepEntity[];
+
+    @CreateDateColumn({
+        type: 'timestamp with time zone'
+    })
+    createdAt: Date;
+
+    @UpdateDateColumn({
+        type: 'timestamp with time zone',
+    })
+    updatedAt: Date;
 
     @AfterLoad()
     sortSteps() {

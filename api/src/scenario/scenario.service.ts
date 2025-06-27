@@ -80,6 +80,8 @@ export class ScenarioService {
                     step.expectedResult = stepDto.expectedResult;
                     return step;
                 });
+
+                scenario.updatedAt = new Date();
             }
 
             return this.scenarioRepository.save(scenario);

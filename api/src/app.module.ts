@@ -48,8 +48,8 @@ import {Createscenariosteptable1750938254814} from "./migration/1750938254814-cr
                 Createscenariotable1750938191907,
                 Createscenariosteptable1750938254814
             ],
-            migrationsRun: true,
-            synchronize: false,
+            migrationsRun: false,
+            synchronize: true,
             logging: true
         }),
         ScenarioContextOptionModule,

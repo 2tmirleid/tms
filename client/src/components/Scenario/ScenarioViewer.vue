@@ -12,6 +12,10 @@
       />
     </div>
 
+    <ScenarioViewerSidebar
+        :scenario="localScenario"
+    />
+
     <div class="scenario-viewer__content">
       <EditableField
           :id="localScenario.id"
@@ -49,9 +53,10 @@ import EditableField from "@/components/UI/EditableField.vue";
 import ScenarioEditor from "@/components/UI/ScenarioEditor.vue";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import ScenarioViewerSidebar from "@/components/Scenario/ScenarioViewerSidebar.vue";
 
 export default {
-  components: {ContextMenu, AddStepButton, ScenarioEditor, EditableField},
+  components: {ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
   props: {
     scenario: {
       type: Object,
@@ -61,7 +66,8 @@ export default {
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
-      localScenario: {}
+      localScenario: {},
+      refreshKey: Date.now(),
     }
   },
   methods: {

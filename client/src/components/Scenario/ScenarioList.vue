@@ -44,9 +44,11 @@ import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
 import ContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
 import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import {inject} from "vue";
 
 export default {
   components: {ContextMenu, ContextMenuButton, ScenarioListHeader, DeleteButton, ScenarioCreator},
+  inject: ['showAlert'],
 
   data: () => ({
     scenarios: [],
@@ -65,6 +67,7 @@ export default {
         this.scenarios = response.data.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.error("Fetch scenarios error:" + error);
+        this.showAlert('При попытке получить список сценариев что-то пошло не так...');
       }
     },
     async handleFoundScenario(scenario) {
@@ -97,6 +100,7 @@ export default {
         this.cancelEdit();
       } catch (error) {
         console.error("Update title error:" + error);
+        this.showAlert('При попытке изменить название, что-то пошло не так...');
       }
     },
     getTrimmedTitle(title) {

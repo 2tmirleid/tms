@@ -45,6 +45,7 @@ import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import EditButton from "@/components/UI/Btn/EditButton.vue";
 
 export default {
+  inject: ["showAlert"],
   components: {EditButton},
   props: {
     label: {
@@ -91,7 +92,7 @@ export default {
       const value = this.localValue;
 
       if (value.length > 255) {
-        alert(`Значение поля ${field} не может быть больше 255 символов`);
+        this.showAlert(`Значение поля ${field} не может быть больше 255 символов`);
 
         return
       }
@@ -104,7 +105,7 @@ export default {
 
         this.$emit('scenario-updated', this.id);
       } catch (e) {
-        alert("Что-то пошло не так...");
+        this.showAlert(`При попытке обновить поле ${field} что-то пошло не так...`);
         console.error(`Error while updating field ${field}`, e);
       }
     }

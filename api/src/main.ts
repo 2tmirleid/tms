@@ -3,6 +3,7 @@ import * as date from "./utils/date";
 import {AppModule} from "./app.module";
 import { ValidationPipe } from '@nestjs/common';
 import {BadRequestLoggingFilter} from "./utils/bad.request.logging.filter";
+import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 
 async function start() {
     const PORT = process.env.PORT || 8080;
@@ -22,6 +23,15 @@ async function start() {
     app.setGlobalPrefix('api/v2');
 
     // app.useGlobalFilters(new BadRequestLoggingFilter());
+
+    const config = new DocumentBuilder()
+        .setTitle('TMS API v2')
+        .setDescription('TMS REST API docs.')
+        .setVersion('2.0')
+        .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
 
     app.useGlobalPipes(
         new ValidationPipe({

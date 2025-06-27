@@ -33,16 +33,24 @@ export default {
   },
   methods: {
     async findScenario() {
+      const query = this.scenario.trim();
+
+      if (!query) {
+        this.$emit("refresh-scenarios-list");
+        return;
+      }
+
       try {
-        const scenario = await this.scenarioMethods.getScenarioByID(this.scenario);
-        this.$emit("found-scenario", scenario);
-      } catch(error) {
-        if (error.response.status === 400) {
+        const response = await this.scenarioMethods.getScenarioByID(query);
+        this.$emit("found-scenario", response);
+      } catch (error) {
+        const status = error?.response?.status;
+
+        if (status === 400 || status === 404) {
           alert("Сценарий не был найден");
-        } if (error.response.status === 404) {
           this.$emit("refresh-scenarios-list");
         } else {
-          console.error("Error while finding scenario: " + error);
+          console.error("Error while finding scenario:", error);
           alert("Что-то пошло не так...");
         }
       }

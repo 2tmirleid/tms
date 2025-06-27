@@ -23,7 +23,7 @@
 
       <EditableField
           :id="localScenario.id"
-          name="precondition" 
+          name="precondition"
           label="Предусловие"
           :value="localScenario.precondition"
           @scenario-updated="handleScenarioUpdated"
@@ -51,6 +51,7 @@ import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
 
 export default {
+  inject: ["showAlert"],
   components: {ContextMenu, AddStepButton, ScenarioEditor, EditableField},
   props: {
     scenario: {
@@ -61,7 +62,7 @@ export default {
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
-      localScenario: {}
+      localScenario: {},
     }
   },
   methods: {
@@ -74,8 +75,8 @@ export default {
         const response = await this.scenarioMethods.getScenarioByID(id);
         this.localScenario = response.data;
       } catch (error) {
-        console.error("Error while getting scenarios: ", error);
-        alert("Что-то пошло не так...")
+        console.error("Error while getting scenario by id: ", error);
+        this.showAlert("Что-то пошло не так...")
       }
     },
     async deleteScenario(id) {
@@ -85,7 +86,7 @@ export default {
         this.$emit('scenario-deleted');
       } catch (error) {
         console.error("Ошибка при удалении сценария:" + error);
-        alert("Не удалось удалить сценарий");
+        this.showAlert("Не удалось удалить сценарий");
       }
     },
   },

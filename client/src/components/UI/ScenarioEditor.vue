@@ -98,6 +98,7 @@ import StepContextMenuButton from "@/components/UI/Btn/StepContextMenuButton.vue
 import StepContextMenu from "@/components/UI/StepContextMenu.vue";
 
 export default {
+  inject: ["showAlert"],
   components: {
     StepContextMenu,
     StepContextMenuButton,
@@ -147,7 +148,7 @@ export default {
       const {step, expectedResult} = this.newStep;
 
       if (!step.trim()) {
-        alert("Поле 'Шаг' не может быть пустым.");
+        this.showAlert("Поле 'Шаг' не может быть пустым.");
         return;
       }
 
@@ -171,7 +172,7 @@ export default {
         this.$emit('scenario-updated', this.scenarioID);
       } catch (error) {
         console.error("Ошибка при обновлении шага:", error);
-        alert("Не удалось сохранить шаг");
+        this.showAlert("Не удалось сохранить шаг");
       }
     },
     startEditStep(step, field) {

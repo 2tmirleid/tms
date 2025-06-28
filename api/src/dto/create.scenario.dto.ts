@@ -1,6 +1,7 @@
 import {Type} from 'class-transformer';
 import {CreateScenarioStepDto} from "./create.scenario.step.dto";
 import {IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
+import {CreateScenarioTagDto} from "./create.scenario.tag.dto";
 
 export class CreateScenarioDto {
     @IsNotEmpty({ message: 'Title cannot be empty' })
@@ -23,4 +24,9 @@ export class CreateScenarioDto {
     @ValidateNested({ each: true })
     @Type(() => CreateScenarioStepDto)
     readonly steps?: CreateScenarioStepDto[];
+
+    @IsOptional()
+    @IsArray({ message: 'Tags must be array' })
+    @ValidateNested({ each: true })
+    readonly tags?: CreateScenarioTagDto[];
 }

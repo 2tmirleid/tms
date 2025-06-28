@@ -5,6 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {UpdateScenarioDto} from "../dto/update.scenario.dto";
 import {ScenarioStepEntity} from "../entity/scenario.step.entity";
+import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
 
 @Injectable()
 export class ScenarioService {
@@ -79,6 +80,17 @@ export class ScenarioService {
                     step.step = stepDto.step;
                     step.expectedResult = stepDto.expectedResult;
                     return step;
+                });
+
+                scenario.updatedAt = new Date();
+            }
+
+            if (dto.tags !== undefined) {
+                scenario.tags = dto.tags.map(tagDto => {
+                    const tag = new ScenarioTagEntity();
+                    tag.id = tagDto.id;
+                    tag.title = tagDto.title;
+                    return tag;
                 });
 
                 scenario.updatedAt = new Date();

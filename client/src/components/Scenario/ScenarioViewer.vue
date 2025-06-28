@@ -14,6 +14,7 @@
 
     <ScenarioViewerSidebar
         :scenario="localScenario"
+        @scenario-updated="handleScenarioUpdated"
     />
 
     <div class="scenario-viewer__content">

@@ -63,6 +63,7 @@ import CloseButton from "@/components/UI/Btn/CloseButton.vue";
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 
 export default {
+  inject: ["showAlert"],
   components: {CloseButton, AddIcon},
   data() {
     return {
@@ -87,12 +88,12 @@ export default {
       const tag = this.newTag;
 
       if (!tag.trim()) {
-        alert("Тег не может быть пустым.");
+        this.showAlert("Тег не может быть пустым.");
         return;
       }
 
       if (tag.trim().length > 15) {
-        alert("Тег не может превышать 15 символов.");
+        this.showAlert("Тег не может превышать 15 символов.");
         return;
       }
 
@@ -115,7 +116,7 @@ export default {
         this.$emit('scenario-updated', this.scenario.id);
       } catch (error) {
         console.error("Ошибка при добавлении тега:", error);
-        alert("Не удалось сохранить тег");
+        this.showAlert("Не удалось сохранить тег");
       }
     },
     async deleteTag(id) {
@@ -125,7 +126,7 @@ export default {
         this.$emit('scenario-updated', this.scenario.id);
       } catch(error) {
         console.error("Ошибка при удалении тега:" + error);
-        alert("Не удалось удалить тег");
+        this.showAlert("Не удалось удалить тег");
       }
     }
   },

@@ -42,7 +42,22 @@ export default {
       }
 
       try {
-        const response = await this.scenarioMethods.getScenarioByID(query);
+        let response;
+
+        if (!isNaN(Number(query))) {
+          response = await this.scenarioMethods.getScenarioByID(query);
+        } else {
+          const [ property, value ] = query.split('=');
+
+          response = await this.scenarioMethods.searchScenario(property, value);
+        }
+
+        if (response.data.length === 0) {
+          this.showAlert("Сценарий не был найден");
+          this.$emit("refresh-scenarios-list");
+          return;
+        }
+
         this.$emit("found-scenario", response);
       } catch (error) {
         const status = error?.response?.status;

@@ -70,8 +70,7 @@ export default {
       }
     },
     async handleFoundScenario(scenario) {
-      this.scenarios.length = 0;
-      this.scenarios.push(scenario.data);
+      this.scenarios = Array.isArray(scenario.data) ? scenario.data : [scenario.data];
     },
     startEditTitle(scenario) {
       this.editedTitleID = scenario.id;

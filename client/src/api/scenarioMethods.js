@@ -25,4 +25,8 @@ export class ScenarioMethods extends BaseMethods {
     async deleteStep(id) {
         await axios.delete(`${this.BASE_URI}/scenario/step/${id}`);
     }
+
+    async deleteTag(id) {
+        await axios.delete(`${this.BASE_URI}/scenario/tag/${id}`);
+    }
 }

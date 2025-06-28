@@ -20,11 +20,13 @@ import {
 } from "./migration/1750937820203-createandseedstepcontextoptiontable";
 import {Createscenariotable1750938191907} from "./migration/1750938191907-createscenariotable";
 import {Createscenariosteptable1750938254814} from "./migration/1750938254814-createscenariosteptable";
+import {ScenarioTagEntity} from "./entity/scenario.tag.entity";
 
 
 @Module({
     imports: [
         ConfigModule.forRoot({
+            isGlobal: true,
             envFilePath: '.env',
         }),
         TypeOrmModule.forRoot({
@@ -39,7 +41,8 @@ import {Createscenariosteptable1750938254814} from "./migration/1750938254814-cr
                 ScenarioStepEntity,
                 PageEntity,
                 ScenarioContextOptionEntity,
-                StepContextOptionEntity
+                StepContextOptionEntity,
+                ScenarioTagEntity
             ],
             migrations: [
                 Createandseedpagetable1750936677511,
@@ -48,14 +51,14 @@ import {Createscenariosteptable1750938254814} from "./migration/1750938254814-cr
                 Createscenariotable1750938191907,
                 Createscenariosteptable1750938254814
             ],
-            migrationsRun: true,
-            synchronize: false,
+            migrationsRun: process.env.IS_PROD === 'true',
+            synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
         ScenarioContextOptionModule,
         StepContextOptionModule,
         ScenarioModule,
-        PageModule,
+        PageModule
     ],
     controllers: [],
     providers: []

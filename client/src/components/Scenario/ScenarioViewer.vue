@@ -12,6 +12,11 @@
       />
     </div>
 
+    <ScenarioViewerSidebar
+        :scenario="localScenario"
+        @scenario-updated="handleScenarioUpdated"
+    />
+
     <div class="scenario-viewer__content">
       <EditableField
           :id="localScenario.id"
@@ -23,7 +28,7 @@
 
       <EditableField
           :id="localScenario.id"
-          name="precondition"
+          name="precondition" 
           label="Предусловие"
           :value="localScenario.precondition"
           @scenario-updated="handleScenarioUpdated"
@@ -49,10 +54,11 @@ import EditableField from "@/components/UI/EditableField.vue";
 import ScenarioEditor from "@/components/UI/ScenarioEditor.vue";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import ScenarioViewerSidebar from "@/components/Scenario/ScenarioViewerSidebar.vue";
 
 export default {
+  components: {ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
   inject: ["showAlert"],
-  components: {ContextMenu, AddStepButton, ScenarioEditor, EditableField},
   props: {
     scenario: {
       type: Object,
@@ -63,6 +69,7 @@ export default {
     return {
       scenarioMethods: new ScenarioMethods(),
       localScenario: {},
+      refreshKey: Date.now(),
     }
   },
   methods: {

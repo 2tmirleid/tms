@@ -1,6 +1,7 @@
 import {IsArray, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
 import {Type} from "class-transformer";
 import {UpdateScenarioStepDto} from "./update.scenario.step.dto";
+import {UpdateScenarioTagDto} from "./update.scenario.tag.dto";
 
 export class UpdateScenarioDto {
     @IsOptional()
@@ -23,4 +24,10 @@ export class UpdateScenarioDto {
     @ValidateNested({ each: true })
     @Type(() => UpdateScenarioStepDto)
     steps?: UpdateScenarioStepDto[];
+
+    @IsOptional()
+    @IsArray({ message: 'Tags must be an array' })
+    @ValidateNested({ each: true })
+    @Type(() => UpdateScenarioTagDto)
+    tags?: UpdateScenarioTagDto[];
 }

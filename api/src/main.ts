@@ -1,9 +1,11 @@
 import {NestFactory} from "@nestjs/core";
 import * as date from "./utils/date";
 import {AppModule} from "./app.module";
-import { ValidationPipe } from '@nestjs/common';
+import {ValidationPipe} from '@nestjs/common';
 import {BadRequestLoggingFilter} from "./utils/bad.request.logging.filter";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import * as process from "node:process";
+
 
 async function start() {
     const PORT = process.env.PORT || 8080;
@@ -22,7 +24,9 @@ async function start() {
 
     app.setGlobalPrefix('api/v2');
 
-    // app.useGlobalFilters(new BadRequestLoggingFilter());
+    if (process.env.IS_PROD === 'false') {
+        app.useGlobalFilters(new BadRequestLoggingFilter());
+    }
 
     const config = new DocumentBuilder()
         .setTitle('TMS API v2')
@@ -48,4 +52,5 @@ async function start() {
         console.log(`[${date.DateNow.dateNow}] :: [Application has been started]`);
     });
 }
+
 start();

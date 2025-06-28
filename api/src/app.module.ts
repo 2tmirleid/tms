@@ -21,6 +21,7 @@ import {
 import {Createscenariotable1750938191907} from "./migration/1750938191907-createscenariotable";
 import {Createscenariosteptable1750938254814} from "./migration/1750938254814-createscenariosteptable";
 import {ScenarioTagEntity} from "./entity/scenario.tag.entity";
+import {Createscenariotagtable1751142734069} from "./migration/1751142734069-createscenariotagtable";
 
 
 @Module({
@@ -49,7 +50,8 @@ import {ScenarioTagEntity} from "./entity/scenario.tag.entity";
                 Createandseedscenariocontextoptiontable1750937700921,
                 Createandseedstepcontextoptiontable1750937820203,
                 Createscenariotable1750938191907,
-                Createscenariosteptable1750938254814
+                Createscenariosteptable1750938254814,
+                Createscenariotagtable1751142734069
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',

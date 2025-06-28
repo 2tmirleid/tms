@@ -58,6 +58,7 @@ import ScenarioViewerSidebar from "@/components/Scenario/ScenarioViewerSidebar.v
 
 export default {
   components: {ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
+  inject: ["showAlert"],
   props: {
     scenario: {
       type: Object,
@@ -81,8 +82,8 @@ export default {
         const response = await this.scenarioMethods.getScenarioByID(id);
         this.localScenario = response.data;
       } catch (error) {
-        console.error("Error while getting scenarios: ", error);
-        alert("Что-то пошло не так...")
+        console.error("Error while getting scenario by id: ", error);
+        this.showAlert("Что-то пошло не так...")
       }
     },
     async deleteScenario(id) {
@@ -92,7 +93,7 @@ export default {
         this.$emit('scenario-deleted');
       } catch (error) {
         console.error("Ошибка при удалении сценария:" + error);
-        alert("Не удалось удалить сценарий");
+        this.showAlert("Не удалось удалить сценарий");
       }
     },
   },

@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
 import {ScenarioService} from "./scenario.service";
 import {CreateScenarioDto} from "../dto/create.scenario.dto";
 import {UpdateScenarioDto} from "../dto/update.scenario.dto";
@@ -15,6 +15,14 @@ export class ScenarioController {
     @Get()
     async getScenarios() {
         return await this.scenarioService.getScenarios();
+    }
+
+    @Get('search')
+    async searchScenario(
+        @Query('property') property: string,
+        @Query('value') value: string
+    ) {
+        return this.scenarioService.findScenario(property, value);
     }
 
     @Get(':id')

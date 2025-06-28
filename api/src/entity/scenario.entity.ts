@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import {ScenarioStepEntity} from "./scenario.step.entity";
 import {ScenarioTagEntity} from "./scenario.tag.entity";
+import {Expose} from "class-transformer";
 
 
 @Entity({ name: 'scenario' })
@@ -50,12 +51,14 @@ export class ScenarioEntity {
     tags: ScenarioTagEntity[];
 
     @CreateDateColumn({
-        type: 'timestamp with time zone'
+        type: 'timestamp with time zone',
+        name: 'created_at'
     })
     createdAt: Date;
 
     @UpdateDateColumn({
         type: 'timestamp with time zone',
+        name: 'updated_at'
     })
     updatedAt: Date;
 

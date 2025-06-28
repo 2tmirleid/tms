@@ -2,14 +2,19 @@ import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import {ScenarioEntity} from "../entity/scenario.entity";
 import {CreateScenarioDto} from "../dto/create.scenario.dto";
 import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import {DataSource, Repository} from "typeorm";
 import {UpdateScenarioDto} from "../dto/update.scenario.dto";
 import {ScenarioStepEntity} from "../entity/scenario.step.entity";
 import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
 
 @Injectable()
 export class ScenarioService {
-    constructor(@InjectRepository(ScenarioEntity) private scenarioRepository: Repository<ScenarioEntity>) {}
+    constructor(
+        @InjectRepository(ScenarioEntity)
+        private scenarioRepository: Repository<ScenarioEntity>,
+
+        private readonly dataSource: DataSource,
+    ) {}
 
     async createScenario(dto: CreateScenarioDto) {
         try {
@@ -128,6 +133,48 @@ export class ScenarioService {
 
             throw new HttpException(
                 error,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    async findScenario(property: string, value: string | number) {
+        if (!property || !value) {
+            throw new HttpException(
+                'Оба параметра property и value обязательны.',
+                HttpStatus.BAD_REQUEST
+            );
+        }
+
+        const allowedProps = ['id', 'title', 'tag'];
+        if (!allowedProps.includes(property)) {
+            throw new HttpException(`Недопустимое поле: ${property}`, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            const qb = this.scenarioRepository.createQueryBuilder('scenario')
+                .leftJoinAndSelect('scenario.steps', 'step')
+                .leftJoinAndSelect('scenario.tags', 'tag');
+
+            if (property === 'id' && typeof value === 'number') {
+                qb.where('scenario.id = :value', { value });
+            } else if (property === 'title') {
+                qb.where('LOWER(scenario.title) LIKE LOWER(:value)', { value: `%${value}%` });
+            } else if (property === 'tag') {
+                qb.where('LOWER(tag.title) LIKE LOWER(:value)', { value: `%${value}%` });
+            }
+
+            qb.orderBy('scenario.id', 'ASC')
+                .addOrderBy('step.id', 'ASC');
+
+            return await qb.getMany();
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+
+            throw new HttpException(
+                error?.message || 'Ошибка при поиске сценария',
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }

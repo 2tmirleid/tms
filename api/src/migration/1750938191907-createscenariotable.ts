@@ -13,8 +13,8 @@ export class Createscenariotable1750938191907 implements MigrationInterface {
                 title        varchar(255)                           not null,
                 description  varchar(255),
                 precondition varchar(255),
-                "createdAt"  timestamp with time zone default now() not null,
-                "updatedAt"  timestamp with time zone default now() not null
+                created_at  timestamp with time zone default now() not null,
+                updated_at  timestamp with time zone default now() not null
                 );
 
             alter table scenario

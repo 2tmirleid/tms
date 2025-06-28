@@ -29,4 +29,8 @@ export class ScenarioMethods extends BaseMethods {
     async deleteTag(id) {
         await axios.delete(`${this.BASE_URI}/scenario/tag/${id}`);
     }
+
+    async searchScenario(property, value) {
+        return await axios.get(`${this.BASE_URI}/scenario/search?property=${property}&value=${value}`);
+    }
 }

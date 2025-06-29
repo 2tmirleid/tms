@@ -20,12 +20,12 @@
 
         <ul class="tags">
           <li
-            class="tag-item"
-            v-for="tag in scenario.tags"
-            :key="tag.id"
+              class="tag-item"
+              v-for="tag in scenario.tags"
+              :key="tag.id"
           >
             <CloseButton
-              @click="deleteTag(tag.id)"
+                @click="deleteTag(tag.id)"
             />
 
             <span>{{ tag.title }}</span>
@@ -124,7 +124,7 @@ export default {
         await this.scenarioMethods.deleteTag(id);
 
         this.$emit('scenario-updated', this.scenario.id);
-      } catch(error) {
+      } catch (error) {
         console.error("Ошибка при удалении тега:" + error);
         this.showAlert("Не удалось удалить тег");
       }
@@ -195,7 +195,7 @@ li {
   position: relative;
 }
 
-.tags .tag-add svg{
+.tags .tag-add svg {
   width: 15px;
   height: 15px;
 }

@@ -58,6 +58,8 @@
           <StepContextMenu
             :stepID="step.id"
             @delete-step="deleteStep"
+            @editStep-step="startEditStep(step, 'step')"
+            @editER-step="startEditStep(step, 'expectedResult')"
           />
         </td>
       </tr>

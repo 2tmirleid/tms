@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import {ScenarioStepEntity} from "./scenario.step.entity";
 import {ScenarioTagEntity} from "./scenario.tag.entity";
-import {Expose} from "class-transformer";
 
 
 @Entity({ name: 'scenario' })

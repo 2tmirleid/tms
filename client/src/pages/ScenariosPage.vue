@@ -1,5 +1,5 @@
 <script setup>
-import {onUnmounted, ref, watch} from 'vue'
+import {onUnmounted, ref} from 'vue'
 import ScenarioList from "@/components/Scenario/ScenarioList.vue"
 import ScenarioViewer from "@/components/Scenario/ScenarioViewer.vue"
 import Sidebar from "@/components/Sidebar.vue";

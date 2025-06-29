@@ -30,7 +30,6 @@
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import AddIcon from "@/components/UI/Icons/AddIcon.vue";
-import {inject} from "vue";
 
 export default {
   inject: ["showAlert"],

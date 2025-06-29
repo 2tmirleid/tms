@@ -1,5 +1,4 @@
-import {Expose} from 'class-transformer';
-import {IsInt, IsString, MaxLength} from "@nestjs/class-validator";
+import {IsString, MaxLength} from "@nestjs/class-validator";
 
 export class CreateScenarioStepDto {
     @IsString({ message: 'Step must be string' })

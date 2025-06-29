@@ -58,8 +58,12 @@ export default {
       try {
         if (this.newScenarioName.length > 255) {
           this.showAlert('Название сценария не может быть больше 255 символов');
+          return;
+        }
 
-          return
+        if (!this.newScenarioName.trim()) {
+          this.showAlert('Название сценария не может быть пустым.');
+          return;
         }
 
         const body = { "title": this.newScenarioName }

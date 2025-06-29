@@ -89,6 +89,11 @@ export default {
     },
     async saveTitle(id) {
       try {
+        if (!this.updatedScenarioTitle.trim()) {
+          this.showAlert('Название сценария не может быть пустым.');
+          return;
+        }
+
         const body = {"title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title}
 
         await this.scenarioMethods.updateScenario(id, body);

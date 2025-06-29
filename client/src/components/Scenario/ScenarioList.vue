@@ -6,31 +6,38 @@
     />
 
     <ul class="scenarios">
-      <li
-          v-for="scenario in scenarios"
-          :key="scenario.id"
-          class="scenario-preview"
-          @click="$emit('select', scenario)"
-          @dblclick="startEditTitle(scenario)"
+      <transition-group
+          name="scenario"
+          tag="ul"
+          class="scenarios"
+          appear
       >
-        <template v-if="editedTitleID !== scenario.id">
+        <li
+            v-for="scenario in scenarios"
+            :key="scenario.id"
+            class="scenario-preview"
+            @click="$emit('select', scenario)"
+            @dblclick="startEditTitle(scenario)"
+        >
+          <template v-if="editedTitleID !== scenario.id">
           <span class="title">
             <span class="id">#{{ scenario.id }}</span>
             {{ getTrimmedTitle(scenario.title) }}
           </span>
-        </template>
+          </template>
 
-        <input
-            v-else
-            ref="titleInput"
-            v-model="updatedScenarioTitle"
-            class="new-scenario-title"
-            :placeholder="scenario.title"
-            @blur="cancelEdit"
-            @keyup.enter="saveTitle(scenario.id)"
-            @keyup.esc="cancelEdit"
-        />
-      </li>
+          <input
+              v-else
+              ref="titleInput"
+              v-model="updatedScenarioTitle"
+              class="new-scenario-title"
+              :placeholder="scenario.title"
+              @blur="cancelEdit"
+              @keyup.enter="saveTitle(scenario.id)"
+              @keyup.esc="cancelEdit"
+          />
+        </li>
+      </transition-group>
     </ul>
 
     <ScenarioCreator @scenario-created="refreshScenarios"/>
@@ -184,6 +191,33 @@ export default {
   background: none;
   border: none;
   outline: none;
+}
+
+/* Анимация появления */
+.scenario-enter-active {
+  transition: all 0.4s ease;
+}
+.scenario-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.scenario-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Анимация удаления */
+.scenario-leave-active {
+  transition: all 0.4s ease;
+  position: absolute;
+}
+.scenario-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+.scenario-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
 }
 
 </style>

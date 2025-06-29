@@ -72,6 +72,7 @@ export default {
     async submitEditing() {
       if (!this.scenarioTitle.trim()) {
         this.showAlert('Название сценария не может быть пустым.');
+        return;
       }
 
       try {

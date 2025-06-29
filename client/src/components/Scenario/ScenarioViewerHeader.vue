@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 
 export default {

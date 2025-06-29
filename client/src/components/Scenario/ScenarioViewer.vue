@@ -44,10 +44,10 @@
 
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
-import EditableField from "@/components/UI/EditableField.vue";
-import ScenarioEditor from "@/components/UI/ScenarioEditor.vue";
+import EditableField from "@/components/Scenario/EditableField.vue";
+import ScenarioEditor from "@/components/Scenario/ScenarioEditor.vue";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
-import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
 import ScenarioViewerSidebar from "@/components/Scenario/ScenarioViewerSidebar.vue";
 import ScenarioViewerHeader from "@/components/Scenario/ScenarioViewerHeader.vue";
 

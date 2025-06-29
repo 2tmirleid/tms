@@ -93,11 +93,11 @@
 </template>
 
 <script>
-import {ScenarioMethods} from "@/api/scenarioMethods";
+import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import StepContextMenuButton from "@/components/UI/Btn/StepContextMenuButton.vue";
-import StepContextMenu from "@/components/UI/StepContextMenu.vue";
+import StepContextMenu from "@/components/Scenario/StepContextMenu.vue";
 
 export default {
   inject: ["showAlert"],

@@ -21,7 +21,9 @@ export class Createandseedstepcontextoptiontable1750937820203 implements Migrati
 
         await queryRunner.query(`
             INSERT INTO step_context_option ("title", "alias")
-            VALUES ('Удалить', 'delete')
+            VALUES ('Редактировать шаг', 'editStep'),
+                   ('Редактировать ОР', 'editER'),
+                   ('Удалить', 'delete')
         `);
     }
 

@@ -21,7 +21,8 @@ export class Createandseedscenariocontextoptiontable1750937700921 implements Mig
 
         await queryRunner.query(`
             INSERT INTO scenario_context_option ("title", "alias")
-            VALUES ('Удалить', 'delete')
+            VALUES ('Переименовать', 'rename'),
+                   ('Удалить', 'delete')
         `);
     }
 

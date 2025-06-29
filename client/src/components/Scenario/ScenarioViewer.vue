@@ -1,16 +1,10 @@
 <template>
   <section class="scenario-viewer">
-    <div class="scenario-viewer__header">
-      <div class="title__wrapper">
-        <h3 id="id">#{{ localScenario.id }}</h3>
-        <h3 id="title">{{ localScenario.title }}</h3>
-      </div>
-
-      <ContextMenu
-        :scenarioID="localScenario.id"
-        @delete-scenario="deleteScenario"
-      />
-    </div>
+    <ScenarioViewerHeader
+      :scenario="localScenario"
+      @scenario-deleted="$emit('scenario-deleted')"
+      @scenario-updated="handleScenarioUpdatedForList"
+    />
 
     <ScenarioViewerSidebar
         :scenario="localScenario"
@@ -55,9 +49,10 @@ import ScenarioEditor from "@/components/UI/ScenarioEditor.vue";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
 import ScenarioViewerSidebar from "@/components/Scenario/ScenarioViewerSidebar.vue";
+import ScenarioViewerHeader from "@/components/Scenario/ScenarioViewerHeader.vue";
 
 export default {
-  components: {ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
+  components: {ScenarioViewerHeader, ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
   inject: ["showAlert"],
   props: {
     scenario: {
@@ -77,6 +72,10 @@ export default {
       this.$emit('scenario-updated', this.localScenario.id);
       this.getScenarioByID(this.localScenario.id);
     },
+    handleScenarioUpdatedForList() {
+      this.handleScenarioUpdated(this.localScenario.id);
+      this.$emit('scenario-updated', this.localScenario.id);
+    },
     async getScenarioByID(id) {
       try {
         const response = await this.scenarioMethods.getScenarioByID(id);
@@ -84,16 +83,6 @@ export default {
       } catch (error) {
         console.error("Error while getting scenario by id: ", error);
         this.showAlert("Что-то пошло не так...")
-      }
-    },
-    async deleteScenario(id) {
-      try {
-        await this.scenarioMethods.deleteScenario(id);
-
-        this.$emit('scenario-deleted');
-      } catch (error) {
-        console.error("Ошибка при удалении сценария:" + error);
-        this.showAlert("Не удалось удалить сценарий");
       }
     },
   },
@@ -123,36 +112,5 @@ export default {
 
   padding: 25px 10px 10px 40px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.scenario-viewer__header {
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 25px;
-  padding-left: 10px;
-  padding-right: 25px;
-
-  display: flex;
-  justify-content: space-between;
-
-  h3 {
-    font-weight: normal;
-    font-family: var(--font-primary);
-    color: #000000;
-  }
-
-  #id {
-    color: gray;
-  }
-
-  #title {
-    word-break: break-word;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
-}
-
-.title__wrapper {
-  display: flex;
-  gap: 20px;
 }
 </style>

@@ -15,6 +15,8 @@ const handleScenarioUpdated = (updatedScenarioId) => {
   if (selectedScenario.value?.id === updatedScenarioId) {
     selectedScenario.value = { ...selectedScenario.value }
   }
+
+  scenarioListRef.value?.refreshScenarios?.();
 }
 
 const handleScenarioDeleted = () => {

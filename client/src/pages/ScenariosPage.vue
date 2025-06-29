@@ -2,7 +2,7 @@
 import {onUnmounted, ref, watch} from 'vue'
 import ScenarioList from "@/components/Scenario/ScenarioList.vue"
 import ScenarioViewer from "@/components/Scenario/ScenarioViewer.vue"
-import Sidebar from "@/components/UI/Sidebar.vue";
+import Sidebar from "@/components/Sidebar.vue";
 
 const selectedScenario = ref(null);
 const scenarioListRef = ref(null);

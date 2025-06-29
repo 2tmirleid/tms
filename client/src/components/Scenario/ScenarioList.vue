@@ -43,7 +43,7 @@ import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
 import ContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
-import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
 
 export default {
   components: {ContextMenu, ContextMenuButton, ScenarioListHeader, DeleteButton, ScenarioCreator},

@@ -1,4 +1,4 @@
-import {IsArray, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
+import {IsArray, IsInt, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
 import {Type} from "class-transformer";
 import {UpdateScenarioStepDto} from "./update.scenario.step.dto";
 import {UpdateScenarioTagDto} from "./update.scenario.tag.dto";
@@ -30,4 +30,9 @@ export class UpdateScenarioDto {
     @ValidateNested({ each: true })
     @Type(() => UpdateScenarioTagDto)
     tags?: UpdateScenarioTagDto[];
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt({ message: 'Status must be an integer ID' })
+    readonly status?: number;
 }

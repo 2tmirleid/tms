@@ -1,6 +1,6 @@
 import {Type} from 'class-transformer';
 import {CreateScenarioStepDto} from "./create.scenario.step.dto";
-import {IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
+import {IsArray, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
 import {CreateScenarioTagDto} from "./create.scenario.tag.dto";
 
 export class CreateScenarioDto {

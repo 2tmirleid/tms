@@ -6,23 +6,27 @@ import {DataSource, Repository} from "typeorm";
 import {UpdateScenarioDto} from "../dto/update.scenario.dto";
 import {ScenarioStepEntity} from "../entity/scenario.step.entity";
 import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
+import {ScenarioStatusService} from "./status/scenario.status.service";
 
 @Injectable()
 export class ScenarioService {
     constructor(
         @InjectRepository(ScenarioEntity)
         private scenarioRepository: Repository<ScenarioEntity>,
-
+        private readonly scenarioStatusRepository: ScenarioStatusService,
         private readonly dataSource: DataSource,
-    ) {}
+    ) {
+    }
 
     async createScenario(dto: CreateScenarioDto) {
         try {
             const scenario = this.scenarioRepository.create(dto);
 
+            scenario.status = await this.scenarioStatusRepository.getStatus(4);
+
             return await this.scenarioRepository.save(scenario);
         } catch (error) {
-            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -101,6 +105,10 @@ export class ScenarioService {
                 scenario.updatedAt = new Date();
             }
 
+            if (dto.status !== undefined) {
+                scenario.status = await this.scenarioStatusRepository.getStatus(dto.status);
+            }
+
             return this.scenarioRepository.save(scenario);
         } catch (error) {
             if (error instanceof HttpException) {
@@ -157,11 +165,11 @@ export class ScenarioService {
                 .leftJoinAndSelect('scenario.tags', 'tag');
 
             if (property === 'id' && typeof value === 'number') {
-                qb.where('scenario.id = :value', { value });
+                qb.where('scenario.id = :value', {value});
             } else if (property === 'title') {
-                qb.where('LOWER(scenario.title) LIKE LOWER(:value)', { value: `%${value}%` });
+                qb.where('LOWER(scenario.title) LIKE LOWER(:value)', {value: `%${value}%`});
             } else if (property === 'tag') {
-                qb.where('LOWER(tag.title) LIKE LOWER(:value)', { value: `%${value}%` });
+                qb.where('LOWER(tag.title) LIKE LOWER(:value)', {value: `%${value}%`});
             }
 
             qb.orderBy('scenario.id', 'ASC')

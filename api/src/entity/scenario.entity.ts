@@ -3,12 +3,15 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
+    ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
 import {ScenarioStepEntity} from "./scenario.step.entity";
 import {ScenarioTagEntity} from "./scenario.tag.entity";
+import {ScenarioStatusEntity} from "./scenario.status.entity";
 
 
 @Entity({ name: 'scenario' })
@@ -48,6 +51,13 @@ export class ScenarioEntity {
         eager: true,
     })
     tags: ScenarioTagEntity[];
+
+    @ManyToOne(() => ScenarioStatusEntity, status => status.scenarios, {
+        eager: true,
+        nullable: false,
+    })
+    @JoinColumn({ name: 'status_id' })
+    status: ScenarioStatusEntity;
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

@@ -22,6 +22,7 @@
           <template v-if="editedTitleID !== scenario.id">
           <span class="title">
             <span class="id">#{{ scenario.id }}</span>
+            <span class="status" :style="{backgroundColor: scenario.status.color}"></span>
             {{ getTrimmedTitle(scenario.title) }}
           </span>
           </template>
@@ -110,7 +111,7 @@ export default {
         this.cancelEdit();
       } catch (error) {
         console.error("Update title error:" + error);
-        this.showAlert('При попытке изменить название, что-то пошло не так...');
+        this.showAlert('При попытке изменить название что-то пошло не так...');
       }
     },
     getTrimmedTitle(title) {
@@ -154,27 +155,31 @@ export default {
 
 .scenario-preview {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   font-family: var(--font-primary);
   font-size: 14px;
   padding: 5px;
   border-radius: 5px;
-  gap: 10px;
   transition: background-color 0.2s ease;
   cursor: pointer;
+  align-items: center;
 }
 
 .scenario-preview .title {
-  display: inline-block;
-  width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  vertical-align: middle;
+  flex: 1;
 }
 
 .scenario-preview .title .id {
   color: var(--id-color);
+  flex-shrink: 0;
+  min-width: 30px;
+  text-align: right;
 }
 
 .scenario-preview:hover {
@@ -191,6 +196,15 @@ export default {
   background: none;
   border: none;
   outline: none;
+}
+
+.scenario-preview .status {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 /* Анимация появления */

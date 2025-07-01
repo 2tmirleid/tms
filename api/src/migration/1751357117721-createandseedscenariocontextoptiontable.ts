@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 /*
  * Миграция, создающая и заполняющая таблицу scenario_context_option данными по умолчанию
  */
-export class Createandseedscenariocontextoptiontable1750937700921 implements MigrationInterface {
+export class Createandseedscenariocontextoptiontable1751357117721 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             create table if not exists scenario_context_option
@@ -21,7 +21,8 @@ export class Createandseedscenariocontextoptiontable1750937700921 implements Mig
 
         await queryRunner.query(`
             INSERT INTO scenario_context_option ("title", "alias")
-            VALUES ('Удалить', 'delete')
+            VALUES ('Переименовать', 'rename'),
+                   ('Удалить', 'delete')
         `);
     }
 

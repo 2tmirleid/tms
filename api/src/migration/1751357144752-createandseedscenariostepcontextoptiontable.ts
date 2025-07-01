@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 /*
  * Миграция, создающая и заполняющая таблицу step_context_option данными по умолчанию
  */
-export class Createandseedstepcontextoptiontable1750937820203 implements MigrationInterface {
+export class Createandseedscenariostepcontextoptiontable1751357144752 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             create table if not exists step_context_option
@@ -21,7 +21,9 @@ export class Createandseedstepcontextoptiontable1750937820203 implements Migrati
 
         await queryRunner.query(`
             INSERT INTO step_context_option ("title", "alias")
-            VALUES ('Удалить', 'delete')
+            VALUES ('Редактировать шаг', 'editStep'),
+                   ('Редактировать ОР', 'editER'),
+                   ('Удалить', 'delete')
         `);
     }
 

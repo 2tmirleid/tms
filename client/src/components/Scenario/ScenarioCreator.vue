@@ -32,6 +32,8 @@ import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import AddIcon from "@/components/UI/Icons/AddIcon.vue";
 
 export default {
+  inject: ["showAlert"],
+
   components: {AddIcon},
   data() {
     return {
@@ -54,9 +56,13 @@ export default {
     async saveScenario() {
       try {
         if (this.newScenarioName.length > 255) {
-          alert('Название сценария не может быть больше 255 символов');
+          this.showAlert('Название сценария не может быть больше 255 символов');
+          return;
+        }
 
-          return
+        if (!this.newScenarioName.trim()) {
+          this.showAlert('Название сценария не может быть пустым.');
+          return;
         }
 
         const body = { "title": this.newScenarioName }
@@ -66,7 +72,7 @@ export default {
         this.$emit('scenario-created');
         this.cancelSaving();
       } catch (e) {
-        alert('Что-то пошло не так...');
+        this.showAlert('При попытке сохранить сценарий что-то пошло не так...');
         console.error("Error while creating scenario: ", e);
       }
     }

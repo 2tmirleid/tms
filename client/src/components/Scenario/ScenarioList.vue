@@ -6,31 +6,39 @@
     />
 
     <ul class="scenarios">
-      <li
-          v-for="scenario in scenarios"
-          :key="scenario.id"
-          class="scenario-preview"
-          @click="$emit('select', scenario)"
-          @dblclick="startEditTitle(scenario)"
+      <transition-group
+          name="scenario"
+          tag="ul"
+          class="scenarios"
+          appear
       >
-        <template v-if="editedTitleID !== scenario.id">
+        <li
+            v-for="scenario in scenarios"
+            :key="scenario.id"
+            class="scenario-preview"
+            @click="$emit('select', scenario)"
+            @dblclick="startEditTitle(scenario)"
+        >
+          <template v-if="editedTitleID !== scenario.id">
           <span class="title">
             <span class="id">#{{ scenario.id }}</span>
+            <span class="status" :style="{backgroundColor: scenario.status.color}"></span>
             {{ getTrimmedTitle(scenario.title) }}
           </span>
-        </template>
+          </template>
 
-        <input
-            v-else
-            ref="titleInput"
-            v-model="updatedScenarioTitle"
-            class="new-scenario-title"
-            :placeholder="scenario.title"
-            @blur="cancelEdit"
-            @keyup.enter="saveTitle(scenario.id)"
-            @keyup.esc="cancelEdit"
-        />
-      </li>
+          <input
+              v-else
+              ref="titleInput"
+              v-model="updatedScenarioTitle"
+              class="new-scenario-title"
+              :placeholder="scenario.title"
+              @blur="cancelEdit"
+              @keyup.enter="saveTitle(scenario.id)"
+              @keyup.esc="cancelEdit"
+          />
+        </li>
+      </transition-group>
     </ul>
 
     <ScenarioCreator @scenario-created="refreshScenarios"/>
@@ -43,10 +51,11 @@ import ScenarioCreator from "@/components/Scenario/ScenarioCreator.vue";
 import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
 import ContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
-import ContextMenu from "@/components/UI/ScenarioContextMenu.vue";
+import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
 
 export default {
   components: {ContextMenu, ContextMenuButton, ScenarioListHeader, DeleteButton, ScenarioCreator},
+  inject: ['showAlert'],
 
   data: () => ({
     scenarios: [],
@@ -65,11 +74,11 @@ export default {
         this.scenarios = response.data.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.error("Fetch scenarios error:" + error);
+        this.showAlert('При попытке получить список сценариев что-то пошло не так...');
       }
     },
     async handleFoundScenario(scenario) {
-      this.scenarios.length = 0;
-      this.scenarios.push(scenario.data);
+      this.scenarios = Array.isArray(scenario.data) ? scenario.data : [scenario.data];
     },
     startEditTitle(scenario) {
       this.editedTitleID = scenario.id;
@@ -88,6 +97,11 @@ export default {
     },
     async saveTitle(id) {
       try {
+        if (!this.updatedScenarioTitle.trim()) {
+          this.showAlert('Название сценария не может быть пустым.');
+          return;
+        }
+
         const body = {"title": this.updatedScenarioTitle.trim() || this.scenarios.find(s => s.id === id).title}
 
         await this.scenarioMethods.updateScenario(id, body);
@@ -97,6 +111,7 @@ export default {
         this.cancelEdit();
       } catch (error) {
         console.error("Update title error:" + error);
+        this.showAlert('При попытке изменить название что-то пошло не так...');
       }
     },
     getTrimmedTitle(title) {
@@ -140,27 +155,31 @@ export default {
 
 .scenario-preview {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   font-family: var(--font-primary);
   font-size: 14px;
   padding: 5px;
   border-radius: 5px;
-  gap: 10px;
   transition: background-color 0.2s ease;
   cursor: pointer;
+  align-items: center;
 }
 
 .scenario-preview .title {
-  display: inline-block;
-  width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  vertical-align: middle;
+  flex: 1;
 }
 
 .scenario-preview .title .id {
   color: var(--id-color);
+  flex-shrink: 0;
+  min-width: 30px;
+  text-align: right;
 }
 
 .scenario-preview:hover {
@@ -177,6 +196,42 @@ export default {
   background: none;
   border: none;
   outline: none;
+}
+
+.scenario-preview .status {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Анимация появления */
+.scenario-enter-active {
+  transition: all 0.4s ease;
+}
+.scenario-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.scenario-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Анимация удаления */
+.scenario-leave-active {
+  transition: all 0.4s ease;
+  position: absolute;
+}
+.scenario-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+.scenario-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
 }
 
 </style>

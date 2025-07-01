@@ -1,9 +1,8 @@
 import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
 import {ScenarioStepEntity} from "../../entity/scenario.step.entity";
 import {ScenarioEntity} from "../../entity/scenario.entity";
-import {UpdateScenarioStepDto} from "../../dto/update.scenario.step.dto";
 import {CreateScenarioStepDto} from "../../dto/create.scenario.step.dto";
 
 @Injectable()

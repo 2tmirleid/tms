@@ -4,13 +4,17 @@ import {ScenarioController} from "./scenario.controller";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ScenarioEntity} from "../entity/scenario.entity";
 import {ScenarioStepModule} from "./step/scenario.step.module";
+import {ScenarioTagModule} from "./tag/scenario.tag.module";
+import {ScenarioStatusModule} from "./status/scenario.status.module";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             ScenarioEntity,
         ]),
-        ScenarioStepModule
+        ScenarioStepModule,
+        ScenarioTagModule,
+        ScenarioStatusModule
     ],
     controllers: [
         ScenarioController

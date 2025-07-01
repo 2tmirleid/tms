@@ -24,6 +24,7 @@ import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ClearButton from "@/components/UI/Btn/ClearButton.vue";
 
 export default {
+  inject: ["showAlert"],
   components: {ClearButton},
   data() {
     return {
@@ -41,17 +42,32 @@ export default {
       }
 
       try {
-        const response = await this.scenarioMethods.getScenarioByID(query);
+        let response;
+
+        if (!isNaN(Number(query))) {
+          response = await this.scenarioMethods.getScenarioByID(query);
+        } else {
+          const [ property, value ] = query.split('=');
+
+          response = await this.scenarioMethods.searchScenario(property, value);
+        }
+
+        if (response.data.length === 0) {
+          this.showAlert("Сценарий не был найден");
+          this.$emit("refresh-scenarios-list");
+          return;
+        }
+
         this.$emit("found-scenario", response);
       } catch (error) {
         const status = error?.response?.status;
 
         if (status === 400 || status === 404) {
-          alert("Сценарий не был найден");
+          this.showAlert("Сценарий не был найден");
           this.$emit("refresh-scenarios-list");
         } else {
           console.error("Error while finding scenario:", error);
-          alert("Что-то пошло не так...");
+          this.showAlert("При попытке поиска сценария что-то пошло не так...");
         }
       }
     },

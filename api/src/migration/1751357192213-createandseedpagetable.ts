@@ -1,9 +1,9 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 /*
  * Миграция, создающая и заполняющая таблицу page данными по умолчанию
  */
-export class Createandseedpagetable1750936677511 implements MigrationInterface {
+export class Createandseedpagetable1751357192213 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             create table if not exists page

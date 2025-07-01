@@ -25,4 +25,12 @@ export class ScenarioMethods extends BaseMethods {
     async deleteStep(id) {
         await axios.delete(`${this.BASE_URI}/scenario/step/${id}`);
     }
+
+    async deleteTag(id) {
+        await axios.delete(`${this.BASE_URI}/scenario/tag/${id}`);
+    }
+
+    async searchScenario(property, value) {
+        return await axios.get(`${this.BASE_URI}/scenario/search?property=${property}&value=${value}`);
+    }
 }

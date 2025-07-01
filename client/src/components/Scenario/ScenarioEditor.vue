@@ -2,91 +2,93 @@
   <div class="scenario-editor">
     <h4>Сценарий</h4>
 
-    <table class="scenario-table">
-      <thead>
-      <tr class="scenario-row header">
-        <th class="scenario-step">Шаг</th>
-        <td class="scenario-result">Ожидаемый результат</td>
-      </tr>
-      </thead>
+    <div class="table-wrapper">
+      <table class="scenario-table">
+        <thead>
+        <tr class="scenario-row header">
+          <th class="scenario-step">Шаг</th>
+          <th class="scenario-result">Ожидаемый результат</th>
+        </tr>
+        </thead>
 
-      <tbody>
-      <tr
-          v-for="(step, index) in scenarioSteps"
-          :key="index"
-          class="scenario-row"
-      >
-        <th
-            class="scenario-step"
-            @dblclick="startEditStep(step, 'step')"
+        <tbody>
+        <tr
+            v-for="(step, index) in scenarioSteps"
+            :key="index"
+            class="scenario-row"
         >
-          <input
-              v-if="edit.active && step.id === edit.editableStepID && edit.editingField === 'step'"
-              class="editable-step"
-              ref="stepInput"
-              type="text"
-              v-model="editableStep.step"
-              @blur="finishEdit"
-              @keyup.enter="finishEdit"
+          <th
+              class="scenario-step"
+              @dblclick="startEditStep(step, 'step')"
           >
-          <div v-else class="step">
-            {{ step.step }}
-          </div>
-        </th>
-        <td
-            class="scenario-result"
-            @dblclick="startEditStep(step, 'expectedResult')"
-            @mouseenter="toggleShowDeleteIcon(step.id)"
-            @mousedown="toggleShowDeleteIcon"
-            @mouseleave="toggleShowDeleteIcon"
-        >
-          <input
-              v-if="edit.active && step.id === edit.editableStepID && edit.editingField === 'expectedResult'"
-              class="editable-result"
-              ref="resultInput"
-              type="text"
-              v-model="editableStep.expectedResult"
-              @blur="finishEdit"
-              @keyup.enter="finishEdit"
+            <input
+                v-if="edit.active && step.id === edit.editableStepID && edit.editingField === 'step'"
+                class="editable-step"
+                ref="stepInput"
+                type="text"
+                v-model="editableStep.step"
+                @blur="finishEdit"
+                @keyup.enter="finishEdit"
+            >
+            <div v-else class="step">
+              {{ step.step }}
+            </div>
+          </th>
+          <td
+              class="scenario-result"
+              @dblclick="startEditStep(step, 'expectedResult')"
+              @mouseenter="toggleShowDeleteIcon(step.id)"
+              @mousedown="toggleShowDeleteIcon"
+              @mouseleave="toggleShowDeleteIcon"
           >
-          <div v-else>
-            {{ step.expectedResult }}
-          </div>
-        </td>
+            <input
+                v-if="edit.active && step.id === edit.editableStepID && edit.editingField === 'expectedResult'"
+                class="editable-result"
+                ref="resultInput"
+                type="text"
+                v-model="editableStep.expectedResult"
+                @blur="finishEdit"
+                @keyup.enter="finishEdit"
+            >
+            <div v-else>
+              {{ step.expectedResult }}
+            </div>
+          </td>
 
-        <td class="context-menu-cell">
-          <StepContextMenu
-              :stepID="step.id"
-              @delete-step="deleteStep"
-              @editStep-step="startEditStep(step, 'step')"
-              @editER-step="startEditStep(step, 'expectedResult')"
-          />
-        </td>
-      </tr>
+          <td class="context-menu-cell">
+            <StepContextMenu
+                :stepID="step.id"
+                @delete-step="deleteStep"
+                @editStep-step="startEditStep(step, 'step')"
+                @editER-step="startEditStep(step, 'expectedResult')"
+            />
+          </td>
+        </tr>
 
-      <tr v-if="add" class="scenario-row temp-step">
-        <th class="scenario-step">
-          <input
-              ref="step"
-              type="text"
-              name="step"
-              placeholder="Шаг"
-              v-model="newStep.step"
-              @keyup.enter="submitStep"
-          />
-        </th>
-        <td class="scenario-result">
-          <input
-              type="text"
-              name="expectedResult"
-              placeholder="Ожидаемый результат"
-              v-model="newStep.expectedResult"
-              @keyup.enter="submitStep"
-          />
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        <tr v-if="add" class="scenario-row temp-step">
+          <th class="scenario-step">
+            <input
+                ref="step"
+                type="text"
+                name="step"
+                placeholder="Шаг"
+                v-model="newStep.step"
+                @keyup.enter="submitStep"
+            />
+          </th>
+          <td class="scenario-result">
+            <input
+                type="text"
+                name="expectedResult"
+                placeholder="Ожидаемый результат"
+                v-model="newStep.expectedResult"
+                @keyup.enter="submitStep"
+            />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
     <AddStepButton @click="toggleAdd" :class="{ active: add }"/>
   </div>
@@ -274,9 +276,16 @@ export default {
   padding-bottom: 10px;
 }
 
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
 .scenario-table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 95%;
+  border-collapse: separate;
+  border-spacing: 0;
   font-family: var(--font-primary);
   font-size: 14px;
   table-layout: fixed;
@@ -290,10 +299,10 @@ export default {
 
 .scenario-row.header th {
   text-align: center;
-}
-
-.scenario-row.header td {
-  text-align: center;
+  position: sticky;
+  top: 0;
+  background-color: #f9fbfb;
+  z-index: 2;
 }
 
 .scenario-row td,

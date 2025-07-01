@@ -11,17 +11,23 @@ import {ScenarioContextOptionModule} from "./scenario/contextOption/scenario.con
 import {StepContextOptionEntity} from "./entity/step.context.option.entity";
 import {StepContextOptionModule} from "./scenario/step/contextOption/step.context.option.module";
 import * as process from "node:process";
-import {Createandseedpagetable1750936677511} from "./migration/1750936677511-createandseedpagetable";
-import {
-    Createandseedscenariocontextoptiontable1750937700921
-} from "./migration/1750937700921-createandseedscenariocontextoptiontable";
-import {
-    Createandseedstepcontextoptiontable1750937820203
-} from "./migration/1750937820203-createandseedstepcontextoptiontable";
-import {Createscenariotable1750938191907} from "./migration/1750938191907-createscenariotable";
-import {Createscenariosteptable1750938254814} from "./migration/1750938254814-createscenariosteptable";
 import {ScenarioTagEntity} from "./entity/scenario.tag.entity";
-import {Createscenariotagtable1751142734069} from "./migration/1751142734069-createscenariotagtable";
+import { ScenarioStatusEntity } from "./entity/scenario.status.entity";
+import {ScenarioStatusModule} from "./scenario/status/scenario.status.module";
+import {
+    Createandseedscenariostatustable1751356880625
+} from "./migration/1751356880625-createandseedscenariostatustable";
+import {Createscenariotable1751356924323} from "./migration/1751356924323-createscenariotable";
+import {Createscenariosteptable1751357020661} from "./migration/1751357020661-createscenariosteptable";
+import {Createscenariotagtable1751357067393} from "./migration/1751357067393-createscenariotagtable";
+import {
+    Createandseedscenariocontextoptiontable1751357117721
+} from "./migration/1751357117721-createandseedscenariocontextoptiontable";
+import {
+    Createandseedscenariostepcontextoptiontable1751357144752
+} from "./migration/1751357144752-createandseedscenariostepcontextoptiontable";
+import {Createandseedpagetable1751357192213} from "./migration/1751357192213-createandseedpagetable";
+
 
 
 @Module({
@@ -43,20 +49,23 @@ import {Createscenariotagtable1751142734069} from "./migration/1751142734069-cre
                 PageEntity,
                 ScenarioContextOptionEntity,
                 StepContextOptionEntity,
-                ScenarioTagEntity
+                ScenarioTagEntity,
+                ScenarioStatusEntity
             ],
             migrations: [
-                Createandseedpagetable1750936677511,
-                Createandseedscenariocontextoptiontable1750937700921,
-                Createandseedstepcontextoptiontable1750937820203,
-                Createscenariotable1750938191907,
-                Createscenariosteptable1750938254814,
-                Createscenariotagtable1751142734069
+                Createandseedscenariostatustable1751356880625,
+                Createscenariotable1751356924323,
+                Createscenariosteptable1751357020661,
+                Createscenariotagtable1751357067393,
+                Createandseedscenariocontextoptiontable1751357117721,
+                Createandseedscenariostepcontextoptiontable1751357144752,
+                Createandseedpagetable1751357192213
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        ScenarioStatusModule,
         ScenarioContextOptionModule,
         StepContextOptionModule,
         ScenarioModule,

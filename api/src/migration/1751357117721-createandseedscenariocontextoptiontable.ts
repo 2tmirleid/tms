@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 /*
- * Миграция, создающая и заполняющая таблицу step_context_option данными по умолчанию
+ * Миграция, создающая и заполняющая таблицу scenario_context_option данными по умолчанию
  */
-export class Createandseedstepcontextoptiontable1750937820203 implements MigrationInterface {
+export class Createandseedscenariocontextoptiontable1751357117721 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            create table if not exists step_context_option
+            create table if not exists scenario_context_option
             (
                 id    serial
                     primary key,
@@ -15,21 +15,20 @@ export class Createandseedstepcontextoptiontable1750937820203 implements Migrati
                 alias varchar(255) not null
             );
 
-            alter table step_context_option
+            alter table scenario_context_option
                 owner to postgres;
         `);
 
         await queryRunner.query(`
-            INSERT INTO step_context_option ("title", "alias")
-            VALUES ('Редактировать шаг', 'editStep'),
-                   ('Редактировать ОР', 'editER'),
+            INSERT INTO scenario_context_option ("title", "alias")
+            VALUES ('Переименовать', 'rename'),
                    ('Удалить', 'delete')
         `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            DROP TABLE IF EXISTS step_context_option
+            DROP TABLE IF EXISTS scenario_context_option
         `);
     }
 }

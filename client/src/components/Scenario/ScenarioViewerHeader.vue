@@ -5,6 +5,13 @@
         class="title__wrapper"
     >
       <h3 id="id">#{{ scenario.id }}</h3>
+
+      <StatusContextMenu
+        :status="scenario.status"
+        :scenarioID="scenario.id"
+        @scenario-updated="$emit('scenario-updated')"
+      />
+
       <h3 id="title">{{ scenario.title }}</h3>
     </div>
 
@@ -34,10 +41,11 @@
 <script>
 import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import StatusContextMenu from "@/components/Scenario/StatusContextMenu.vue";
 
 export default {
   inject: ['showAlert'],
-  components: {ContextMenu},
+  components: {StatusContextMenu, ContextMenu},
   props: {
     scenario: Object
   },
@@ -129,6 +137,7 @@ export default {
     overflow-wrap: break-word;
   }
 }
+
 
 .title__wrapper {
   display: flex;

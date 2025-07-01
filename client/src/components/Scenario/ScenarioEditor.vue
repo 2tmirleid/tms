@@ -56,10 +56,10 @@
 
         <td class="context-menu-cell">
           <StepContextMenu
-            :stepID="step.id"
-            @delete-step="deleteStep"
-            @editStep-step="startEditStep(step, 'step')"
-            @editER-step="startEditStep(step, 'expectedResult')"
+              :stepID="step.id"
+              @delete-step="deleteStep"
+              @editStep-step="startEditStep(step, 'step')"
+              @editER-step="startEditStep(step, 'expectedResult')"
           />
         </td>
       </tr>
@@ -154,6 +154,11 @@ export default {
         return;
       }
 
+      if (step.length > 255 || expectedResult.length > 255) {
+        this.showAlert('Поля "Шаг" и "Ожидаемый результат" не могут превышать 255 символов.');
+        return;
+      }
+
       try {
         const currentSteps = [...this.scenarioSteps];
 
@@ -181,7 +186,7 @@ export default {
       this.edit.active = true;
       this.edit.editableStepID = step.id;
       this.edit.editingField = field;
-      this.editableStep = { ...step };
+      this.editableStep = {...step};
 
       this.$nextTick(() => {
         const refName = field === 'step' ? 'stepInput' : 'resultInput';
@@ -203,9 +208,14 @@ export default {
       this.edit.active = false;
       this.edit.editableStepID = 0;
       this.edit.editingField = '';
-      this.editableStep = { id: 0, step: "", expectedResult: "" };
+      this.editableStep = {id: 0, step: "", expectedResult: ""};
     },
     async editScenario() {
+      if (this.editableStep.step.length > 255 || this.editableStep.expectedResult.length > 255) {
+        this.showAlert('Поля "Шаг" и "Ожидаемый результат" не могут превышать 255 символов.');
+        return;
+      }
+
       try {
         const currentSteps = [...this.scenarioSteps];
         const stepIndex = currentSteps.findIndex(s => s.id === this.edit.editableStepID);
@@ -219,7 +229,7 @@ export default {
 
           await this.scenarioMethods.updateScenario(
               this.scenarioID,
-              { steps: currentSteps }
+              {steps: currentSteps}
           );
 
           this.cancelEdit();
@@ -227,7 +237,7 @@ export default {
         }
       } catch (error) {
         console.error("Ошибка при обновлении шага:" + error);
-        alert("Не удалось сохранить изменения");
+        this.showAlert("Не удалось сохранить изменения");
       }
     },
     toggleShowDeleteIcon(id) {
@@ -242,9 +252,9 @@ export default {
 
         this.deletingStepID = 0;
         this.$emit('scenario-updated', this.scenarioID);
-      } catch(error) {
+      } catch (error) {
         console.error("Ошибка при удалении шага:" + error);
-        alert("Не удалось удалить шаг");
+        this.showAlert("Не удалось удалить шаг");
       }
     }
   },

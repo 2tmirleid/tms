@@ -143,7 +143,7 @@ export default {
   padding: 4px;
   border-radius: 5px;
   text-align: center;
-  color: #000000;
+  color: #FFFFFF;
   cursor: pointer;
 }
 

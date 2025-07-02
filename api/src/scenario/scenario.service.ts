@@ -146,45 +146,59 @@ export class ScenarioService {
         }
     }
 
-    async findScenario(property: string, value: string | number) {
-        if (!property || !value) {
-            throw new HttpException(
-                'Оба параметра property и value обязательны.',
-                HttpStatus.BAD_REQUEST
-            );
-        }
+    async findScenario(filters: Record<string, string[]>) {
+        const allowedProps = ['id', 'title', 'tag', 'status'];
 
-        const allowedProps = ['id', 'title', 'tag'];
-        if (!allowedProps.includes(property)) {
-            throw new HttpException(`Недопустимое поле: ${property}`, HttpStatus.BAD_REQUEST);
-        }
+        const qb = this.scenarioRepository.createQueryBuilder('scenario')
+            .leftJoinAndSelect('scenario.steps', 'step')
+            .leftJoinAndSelect('scenario.tags', 'tag')
+            .leftJoinAndSelect('scenario.status', 'status');
 
-        try {
-            const qb = this.scenarioRepository.createQueryBuilder('scenario')
-                .leftJoinAndSelect('scenario.steps', 'step')
-                .leftJoinAndSelect('scenario.tags', 'tag');
+        let firstCondition = true;
 
-            if (property === 'id' && typeof value === 'number') {
-                qb.where('scenario.id = :value', {value});
-            } else if (property === 'title') {
-                qb.where('LOWER(scenario.title) LIKE LOWER(:value)', {value: `%${value}%`});
-            } else if (property === 'tag') {
-                qb.where('LOWER(tag.title) LIKE LOWER(:value)', {value: `%${value}%`});
+        for (const [key, values] of Object.entries(filters)) {
+            if (!allowedProps.includes(key)) continue;
+            if (!Array.isArray(values) || values.length === 0) continue;
+
+            const paramName = `${key}_values`;
+            const conditionGroup: string[] = [];
+
+            values.forEach((_, index) => {
+                conditionGroup.push(`${getField(key)} LIKE :${paramName}${index}`);
+            });
+
+            const joinedGroup = `(${conditionGroup.join(" OR ")})`;
+
+            if (firstCondition) {
+                qb.where(joinedGroup);
+                firstCondition = false;
+            } else {
+                qb.andWhere(joinedGroup);
             }
 
-            qb.orderBy('scenario.id', 'ASC')
-                .addOrderBy('step.id', 'ASC');
+            values.forEach((val, index) => {
+                qb.setParameter(`${paramName}${index}`, `%${val.toLowerCase()}%`);
+            });
+        }
 
-            return await qb.getMany();
-        } catch (error) {
-            if (error instanceof HttpException) {
-                throw error;
+        qb.orderBy("scenario.id", "ASC")
+            .addOrderBy("step.id", "ASC");
+
+        return qb.getMany();
+
+        function getField(property: string): string {
+            switch (property) {
+                case 'id':
+                    return 'CAST(scenario.id AS TEXT)';
+                case 'title':
+                    return 'LOWER(scenario.title)';
+                case 'tag':
+                    return 'LOWER(tag.title)';
+                case 'status':
+                    return 'LOWER(status.title)';
+                default:
+                    return '1=0';
             }
-
-            throw new HttpException(
-                error?.message || 'Ошибка при поиске сценария',
-                HttpStatus.INTERNAL_SERVER_ERROR
-            );
         }
     }
 }

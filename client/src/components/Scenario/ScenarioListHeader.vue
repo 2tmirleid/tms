@@ -42,17 +42,27 @@ export default {
       }
 
       try {
-        let response;
+        const criteria = {};
 
-        if (!isNaN(Number(query))) {
-          response = await this.scenarioMethods.getScenarioByID(query);
-        } else {
-          const [ property, value ] = query.split('=');
+        query.split(";").forEach(pair => {
+          const [propRaw, valuesRaw] = pair.split("=");
+          if (!propRaw || !valuesRaw) return;
 
-          response = await this.scenarioMethods.searchScenario(property, value);
-        }
+          const property = propRaw.trim().toLowerCase();
+          const values = valuesRaw
+              .split(",")
+              .map(val => val.trim())
+              .filter(Boolean);
 
-        if (response.data.length === 0) {
+          if (values.length) {
+            criteria[property] = values;
+          }
+        });
+        console.log("Отправка критериев поиска:", JSON.stringify(criteria, null, 2));
+
+        const response = await this.scenarioMethods.searchScenario(criteria);
+
+        if (!response || response.length === 0) {
           this.showAlert("Сценарий не был найден");
           this.$emit("refresh-scenarios-list");
           return;
@@ -66,8 +76,8 @@ export default {
           this.showAlert("Сценарий не был найден");
           this.$emit("refresh-scenarios-list");
         } else {
-          console.error("Error while finding scenario:", error);
-          this.showAlert("При попытке поиска сценария что-то пошло не так...");
+          console.error("Ошибка поиска:", error);
+          this.showAlert("Ошибка при поиске сценария");
         }
       }
     },

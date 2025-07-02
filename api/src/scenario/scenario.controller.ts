@@ -17,12 +17,9 @@ export class ScenarioController {
         return await this.scenarioService.getScenarios();
     }
 
-    @Get('search')
-    async searchScenario(
-        @Query('property') property: string,
-        @Query('value') value: string
-    ) {
-        return this.scenarioService.findScenario(property, value);
+    @Post('search')
+    async searchScenario(@Body() filters: Record<string, string[]>) {
+        return this.scenarioService.findScenario(filters);
     }
 
     @Get(':id')

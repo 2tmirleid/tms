@@ -7,6 +7,7 @@
     <ScenarioListHeader
         @refresh-scenarios-list="refreshScenarios"
         @found-scenario="handleFoundScenario"
+        @scenario-sorted="handleSortScenario"
     />
 
     <ul class="scenarios">
@@ -91,6 +92,22 @@ export default {
     },
     async handleFoundScenario(scenario) {
       this.scenarios = Array.isArray(scenario.data) ? scenario.data : [scenario.data];
+    },
+    async handleSortScenario(type) {
+      switch (type) {
+        case 'sort_asc':
+          this.scenarios = this.scenarios.sort((a, b) => a.id - b.id);
+          return;
+        case 'sort_desc':
+          this.scenarios = this.scenarios.sort((a, b) => b.id - a.id);
+          return;
+        case 'sort_alphabet':
+          this.scenarios.sort((a, b) => a.title.localeCompare(b.title));
+          return;
+        case 'sort_status':
+          this.scenarios.sort((a, b) => a.status.id - b.status.id);
+          return;
+      }
     },
     startEditTitle(scenario) {
       this.editedTitleID = scenario.id;

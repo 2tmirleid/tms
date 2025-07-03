@@ -15,6 +15,14 @@
             @click="clearSearch"
         />
       </div>
+
+      <div class="options">
+        <div class="sort">
+          <SortContextMenu
+            @scenario-sorted="handleSort"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -22,10 +30,12 @@
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ClearButton from "@/components/UI/Btn/ClearButton.vue";
+import SortButton from "@/components/UI/Btn/SortButton.vue";
+import SortContextMenu from "@/components/Scenario/SortContextMenu.vue";
 
 export default {
   inject: ["showAlert"],
-  components: {ClearButton},
+  components: {SortContextMenu, SortButton, ClearButton},
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
@@ -33,6 +43,9 @@ export default {
     }
   },
   methods: {
+    async handleSort(type) {
+      this.$emit('scenario-sorted', type);
+    },
     async findScenario() {
       const query = this.scenario.trim();
 
@@ -58,7 +71,6 @@ export default {
             criteria[property] = values;
           }
         });
-        console.log("Отправка критериев поиска:", JSON.stringify(criteria, null, 2));
 
         const response = await this.scenarioMethods.searchScenario(criteria);
 
@@ -90,6 +102,11 @@ export default {
 </script>
 
 <style scoped>
+.options {
+  padding: 5px;
+  float: right;
+}
+
 .scenario-list__header {
   height: 150px;
   border-bottom: 1px solid var(--border-color);

@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     showAlert(message) {
-      console.log(message)
       this.globalAlert.message = message;
       this.globalAlert.visible = true;
     },

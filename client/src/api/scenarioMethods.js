@@ -33,4 +33,12 @@ export class ScenarioMethods extends BaseMethods {
     async searchScenario(body) {
         return await axios.post(`${this.BASE_URI}/scenario/search`, body);
     }
+
+    async importScenario(formData) {
+        return await axios.post(`${this.BASE_URI}/scenario/import`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    }
 }

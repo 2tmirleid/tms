@@ -7,6 +7,7 @@ import {UpdateScenarioDto} from "../dto/update.scenario.dto";
 import {ScenarioStepEntity} from "../entity/scenario.step.entity";
 import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
 import {ScenarioStatusService} from "./status/scenario.status.service";
+import {parseScenarioSteps} from "../utils/parse.scenario";
 
 @Injectable()
 export class ScenarioService {
@@ -199,6 +200,32 @@ export class ScenarioService {
                 default:
                     return '1=0';
             }
+        }
+    }
+
+    async importScenario(file: any, type: string) {
+        try {
+            let dto = {}
+
+            if (type === 'csv') {
+                dto = {
+                    title: file[0]?.name,
+                    description: file[0]?.description,
+                    precondition: file[0]?.precondition,
+                    steps: parseScenarioSteps(file[0]?.scenario),
+                };
+            }
+
+            const scenario = this.scenarioRepository.create(dto);
+
+            scenario.status = await this.scenarioStatusRepository.getStatus(4);
+
+            return await this.scenarioRepository.save(scenario);
+        } catch (error) {
+            throw new HttpException(
+                error,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

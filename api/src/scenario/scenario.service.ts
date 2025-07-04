@@ -7,7 +7,8 @@ import {UpdateScenarioDto} from "../dto/update.scenario.dto";
 import {ScenarioStepEntity} from "../entity/scenario.step.entity";
 import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
 import {ScenarioStatusService} from "./status/scenario.status.service";
-import {parseScenarioSteps} from "../utils/parse.scenario";
+import {parseScenarioSteps} from "../utils/parse.scenario.steps";
+import {parseScenarioTags} from "../utils/parse.scenario.tags";
 
 @Injectable()
 export class ScenarioService {
@@ -213,6 +214,7 @@ export class ScenarioService {
                     description: file[0]?.description,
                     precondition: file[0]?.precondition,
                     steps: parseScenarioSteps(file[0]?.scenario),
+                    tags: parseScenarioTags(file[0]?.tag),
                 };
             }
 

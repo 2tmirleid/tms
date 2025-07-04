@@ -33,6 +33,8 @@ export function parseScenarioSteps(raw: string): { step: string; expectedResult:
             }
             continue;
         }
+
+
     }
 
     return steps;

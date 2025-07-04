@@ -17,6 +17,14 @@
       </div>
 
       <div class="options">
+        <div class="data">
+          <div class="import">
+            <ImportScenarioMenu
+              @refresh-scenarios-list="$emit('refresh-scenarios-list')"
+            />
+          </div>
+        </div>
+
         <div class="sort">
           <SortContextMenu
             @scenario-sorted="handleSort"
@@ -32,10 +40,11 @@ import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ClearButton from "@/components/UI/Btn/ClearButton.vue";
 import SortButton from "@/components/UI/Btn/SortButton.vue";
 import SortContextMenu from "@/components/Scenario/SortContextMenu.vue";
+import ImportScenarioMenu from "@/components/Scenario/ImportScenarioMenu.vue";
 
 export default {
   inject: ["showAlert"],
-  components: {SortContextMenu, SortButton, ClearButton},
+  components: {ImportScenarioMenu, SortContextMenu, SortButton, ClearButton},
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
@@ -105,6 +114,8 @@ export default {
 .options {
   padding: 5px;
   float: right;
+  display: flex;
+  gap: 10px;
 }
 
 .scenario-list__header {

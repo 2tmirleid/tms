@@ -29,23 +29,7 @@ export class ScenarioController {
     @Post('import')
     @UseInterceptors(FileInterceptor('scenario'))
     async importScenario(@UploadedFile() scenario: Express.Multer.File) {
-        const results: any[] = [];
-
-        const stream = Readable.from(scenario.buffer);
-
-        const uploadedScenario = await new Promise<any[]>((resolve, reject) => {
-            stream
-                .pipe(csv({ separator: ';' }))
-                .on('data', (data) => results.push(data))
-                .on('end', () => {
-                    resolve(results);
-                })
-                .on('error', (err) => {
-                    reject(`Ошибка парсинга CSV: ${err.message}`);
-                });
-        });
-
-        return await this.scenarioService.importScenario(uploadedScenario, scenario.originalname.split('.')[1]);
+        return await this.scenarioService.importScenario(scenario);
     }
 
     @Get()

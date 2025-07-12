@@ -9,6 +9,8 @@ import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
 import {ScenarioStatusService} from "./status/scenario.status.service";
 import {parseScenarioSteps} from "../utils/parse.scenario.steps";
 import {parseScenarioTags} from "../utils/parse.scenario.tags";
+import {Readable} from "stream";
+import * as csv from "csv-parser";
 
 @Injectable()
 export class ScenarioService {
@@ -204,17 +206,33 @@ export class ScenarioService {
         }
     }
 
-    async importScenario(file: any, type: string) {
+    async importScenario(scenario: Express.Multer.File) {
+        const results: any[] = [];
+
+        const stream = Readable.from(scenario.buffer);
+        const type = scenario.originalname.split('.')[1];
         try {
+            const uploadedScenario = await new Promise<any[]>((resolve, reject) => {
+                stream
+                    .pipe(csv({ separator: ';' }))
+                    .on('data', (data) => results.push(data))
+                    .on('end', () => {
+                        resolve(results);
+                    })
+                    .on('error', (err) => {
+                        reject(`Error while parsing CSV: ${err.message}`);
+                    });
+            });
+
             let dto = {}
 
             if (type === 'csv') {
                 dto = {
-                    title: file[0]?.name,
-                    description: file[0]?.description,
-                    precondition: file[0]?.precondition,
-                    steps: parseScenarioSteps(file[0]?.scenario),
-                    tags: parseScenarioTags(file[0]?.tag),
+                    title: uploadedScenario[0]?.name,
+                    description: uploadedScenario[0]?.description,
+                    precondition: uploadedScenario[0]?.precondition,
+                    steps: parseScenarioSteps(uploadedScenario[0]?.scenario),
+                    tags: parseScenarioTags(uploadedScenario[0]?.tag),
                 };
             }
 

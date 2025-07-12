@@ -1,8 +1,13 @@
 <template>
-  <section class="scenario-list">
+  <section class="scenario-list" :style="{
+    width: `${this.width}%`,
+    minWidth: `${this.minWidth}%`,
+    maxWidth: `${this.maxWidth}%`,
+  }">
     <ScenarioListHeader
         @refresh-scenarios-list="refreshScenarios"
         @found-scenario="handleFoundScenario"
+        @scenario-sorted="handleSortScenario"
     />
 
     <ul class="scenarios">
@@ -42,6 +47,8 @@
     </ul>
 
     <ScenarioCreator @scenario-created="refreshScenarios"/>
+
+    <div class="resizer" @mousedown="startResizing"></div>
   </section>
 </template>
 
@@ -64,7 +71,13 @@ export default {
     maxTitleLength: 120,
     updatedScenarioTitle: '',
     showDeleteIcon: false,
-    scenarioMethods: new ScenarioMethods()
+    scenarioMethods: new ScenarioMethods(),
+    minWidth: 35,
+    width: 40,
+    maxWidth: 60,
+    resizing: false,
+    startWidth: 0,
+    startX: 0,
   }),
 
   methods: {
@@ -79,6 +92,22 @@ export default {
     },
     async handleFoundScenario(scenario) {
       this.scenarios = Array.isArray(scenario.data) ? scenario.data : [scenario.data];
+    },
+    async handleSortScenario(type) {
+      switch (type) {
+        case 'sort_asc':
+          this.scenarios = this.scenarios.sort((a, b) => a.id - b.id);
+          return;
+        case 'sort_desc':
+          this.scenarios = this.scenarios.sort((a, b) => b.id - a.id);
+          return;
+        case 'sort_alphabet':
+          this.scenarios.sort((a, b) => a.title.localeCompare(b.title));
+          return;
+        case 'sort_status':
+          this.scenarios.sort((a, b) => a.status.id - b.status.id);
+          return;
+      }
     },
     startEditTitle(scenario) {
       this.editedTitleID = scenario.id;
@@ -118,6 +147,41 @@ export default {
       const max = this.maxTitleLength;
       if (!title || typeof title !== 'string') return '';
       return title.length > max ? title.slice(0, max) + '...' : title;
+    },
+    startResizing(event) {
+      this.resizing = true;
+      this.startWidth = this.width;
+      this.startX = event.clientX;
+
+      document.addEventListener('mousemove', this.resize);
+      document.addEventListener('mouseup', this.cancelResizing);
+
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'col-resize';
+    },
+
+    resize(event) {
+      if (!this.resizing) return;
+
+      const offsetX = event.clientX - this.startX;
+      const offsetPercent = (offsetX / window.innerWidth) * 100;
+
+      let newWidth = this.startWidth + offsetPercent;
+
+      if (newWidth < this.minWidth) newWidth = this.minWidth;
+      if (newWidth > this.maxWidth) newWidth = this.maxWidth;
+
+      this.width = newWidth;
+    },
+
+    cancelResizing() {
+      this.resizing = false;
+
+      document.removeEventListener('mousemove', this.resize);
+      document.removeEventListener('mouseup', this.cancelResizing);
+
+      document.body.style.removeProperty('user-select');
+      document.body.style.removeProperty('cursor');
     }
   },
 
@@ -128,14 +192,19 @@ export default {
 </script>
 
 <style scoped>
-.scenario-list {
-  --border-color: #e8edf1;
-  --hover-bg: #edf1f5;
-  --id-color: #6c757d;
-  --font-primary: "JetBrains Mono", monospace, sans-serif;
+.resizer {
+  width: 4px;
+  height: calc(100vh - 60px);
+  background: none;
+  cursor: col-resize;
 
+  position: absolute;
+  left: 100%;
+}
+
+.scenario-list {
   position: relative;
-  width: 40%;
+
   height: calc(100vh - 60px);
   border: 1px solid var(--border-color);
   background-color: #FFFFFF;

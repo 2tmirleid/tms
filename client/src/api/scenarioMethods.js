@@ -30,7 +30,15 @@ export class ScenarioMethods extends BaseMethods {
         await axios.delete(`${this.BASE_URI}/scenario/tag/${id}`);
     }
 
-    async searchScenario(property, value) {
-        return await axios.get(`${this.BASE_URI}/scenario/search?property=${property}&value=${value}`);
+    async searchScenario(body) {
+        return await axios.post(`${this.BASE_URI}/scenario/search`, body);
+    }
+
+    async importScenario(formData) {
+        return await axios.post(`${this.BASE_URI}/scenario/import`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
     }
 }

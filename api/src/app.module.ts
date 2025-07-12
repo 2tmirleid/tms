@@ -27,6 +27,9 @@ import {
     Createandseedscenariostepcontextoptiontable1751357144752
 } from "./migration/1751357144752-createandseedscenariostepcontextoptiontable";
 import {Createandseedpagetable1751357192213} from "./migration/1751357192213-createandseedpagetable";
+import {ScenarioSortEntity} from "./entity/scenario.sort.entity";
+import {Createandseedscenariosorttable1751542148667} from "./migration/1751542148667-createandseedscenariosorttable";
+import {ScenarioSortModule} from "./scenario/sort/scenario.sort.module";
 
 
 
@@ -50,7 +53,8 @@ import {Createandseedpagetable1751357192213} from "./migration/1751357192213-cre
                 ScenarioContextOptionEntity,
                 StepContextOptionEntity,
                 ScenarioTagEntity,
-                ScenarioStatusEntity
+                ScenarioStatusEntity,
+                ScenarioSortEntity
             ],
             migrations: [
                 Createandseedscenariostatustable1751356880625,
@@ -59,12 +63,14 @@ import {Createandseedpagetable1751357192213} from "./migration/1751357192213-cre
                 Createscenariotagtable1751357067393,
                 Createandseedscenariocontextoptiontable1751357117721,
                 Createandseedscenariostepcontextoptiontable1751357144752,
-                Createandseedpagetable1751357192213
+                Createandseedpagetable1751357192213,
+                Createandseedscenariosorttable1751542148667
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        ScenarioSortModule,
         ScenarioStatusModule,
         ScenarioContextOptionModule,
         StepContextOptionModule,

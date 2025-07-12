@@ -1,10 +1,9 @@
 <template>
   <div class="context-menu">
-    <div
-        class="status"
+    <div class="sort-btn">
+      <SortButton
         @click="showContextMenu"
-    >
-      <span id="status" :style="{backgroundColor: status.color}">{{ status.title }}</span>
+      />
     </div>
 
     <div
@@ -21,12 +20,11 @@
       <ul class="dropdown">
         <li
             class="dropdown-item"
-            v-for="status in statuses"
-            :key="status.id"
-            :style="{color: status.color}"
-            @click="updateStatus(status.id)"
+            v-for="option in options"
+            :key="option.id"
+            @click="sort(option.alias)"
         >
-          <span>{{ status.title }}</span>
+          <span>{{ option.title }}</span>
         </li>
       </ul>
     </div>
@@ -34,56 +32,41 @@
 </template>
 
 <script>
+import SortButton from "@/components/UI/Btn/SortButton.vue";
 import CloseButton from "@/components/UI/Btn/CloseButton.vue";
-import {StatusMethods} from "@/api/statusMethods.js";
-import {ScenarioMethods} from "@/api/scenarioMethods.js";
+import {SortMethods} from "@/api/sortMethods.js";
 
 export default {
-  inject: ['showAlert'],
-  components: {CloseButton},
+  components: {CloseButton, SortButton},
   data() {
     return {
-      scenarioMethods: new ScenarioMethods(),
-      statusMethods: new StatusMethods(),
+      sortMethods: new SortMethods(),
+      options: [],
       showDropdown: false,
-      statuses: [],
     }
   },
-  props: {
-    status: Object,
-    scenarioID: Number,
-  },
   methods: {
-    async getStatuses() {
-      try {
-        const statuses = await this.statusMethods.getStatuses();
-        this.statuses = statuses.data;
-      } catch (error) {
-        console.error(`Error while fetching statuses`);
-        this.showAlert('Что-то пошло не так.');
-      }
+    async getSortOptions() {
+      const response = await this.sortMethods.getSortOptions();
+      this.options = response.data;
+    },
+    async sort(type) {
+      this.$emit('scenario-sorted', type);
+      this.hideContextMenu();
     },
     showContextMenu() {
       this.showDropdown = true;
+
+      this.$nextTick(() => {
+        this.$refs.dropdown?.focus();
+      });
     },
     hideContextMenu() {
       this.showDropdown = false;
     },
-    async updateStatus(statusID) {
-      try {
-        const body = {"status": statusID};
-
-        await this.scenarioMethods.updateScenario(this.scenarioID, body);
-        this.$emit('scenario-updated', this.scenarioID);
-        this.hideContextMenu()
-      } catch (error) {
-        console.error("Update status error:" + error);
-        this.showAlert('При попытке изменить статус что-то пошло не так...');
-      }
-    }
   },
   mounted() {
-    this.getStatuses();
+    this.getSortOptions();
   }
 }
 </script>
@@ -131,20 +114,6 @@ export default {
   display: flex;
   align-items: center;
   color: #333;
-}
-
-.status #status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-primary);
-  font-size: 12px;
-  max-height: 20px;
-  padding: 4px;
-  border-radius: 5px;
-  text-align: center;
-  color: #FFFFFF;
-  cursor: pointer;
 }
 
 .dropdown .dropdown-item.delete:hover {

@@ -15,6 +15,22 @@
             @click="clearSearch"
         />
       </div>
+
+      <div class="options">
+        <div class="data">
+          <div class="import">
+            <ImportScenarioMenu
+              @refresh-scenarios-list="$emit('refresh-scenarios-list')"
+            />
+          </div>
+        </div>
+
+        <div class="sort">
+          <SortContextMenu
+            @scenario-sorted="handleSort"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -22,10 +38,13 @@
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import ClearButton from "@/components/UI/Btn/ClearButton.vue";
+import SortButton from "@/components/UI/Btn/SortButton.vue";
+import SortContextMenu from "@/components/Scenario/SortContextMenu.vue";
+import ImportScenarioMenu from "@/components/Scenario/ImportScenarioMenu.vue";
 
 export default {
   inject: ["showAlert"],
-  components: {ClearButton},
+  components: {ImportScenarioMenu, SortContextMenu, SortButton, ClearButton},
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
@@ -33,6 +52,9 @@ export default {
     }
   },
   methods: {
+    async handleSort(type) {
+      this.$emit('scenario-sorted', type);
+    },
     async findScenario() {
       const query = this.scenario.trim();
 
@@ -42,17 +64,26 @@ export default {
       }
 
       try {
-        let response;
+        const criteria = {};
 
-        if (!isNaN(Number(query))) {
-          response = await this.scenarioMethods.getScenarioByID(query);
-        } else {
-          const [ property, value ] = query.split('=');
+        query.split(";").forEach(pair => {
+          const [propRaw, valuesRaw] = pair.split("=");
+          if (!propRaw || !valuesRaw) return;
 
-          response = await this.scenarioMethods.searchScenario(property, value);
-        }
+          const property = propRaw.trim().toLowerCase();
+          const values = valuesRaw
+              .split(",")
+              .map(val => val.trim())
+              .filter(Boolean);
 
-        if (response.data.length === 0) {
+          if (values.length) {
+            criteria[property] = values;
+          }
+        });
+
+        const response = await this.scenarioMethods.searchScenario(criteria);
+
+        if (!response || response.length === 0) {
           this.showAlert("Сценарий не был найден");
           this.$emit("refresh-scenarios-list");
           return;
@@ -66,8 +97,8 @@ export default {
           this.showAlert("Сценарий не был найден");
           this.$emit("refresh-scenarios-list");
         } else {
-          console.error("Error while finding scenario:", error);
-          this.showAlert("При попытке поиска сценария что-то пошло не так...");
+          console.error("Ошибка поиска:", error);
+          this.showAlert("Ошибка при поиске сценария");
         }
       }
     },
@@ -80,6 +111,13 @@ export default {
 </script>
 
 <style scoped>
+.options {
+  padding: 5px;
+  float: right;
+  display: flex;
+  gap: 10px;
+}
+
 .scenario-list__header {
   height: 150px;
   border-bottom: 1px solid var(--border-color);

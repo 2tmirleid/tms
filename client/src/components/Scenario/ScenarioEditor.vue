@@ -88,9 +88,9 @@
         </tr>
         </tbody>
       </table>
-    </div>
 
-    <AddStepButton @click="toggleAdd" :class="{ active: add }"/>
+      <AddStepButton @click="toggleAdd" :class="{ active: add }"/>
+    </div>
   </div>
 </template>
 
@@ -277,6 +277,7 @@ export default {
 }
 
 .table-wrapper {
+  min-height: 200px;
   max-height: 400px;
   overflow-y: auto;
   box-sizing: border-box;

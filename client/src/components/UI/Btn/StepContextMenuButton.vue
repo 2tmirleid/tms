@@ -19,6 +19,7 @@ export default {
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 1;
 }
 
 .context-menu-btn:hover {

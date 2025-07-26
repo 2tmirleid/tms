@@ -12,6 +12,7 @@ import {
 import {ScenarioStepEntity} from "./scenario.step.entity";
 import {ScenarioTagEntity} from "./scenario.tag.entity";
 import {ScenarioStatusEntity} from "./scenario.status.entity";
+import {ScenarioAttachmentEntity} from "./scenario.attachment.entity";
 
 
 @Entity({ name: 'scenario' })
@@ -58,6 +59,12 @@ export class ScenarioEntity {
     })
     @JoinColumn({ name: 'status_id' })
     status: ScenarioStatusEntity;
+
+    @OneToMany(() => ScenarioAttachmentEntity, attachment => attachment.scenario, {
+        cascade: ['insert', 'remove', 'update'],
+        eager: true,
+    })
+    attachments: ScenarioAttachmentEntity[];
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

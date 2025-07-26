@@ -122,7 +122,7 @@ export default {
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
-      add: false,
+      addTag: false,
       edit: {
         active: false,
         editableStepID: 0,
@@ -143,8 +143,8 @@ export default {
   },
   methods: {
     toggleAdd() {
-      this.add = !this.add;
-      this.add ? this.$nextTick(() => {
+      this.add = !this.addTag;
+      this.addTag ? this.$nextTick(() => {
         this.$refs.step.focus();
       }) : '';
     },

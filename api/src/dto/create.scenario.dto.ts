@@ -3,6 +3,7 @@ import {CreateScenarioStepDto} from "./create.scenario.step.dto";
 import {IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
 import {CreateScenarioTagDto} from "./create.scenario.tag.dto";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {CreateScenarioAttachmentDto} from "./create.scenario.attachment.dto";
 
 export class CreateScenarioDto {
     @IsNotEmpty({ message: 'Title cannot be empty' })
@@ -50,4 +51,13 @@ export class CreateScenarioDto {
         type: [CreateScenarioTagDto]
     })
     readonly tags?: CreateScenarioTagDto[];
+
+    @IsOptional()
+    @IsArray({ message: 'Attachments must be array' })
+    @ValidateNested({ each: true })
+    @ApiPropertyOptional({
+        description: 'Scenario attachments',
+        type: [CreateScenarioAttachmentDto]
+    })
+    readonly attachments?: CreateScenarioAttachmentDto[];
 }

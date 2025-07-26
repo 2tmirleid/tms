@@ -30,6 +30,9 @@ import {Createandseedpagetable1751357192213} from "./migration/1751357192213-cre
 import {ScenarioSortEntity} from "./entity/scenario.sort.entity";
 import {Createandseedscenariosorttable1751542148667} from "./migration/1751542148667-createandseedscenariosorttable";
 import {ScenarioSortModule} from "./scenario/sort/scenario.sort.module";
+import {ScenarioAttachmentModule} from "./scenario/attachment/scenario.attachment.module";
+import {ScenarioAttachmentEntity} from "./entity/scenario.attachment.entity";
+import {Createscenarioattachmenttable1752928145478} from "./migration/1752928145478-createscenarioattachmenttable";
 
 
 
@@ -54,7 +57,8 @@ import {ScenarioSortModule} from "./scenario/sort/scenario.sort.module";
                 StepContextOptionEntity,
                 ScenarioTagEntity,
                 ScenarioStatusEntity,
-                ScenarioSortEntity
+                ScenarioSortEntity,
+                ScenarioAttachmentEntity
             ],
             migrations: [
                 Createandseedscenariostatustable1751356880625,
@@ -64,12 +68,14 @@ import {ScenarioSortModule} from "./scenario/sort/scenario.sort.module";
                 Createandseedscenariocontextoptiontable1751357117721,
                 Createandseedscenariostepcontextoptiontable1751357144752,
                 Createandseedpagetable1751357192213,
-                Createandseedscenariosorttable1751542148667
+                Createandseedscenariosorttable1751542148667,
+                Createscenarioattachmenttable1752928145478
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        ScenarioAttachmentModule,
         ScenarioSortModule,
         ScenarioStatusModule,
         ScenarioContextOptionModule,

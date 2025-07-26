@@ -3,6 +3,7 @@ import {Type} from "class-transformer";
 import {UpdateScenarioStepDto} from "./update.scenario.step.dto";
 import {UpdateScenarioTagDto} from "./update.scenario.tag.dto";
 import {ApiPropertyOptional} from "@nestjs/swagger";
+import {UpdateScenarioAttachmentDto} from "./update.scenario.attachment.dto";
 
 export class UpdateScenarioDto {
     @IsOptional()
@@ -59,4 +60,14 @@ export class UpdateScenarioDto {
         description: 'Updated scenario status'
     })
     readonly status?: number;
+
+    @IsOptional()
+    @IsArray({ message: 'Attachments must be an array' })
+    @ValidateNested({ each: true })
+    @Type(() => UpdateScenarioAttachmentDto)
+    @ApiPropertyOptional({
+        description: 'Updated scenario attachments',
+        type: [UpdateScenarioAttachmentDto]
+    })
+    attachments?: UpdateScenarioAttachmentDto[];
 }

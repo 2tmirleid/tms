@@ -11,6 +11,7 @@ import {parseScenarioSteps} from "../utils/parse.scenario.steps";
 import {parseScenarioTags} from "../utils/parse.scenario.tags";
 import {Readable} from "stream";
 import * as csv from "csv-parser";
+import {ScenarioAttachmentEntity} from "../entity/scenario.attachment.entity";
 
 @Injectable()
 export class ScenarioService {
@@ -112,6 +113,19 @@ export class ScenarioService {
             if (dto.status !== undefined) {
                 scenario.status = await this.scenarioStatusRepository.getStatus(dto.status);
             }
+
+            // if (dto.attachments !== undefined) {
+            //     scenario.attachments = dto.attachments.map(attachmentDto => {
+            //        const attachment = new ScenarioAttachmentEntity();
+            //        attachment.id = attachmentDto.id;
+            //        attachment.title = attachmentDto.title;
+            //        attachment.path = attachmentDto.path;
+            //
+            //        return attachment;
+            //     });
+            //
+            //     scenario.updatedAt = new Date();
+            // }
 
             return this.scenarioRepository.save(scenario);
         } catch (error) {

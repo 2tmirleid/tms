@@ -1,17 +1,16 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 /*
- * Миграция, создающая таблицу scenario_attachment
+ * Миграция, создающая таблицу scenario_tag
  */
-export class Createscenarioattachmenttable1752928145478 implements MigrationInterface {
+export class Createscenariotagtable1753549975808 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            create table if not exists scenario_attachment
+            create table if not exists scenario_tag
             (
                 id          serial
                 primary key,
                 title       varchar,
-                path        varchar,
                 scenario_id integer
                 references scenario
                 on delete cascade
@@ -24,7 +23,7 @@ export class Createscenarioattachmenttable1752928145478 implements MigrationInte
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            DROP TABLE IF EXISTS scenario_attachment
+            DROP TABLE IF EXISTS scenario_tag
         `);
     }
 }

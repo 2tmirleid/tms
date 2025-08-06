@@ -279,9 +279,18 @@ h4 {
   border-radius: 5px;
   min-width: 24px;
   min-height: 24px;
-  box-shadow: none;
-  background: none;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.add:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 
 
 .tags .tag-item {

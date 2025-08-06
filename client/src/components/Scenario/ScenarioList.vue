@@ -41,6 +41,7 @@
             v-for="scenario in scenarios.filter(scenario => scenario.folder_id === null)"
             :key="scenario.id"
             class="scenario-preview"
+            @dblclick="startEditTitle(scenario)"
             @click="handleSelectScenario(scenario)"
             draggable="true"
             @dragstart="startScenarioDrag($event, scenario.id)"

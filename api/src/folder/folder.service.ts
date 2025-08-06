@@ -194,7 +194,10 @@ export class FolderService {
 
     async deleteFolder(id: number) {
         try {
-            const folder = await this.folderRepository.findOneBy({id});
+            const folder = await this.folderRepository.findOne({
+                where: { id },
+                relations: ['scenarios'],
+            });
 
             if (!folder) {
                 throw new HttpException(

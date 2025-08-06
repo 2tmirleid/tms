@@ -13,9 +13,18 @@
           @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
           @dragleave="$emit('handle-drag-leave')"
           @drop.prevent="$emit('handle-drop', $event, { type: 'folder', id: folder.id })"
+          @click="toggleFolder(folder)"
       >
         <div class="content" v-if="editedFolderID !== folder.id">
-          <span class="icon"><FolderIcon/></span>
+          <span class="icon">
+            <FolderExpandedIcon
+              v-if="isExpanded"
+            />
+
+            <FolderCollapsedIcon
+              v-if="!isExpanded"
+            />
+          </span>
           <span class="title">{{ getTrimmedTitle(folder.title) }}</span>
         </div>
 
@@ -38,12 +47,15 @@
             @delete-folder="deleteFolder"
         />
 
-        <ul class="scenario-list">
+        <ul
+            class="scenario-list"
+            v-if="isExpanded"
+        >
           <li
               v-for="scenario in folder.scenarios"
               :key="scenario.id"
               class="scenario node"
-              @click="handleSelectScenario(scenario)"
+              @click.stop="handleSelectScenario(scenario)"
               @dblclick.stop="startEditTitle(scenario)"
               draggable="true"
               @dragstart.stop="$emit('start-scenario-drag', $event, scenario.id)"
@@ -69,6 +81,7 @@
 
         <!-- Вложенные папки -->
         <FolderNode
+            v-if="isExpanded"
             :folders="folder.children"
             @select="handleSelectScenario"
             @scenario-updated="handleScenarioUpdated"
@@ -89,14 +102,15 @@
 
 <script>
 import {FolderMethods} from "@/api/folderMethods.js";
-import FolderIcon from "@/components/UI/Icons/FolderIcon.vue";
+import FolderExpandedIcon from "@/components/UI/Icons/FolderExpandedIcon.vue";
 import FolderNode from "@/components/Scenario/Folder/FolderNode.vue";
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import FolderContextMenu from "@/components/Scenario/Folder/FolderContextMenu.vue";
+import FolderCollapsedIcon from "@/components/UI/Icons/FolderCollapsedIcon.vue";
 
 export default {
   inject: ['showAlert'],
-  components: {FolderContextMenu, FolderNode, FolderIcon },
+  components: {FolderCollapsedIcon, FolderExpandedIcon, FolderContextMenu, FolderNode, },
   data() {
     return {
       folderMethods: new FolderMethods(),
@@ -107,6 +121,7 @@ export default {
       editedFolderID: 0,
       updatedFolderTitle: '',
       activeContextMenuId: null,
+      isExpanded: true,
     };
   },
   props: {
@@ -115,6 +130,9 @@ export default {
     dragOverTarget: Object,
   },
   methods: {
+    toggleFolder() {
+      this.isExpanded = !this.isExpanded;
+    },
     handleStartFolderDrag(event, folder) {
       this.$emit('start-folder-drag', event, folder);
     },

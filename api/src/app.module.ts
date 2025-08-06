@@ -33,14 +33,14 @@ import {FolderEntity} from "./entity/folder.entity";
 import {FolderModule} from "./folder/folder.module";
 import {Createfoldertable1754147102806} from "./migration/1754147102806-createfoldertable";
 import {Createscenariotable1754147261578} from "./migration/1754147261578-createscenariotable";
-import {Createscenariosteptable1754147353040} from "./migration/1754147353040-createscenariosteptable";
-import {Createscenariotagtable1754147413377} from "./migration/1754147413377-createscenariotagtable";
-import {Createscenarioattachmenttable1754148616132} from "./migration/1754148616132-createscenarioattachmenttable";
 import {FolderContextOptionEntity} from "./entity/folder.context.option.entity";
 import {FolderContextOptionModule} from "./folder/contextOption/folder.context.option.module";
 import {
     Createandseedfoldercontextoptiontable1754055334376
 } from "./migration/1754055334376-createandseedfoldercontextoptiontable";
+import {Createscenariosteptable1754499497044} from "./migration/1754499497044-createscenariosteptable";
+import {Createscenariotagtable1754499641151} from "./migration/1754499641151-createscenariotagtable";
+import {Createscenarioattachmenttable1754499723751} from "./migration/1754499723751-createscenarioattachmenttable";
 
 
 
@@ -79,9 +79,9 @@ import {
                 Createandseedscenariosorttable1751542148667,
                 Createandseedfoldercontextoptiontable1754055334376,
                 Createscenariotable1754147261578,
-                Createscenariosteptable1754147353040,
-                Createscenariotagtable1754147413377,
-                Createscenarioattachmenttable1754148616132,
+                Createscenariosteptable1754499497044,
+                Createscenariotagtable1754499641151,
+                Createscenarioattachmenttable1754499723751,
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',

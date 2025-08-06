@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 /*
  * Миграция, создающая таблицу scenario_step
  */
-export class Createscenariosteptable1753549905998 implements MigrationInterface {
+export class Createscenariosteptable1754499497044 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             create table if not exists scenario_step
@@ -19,12 +19,13 @@ export class Createscenariosteptable1753549905998 implements MigrationInterface 
 
             alter table scenario_step
                 owner to postgres;
+
         `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            DROP TABLE IF EXISTS scenario_step
+            DROP TABLE IF EXISTS scenario_step;
         `);
     }
 }

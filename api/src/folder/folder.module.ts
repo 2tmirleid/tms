@@ -4,7 +4,6 @@ import {FolderEntity} from "../entity/folder.entity";
 import {FolderController} from "./folder.controller";
 import {FolderService} from "./folder.service";
 import {ScenarioEntity} from "../entity/scenario.entity";
-import {ScenarioModule} from "../scenario/scenario.module";
 
 @Module({
     imports: [

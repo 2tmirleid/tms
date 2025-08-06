@@ -25,4 +25,12 @@ export class FolderMethods extends BaseMethods {
     async pullOutFolder(folderID) {
         return await axios.post(`${this.BASE_URI}/folder/pullout/folder?folderID=${folderID}`);
     }
+
+    async updateFolder(id, body) {
+        return await axios.patch(`${this.BASE_URI}/folder/${id}`, body);
+    }
+
+    async deleteFolder(id) {
+        return await axios.delete(`${this.BASE_URI}/folder/${id}`);
+    }
 }

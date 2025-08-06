@@ -1,7 +1,8 @@
-import {Body, Controller, Get, Param, Post, Query} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
 import {FolderService} from "./folder.service";
 import {CreateFolderDto} from "../dto/create.folder.dto";
 import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
+import {UpdateFolderDto} from "../dto/update.folder.dto";
 
 @Controller('/folder')
 export class FolderController {
@@ -84,5 +85,33 @@ export class FolderController {
     })
     async pullOutFolder(@Query('folderID') folderID: number) {
         return await this.folderService.pullOutFolder(folderID);
+    }
+
+    @Patch(':id')
+    @ApiOperation({ summary: 'Editing folder by it\'s id' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        type: Number,
+        description: 'folder id'
+    })
+    @ApiBody({ type: UpdateFolderDto })
+    async updateFolder(
+        @Param('id') id: number,
+        @Body() dto: UpdateFolderDto
+    ) {
+        return await this.folderService.updateFolder(id, dto);
+    }
+
+    @Delete(':id')
+    @ApiOperation({ summary: 'Deleting folder by it\'s id' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        type: Number,
+        description: 'folder id'
+    })
+    async deleteFolder(@Param('id') id: number) {
+        return await this.folderService.deleteFolder(id);
     }
 }

@@ -4,6 +4,7 @@ import {FolderEntity} from "../entity/folder.entity";
 import {Repository} from "typeorm";
 import {CreateFolderDto} from "../dto/create.folder.dto";
 import {ScenarioEntity} from "../entity/scenario.entity";
+import {UpdateFolderDto} from "../dto/update.folder.dto";
 
 @Injectable()
 export class FolderService {
@@ -26,7 +27,9 @@ export class FolderService {
 
     async getFolders() {
         try {
-            return await this.folderRepository.find();
+            return await this.folderRepository.find({
+                relations: ['children', 'scenarios']
+            });
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -83,8 +86,19 @@ export class FolderService {
                 );
             }
 
-            childFolder.parent_id = parentFolderID;
+            let currentParent: FolderEntity | null = parentFolder;
+            while (currentParent) {
+                if (currentParent.id === childFolderID) {
+                    parentFolder.parent_id = childFolder.parent_id;
+                    await this.folderRepository.save(parentFolder);
+                    break;
+                }
 
+                if (!currentParent.parent_id) break;
+                currentParent = await this.folderRepository.findOneBy({ id: currentParent.parent_id });
+            }
+
+            childFolder.parent_id = parentFolderID;
             return await this.folderRepository.save(childFolder);
         } catch (error) {
             if (error instanceof HttpException) {
@@ -138,6 +152,61 @@ export class FolderService {
             folder.parent_id = null;
 
             return await this.folderRepository.save(folder);
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+
+            throw new HttpException(
+                error,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    async updateFolder(id: number, dto: UpdateFolderDto) {
+        try {
+            const folder = await this.folderRepository.findOneBy({id});
+
+            if (!folder) {
+                throw new HttpException(
+                    `folder with id ${id} not found`,
+                    HttpStatus.NOT_FOUND
+                );
+            }
+
+            if (dto.title !== undefined) {
+                folder.title = dto.title;
+            }
+
+            return this.folderRepository.save(folder);
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+
+            throw new HttpException(
+                error,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    async deleteFolder(id: number) {
+        try {
+            const folder = await this.folderRepository.findOne({
+                where: { id },
+                relations: ['scenarios'],
+            });
+
+            if (!folder) {
+                throw new HttpException(
+                    `folder with id ${id} not found`,
+                    HttpStatus.NOT_FOUND
+                );
+            }
+
+            return await this.folderRepository.remove(folder);
         } catch (error) {
             if (error instanceof HttpException) {
                 throw error;

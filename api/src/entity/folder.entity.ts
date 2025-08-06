@@ -1,4 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {ScenarioEntity} from "./scenario.entity";
 
 @Entity({ name: 'folder' })
 export class FolderEntity {
@@ -23,4 +24,7 @@ export class FolderEntity {
 
     @OneToMany(() => FolderEntity, folder => folder.parent)
     children?: FolderEntity[];
+
+    @OneToMany(() => ScenarioEntity, scenario => scenario.folder)
+    scenarios?: ScenarioEntity[];
 }

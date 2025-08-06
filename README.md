@@ -11,7 +11,7 @@
 |------------|--------------------|----------------------------|
 | `client`   | Vue 3, Vite, npm   | Пользовательский интерфейс |
 | `api`      | NestJS, TypeScript | REST API и бизнес-логика   |
-| `postgres` | PostgreSQL 12      | СУБД                       |
+| `postgres` | PostgreSQL 16      | СУБД                       |
 
 ---
 

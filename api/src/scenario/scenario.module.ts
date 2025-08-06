@@ -8,6 +8,7 @@ import {ScenarioTagModule} from "./tag/scenario.tag.module";
 import {ScenarioStatusModule} from "./status/scenario.status.module";
 import {ScenarioSortModule} from "./sort/scenario.sort.module";
 import {ScenarioAttachmentModule} from "./attachment/scenario.attachment.module";
+import {FolderEntity} from "../entity/folder.entity";
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import {ScenarioAttachmentModule} from "./attachment/scenario.attachment.module"
         ScenarioStepModule,
         ScenarioTagModule,
         ScenarioStatusModule,
+        FolderEntity
     ],
     controllers: [
         ScenarioController

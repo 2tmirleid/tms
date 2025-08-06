@@ -29,16 +29,20 @@ export default {
   border-radius: 50%;
   background: #FFFFFF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  margin-left: 11px;
 
   cursor: pointer;
 }
 
-.addStep:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.addStep svg {
+  transition: transform 0.3s ease;
 }
 
-.addStep.active {
+.addStep:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.addStep.active svg{
   transform: rotate(43deg);
 }
 </style>

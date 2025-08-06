@@ -37,6 +37,7 @@ onUnmounted(() => {
         ref="scenarioListRef"
         @select="handleScenarioSelect"
         @scenario-updated="handleScenarioUpdated"
+        @folder-updated="handleScenarioUpdated"
     />
 
     <ScenarioViewer

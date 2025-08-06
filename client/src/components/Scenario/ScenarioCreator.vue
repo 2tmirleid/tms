@@ -1,27 +1,56 @@
 <template>
-  <transition name="fade-slide">
-    <button
-        v-if="!isNewScenario"
-        class="scenario-creator"
-        @click="activateNewScenario"
-        key="button"
-    >
-      <AddIcon/>
-      Сценарий
-    </button>
-  </transition>
+  <div class="creators">
+    <transition name="fade-slide">
+      <button
+          v-if="!isNewScenario && !isNewFolder"
+          class="creator"
+          @click="activateNewScenario"
+          key="button"
+      >
+        <AddIcon/>
+        Сценарий
+      </button>
+    </transition>
+
+    <transition name="fade-slide">
+      <button
+          v-if="!isNewFolder && !isNewScenario"
+          class="creator"
+          @click="activateNewFolder"
+          key="button"
+      >
+        <AddIcon/>
+        Папка
+      </button>
+    </transition>
+  </div>
 
   <transition name="fade-slide">
     <input
         v-if="isNewScenario"
-        class="new-scenario"
+        class="new"
         type="text"
         placeholder="Название сценария"
         ref="scenarioInput"
         v-model="newScenarioName"
-        @blur="cancelSaving"
+        @blur="cancelSavingScenario"
         @keyup.enter="saveScenario"
-        @keyup.esc="cancelSaving"
+        @keyup.esc="cancelSavingScenario"
+        key="input"
+    />
+  </transition>
+
+  <transition name="fade-slide">
+    <input
+        v-if="isNewFolder"
+        class="new"
+        type="text"
+        placeholder="Название папки"
+        ref="folderInput"
+        v-model="newFolderName"
+        @blur="cancelSavingFolder"
+        @keyup.enter="saveFolder"
+        @keyup.esc="cancelSavingFolder"
         key="input"
     />
   </transition>
@@ -30,6 +59,7 @@
 <script>
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import AddIcon from "@/components/UI/Icons/AddIcon.vue";
+import {FolderMethods} from "@/api/folderMethods.js";
 
 export default {
   inject: ["showAlert"],
@@ -39,7 +69,10 @@ export default {
     return {
       isNewScenario: false,
       newScenarioName: '',
-      scenarioMethods: new ScenarioMethods()
+      isNewFolder: false,
+      newFolderName: '',
+      scenarioMethods: new ScenarioMethods(),
+      folderMethods: new FolderMethods()
     };
   },
   methods: {
@@ -49,9 +82,19 @@ export default {
         this.$refs.scenarioInput.focus();
       });
     },
-    cancelSaving() {
+    activateNewFolder() {
+      this.isNewFolder = true;
+      this.$nextTick(() => {
+        this.$refs.folderInput.focus();
+      });
+    },
+    cancelSavingScenario() {
       this.newScenarioName = '';
       this.isNewScenario = false;
+    },
+    cancelSavingFolder() {
+      this.newFolderName = '';
+      this.isNewFolder = false;
     },
     async saveScenario() {
       try {
@@ -70,10 +113,27 @@ export default {
         await this.scenarioMethods.createScenario(body);
 
         this.$emit('scenario-created');
-        this.cancelSaving();
+        this.cancelSavingScenario();
       } catch (e) {
         this.showAlert('При попытке сохранить сценарий что-то пошло не так...');
         console.error("Error while creating scenario: ", e);
+      }
+    },
+    async saveFolder() {
+      try {
+        if (this.newFolderName.length > 255) {
+          this.showAlert('Название папки не может быть больше 255 символов');
+          return;
+        }
+
+        const body = { "title": this.newFolderName };
+
+        await this.folderMethods.createFolder(body);
+        this.$emit('folder-created');
+        this.cancelSavingFolder();
+      } catch (e) {
+        this.showAlert('При попытке создать папку что-то пошло не так...');
+        console.error("Error while creating folder: ", e);
       }
     }
   },
@@ -81,7 +141,7 @@ export default {
 </script>
 
 <style scoped>
-.new-scenario {
+.new {
   width: 50%;
   padding: 5px 10px;
   font-family: var(--font-primary);
@@ -100,32 +160,36 @@ export default {
   transform: translateX(-50%);
 }
 
-.scenario-creator {
-  cursor: pointer;
+.creators {
   position: absolute;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  align-content: center;
+  gap: 10px;
+  z-index: 999;
+}
+
+.creator {
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 5px 10px;
   font-family: var(--font-primary);
   font-size: 15px;
-  font-weight: normal;
   background: #FFFFFF;
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  z-index: 999;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 }
 
-.scenario-creator:hover {
+.creator:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {

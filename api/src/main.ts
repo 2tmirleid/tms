@@ -5,13 +5,16 @@ import {ValidationPipe} from '@nestjs/common';
 import {BadRequestLoggingFilter} from "./utils/bad.request.logging.filter";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import * as process from "node:process";
+import {NestExpressApplication} from "@nestjs/platform-express";
+import * as path from "node:path";
+import * as express from 'express';
 
 
 async function start() {
     const PORT = process.env.PORT || 8080;
     const HOST = process.env.HOST || 'localhost';
 
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     app.enableCors({
         origin: ['http://localhost:5173'],
@@ -47,6 +50,9 @@ async function start() {
             },
         }),
     );
+
+    const uploadDir = path.join(__dirname, '..', 'upload');
+    app.use('/upload', express.static(uploadDir));
 
     await app.listen(PORT, () => {
         console.log(`[${date.DateNow.dateNow}] :: [Application has been started]`);

@@ -17,9 +17,6 @@ import {ScenarioStatusModule} from "./scenario/status/scenario.status.module";
 import {
     Createandseedscenariostatustable1751356880625
 } from "./migration/1751356880625-createandseedscenariostatustable";
-import {Createscenariotable1751356924323} from "./migration/1751356924323-createscenariotable";
-import {Createscenariosteptable1751357020661} from "./migration/1751357020661-createscenariosteptable";
-import {Createscenariotagtable1751357067393} from "./migration/1751357067393-createscenariotagtable";
 import {
     Createandseedscenariocontextoptiontable1751357117721
 } from "./migration/1751357117721-createandseedscenariocontextoptiontable";
@@ -32,7 +29,18 @@ import {Createandseedscenariosorttable1751542148667} from "./migration/175154214
 import {ScenarioSortModule} from "./scenario/sort/scenario.sort.module";
 import {ScenarioAttachmentModule} from "./scenario/attachment/scenario.attachment.module";
 import {ScenarioAttachmentEntity} from "./entity/scenario.attachment.entity";
-import {Createscenarioattachmenttable1752928145478} from "./migration/1752928145478-createscenarioattachmenttable";
+import {FolderEntity} from "./entity/folder.entity";
+import {FolderModule} from "./folder/folder.module";
+import {Createfoldertable1754147102806} from "./migration/1754147102806-createfoldertable";
+import {Createscenariotable1754147261578} from "./migration/1754147261578-createscenariotable";
+import {Createscenariosteptable1754147353040} from "./migration/1754147353040-createscenariosteptable";
+import {Createscenariotagtable1754147413377} from "./migration/1754147413377-createscenariotagtable";
+import {Createscenarioattachmenttable1754148616132} from "./migration/1754148616132-createscenarioattachmenttable";
+import {FolderContextOptionEntity} from "./entity/folder.context.option.entity";
+import {FolderContextOptionModule} from "./folder/contextOption/folder.context.option.module";
+import {
+    Createandseedfoldercontextoptiontable1754055334376
+} from "./migration/1754055334376-createandseedfoldercontextoptiontable";
 
 
 
@@ -58,30 +66,36 @@ import {Createscenarioattachmenttable1752928145478} from "./migration/1752928145
                 ScenarioTagEntity,
                 ScenarioStatusEntity,
                 ScenarioSortEntity,
-                ScenarioAttachmentEntity
+                ScenarioAttachmentEntity,
+                FolderEntity,
+                FolderContextOptionEntity
             ],
             migrations: [
+                Createfoldertable1754147102806,
                 Createandseedscenariostatustable1751356880625,
-                Createscenariotable1751356924323,
-                Createscenariosteptable1751357020661,
-                Createscenariotagtable1751357067393,
                 Createandseedscenariocontextoptiontable1751357117721,
                 Createandseedscenariostepcontextoptiontable1751357144752,
                 Createandseedpagetable1751357192213,
                 Createandseedscenariosorttable1751542148667,
-                Createscenarioattachmenttable1752928145478
+                Createandseedfoldercontextoptiontable1754055334376,
+                Createscenariotable1754147261578,
+                Createscenariosteptable1754147353040,
+                Createscenariotagtable1754147413377,
+                Createscenarioattachmenttable1754148616132,
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        FolderModule,
         ScenarioAttachmentModule,
         ScenarioSortModule,
         ScenarioStatusModule,
         ScenarioContextOptionModule,
         StepContextOptionModule,
         ScenarioModule,
-        PageModule
+        PageModule,
+        FolderContextOptionModule
     ],
     controllers: [],
     providers: []

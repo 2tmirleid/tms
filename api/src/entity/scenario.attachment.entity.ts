@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {ScenarioEntity} from "./scenario.entity";
+import {ScenarioEntity} from "./scenario/scenario.entity";
 import {Expose} from "class-transformer";
 
 @Entity({name: 'scenario_attachment'})

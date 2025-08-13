@@ -1,9 +1,9 @@
 import {IsArray, IsInt, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
 import {Type} from "class-transformer";
-import {UpdateScenarioStepDto} from "./update.scenario.step.dto";
-import {UpdateScenarioTagDto} from "./update.scenario.tag.dto";
+import {UpdateScenarioStepDto} from "../scenarioStep/update.scenario.step.dto";
+import {UpdateScenarioTagDto} from "../tag/update.scenario.tag.dto";
 import {ApiPropertyOptional} from "@nestjs/swagger";
-import {UpdateScenarioAttachmentDto} from "./update.scenario.attachment.dto";
+import {UpdateScenarioAttachmentDto} from "../attachment/update.scenario.attachment.dto";
 
 export class UpdateScenarioDto {
     @IsOptional()

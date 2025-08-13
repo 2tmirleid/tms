@@ -1,9 +1,9 @@
 import {Module} from "@nestjs/common";
 import {ScenarioStepService} from "./scenario.step.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {ScenarioStepEntity} from "../../entity/scenario.step.entity";
+import {ScenarioStepEntity} from "../../entity/scenarioStep/scenario.step.entity";
 import {ScenarioStepController} from "./scenario.step.controller";
-import {ScenarioEntity} from "../../entity/scenario.entity";
+import {ScenarioEntity} from "../../entity/scenario/scenario.entity";
 
 @Module({
     imports: [

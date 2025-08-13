@@ -1,6 +1,6 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {ScenarioContextOptionEntity} from "../../entity/scenario.context.option.entity";
+import {ScenarioContextOptionEntity} from "../../entity/scenario/scenario.context.option.entity";
 import {Repository} from "typeorm";
 
 @Injectable()

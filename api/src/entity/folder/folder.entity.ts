@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {ScenarioEntity} from "./scenario.entity";
+import {ScenarioEntity} from "../scenario/scenario.entity";
 
 @Entity({ name: 'folder' })
 export class FolderEntity {

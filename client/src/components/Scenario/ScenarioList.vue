@@ -94,9 +94,9 @@ import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import ScenarioListHeader from "@/components/Scenario/ScenarioListHeader.vue";
 import ContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
 import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
-import FolderTree from "@/components/Scenario/Folder/FolderTree.vue";
+import FolderTree from "@/components/Folder/FolderTree.vue";
 import {FolderMethods} from "@/api/folderMethods.js";
-import FolderCreator from "@/components/Scenario/Folder/FolderCreator.vue";
+import FolderCreator from "@/components/Folder/FolderCreator.vue";
 
 export default {
   components: {

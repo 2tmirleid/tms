@@ -6,7 +6,7 @@ import {
     JoinColumn,
 } from 'typeorm';
 import { Expose } from 'class-transformer';
-import {ScenarioEntity} from "./scenario.entity";
+import {ScenarioEntity} from "../scenario/scenario.entity";
 
 @Entity({ name: 'scenario_step' })
 export class ScenarioStepEntity {

@@ -1,6 +1,6 @@
 import {Controller, Param, Post, Body, Delete} from "@nestjs/common";
 import {ScenarioStepService} from "./scenario.step.service";
-import {CreateScenarioStepDto} from "../../dto/create.scenario.step.dto";
+import {CreateScenarioStepDto} from "../../dto/scenarioStep/create.scenario.step.dto";
 import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
 
 @Controller('/scenario/step')

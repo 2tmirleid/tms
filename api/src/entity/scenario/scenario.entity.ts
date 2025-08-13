@@ -3,17 +3,18 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn,
+    JoinColumn, ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import {ScenarioStepEntity} from "./scenario.step.entity";
-import {ScenarioTagEntity} from "./scenario.tag.entity";
-import {ScenarioStatusEntity} from "./scenario.status.entity";
-import {ScenarioAttachmentEntity} from "./scenario.attachment.entity";
-import {FolderEntity} from "./folder.entity";
+import {ScenarioStepEntity} from "../scenarioStep/scenario.step.entity";
+import {ScenarioTagEntity} from "../scenario.tag.entity";
+import {ScenarioStatusEntity} from "../scenario.status.entity";
+import {ScenarioAttachmentEntity} from "../scenario.attachment.entity";
+import {FolderEntity} from "../folder/folder.entity";
+import {TestPlanEntity} from "../testPlan/test.plan.entity";
 
 
 @Entity({ name: 'scenario' })
@@ -73,6 +74,9 @@ export class ScenarioEntity {
 
     @Column({ type: 'int', nullable: true })
     folder_id?: number | null;
+
+    @ManyToMany(() => TestPlanEntity, testPlan => testPlan.scenarios)
+    test_plans: TestPlanEntity[];
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

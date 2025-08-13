@@ -1,133 +1,128 @@
 <template>
-  <div class="tree-container">
-    <!-- Корневые папки -->
-    <ul class="root-folder-tree">
-      <li
-          class="root folder"
-          v-for="folder in localFolders"
-          :key="folder.id"
-          @dblclick="startEditFolderTitle(folder)"
-          @contextmenu.prevent="showContextMenu(folder)"
-          draggable="true"
-          @dragstart.stop="$emit('start-folder-drag', $event, folder.id)"
-          @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
-          @dragleave="$emit('handle-drag-leave')"
-          @drop.prevent="$emit('handle-drop', $event, { type: 'folder', id: folder.id })"
-          @click="toggleFolder(folder)"
-      >
-        <div class="content" v-if="editedFolderID !== folder.id">
-          <span class="icon">
-            <FolderExpandedIcon
+  <ul class="folder-node-tree">
+    <li
+        v-for="folder in folders"
+        :key="folder.id"
+        class="folder node"
+        @dblclick.stop="startEditFolderTitle(folder)"
+        @contextmenu.stop.prevent="showContextMenu(folder)"
+        draggable="true"
+        @dragstart.stop="$emit('start-folder-drag', $event, folder.id)"
+        @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
+        @dragleave="$emit('handle-drag-leave')"
+        @drop.prevent="$emit('handle-drop', $event, { type: 'folder', id: folder.id })"
+        @click.stop="toggleFolder(folder)"
+    >
+      <!-- Папка -->
+      <div class="content" v-if="editedFolderID !== folder.id">
+        <span class="icon">
+          <FolderExpandedIcon
               v-if="isExpanded"
-            />
+          />
 
-            <FolderCollapsedIcon
+          <FolderCollapsedIcon
               v-if="!isExpanded"
-            />
-          </span>
-          <span class="title">{{ getTrimmedTitle(folder.title) }}</span>
-        </div>
+          />
+        </span>
+        <span class="title">{{ getTrimmedTitle(folder.title) }}</span>
+      </div>
 
-        <input
-            v-else
-            ref="folderInput"
-            v-model="updatedFolderTitle"
-            class="new-title"
-            :placeholder="folder.title"
-            @blur="cancelEditFolder"
-            @keyup.enter="saveFolderTitle(folder.id)"
-            @keyup.esc="cancelEditFolder"
-        />
+      <input
+          v-else
+          ref="folderInput"
+          v-model="updatedFolderTitle"
+          class="new-title"
+          :placeholder="folder.title"
+          @blur="cancelEditFolder"
+          @keyup.enter="saveFolderTitle(folder.id)"
+          @keyup.esc="cancelEditFolder"
+      />
 
-        <FolderContextMenu
-            v-if="activeContextMenuId === folder.id"
-            :folder="folder"
-            @close="activeContextMenuId = null"
-            @rename-folder="startEditFolderTitle"
-            @delete-folder="deleteFolder"
-        />
+      <FolderContextMenu
+          v-if="activeContextMenuId === folder.id"
+          :folder="folder"
+          @close="activeContextMenuId = null"
+          @rename-folder="startEditFolderTitle"
+          @delete-folder="deleteFolder"
+      />
 
-        <ul
-            class="scenario-list"
-            v-if="isExpanded"
+      <!-- Сценарии этой папки -->
+      <ul
+          class="scenario-list"
+          v-if="isExpanded"
+      >
+        <li
+            v-for="scenario in folder.scenarios"
+            :key="scenario.id"
+            class="scenario node"
+            @click.stop="handleSelectScenario(scenario)"
+            @dblclick.stop="startEditTitle(scenario)"
+            draggable="true"
+            @dragstart.stop="$emit('start-scenario-drag', $event, scenario.id)"
         >
-          <li
-              v-for="scenario in folder.scenarios"
-              :key="scenario.id"
-              class="scenario node"
-              @click.stop="handleSelectScenario(scenario)"
-              @dblclick.stop="startEditTitle(scenario)"
-              draggable="true"
-              @dragstart.stop="$emit('start-scenario-drag', $event, scenario.id)"
-          >
-            <div class="content" v-if="editedTitleID !== scenario.id">
-              <span class="id">#{{ scenario.id }}</span>
-              <span class="status" :style="{ backgroundColor: scenario.status.color }"></span>
-              <span class="title">{{ getTrimmedTitle(scenario.title) }}</span>
-            </div>
+          <div class="content" v-if="editedTitleID !== scenario.id">
+            <span class="id">#{{ scenario.id }}</span>
+            <span class="status" :style="{ backgroundColor: scenario.status.color }"></span>
+            <span class="title">{{ getTrimmedTitle(scenario.title) }}</span>
+          </div>
 
-            <input
-                v-else
-                ref="titleInput"
-                v-model="updatedScenarioTitle"
-                class="new-title"
-                :placeholder="scenario.title"
-                @blur="cancelEdit"
-                @keyup.enter="saveTitle(scenario.id)"
-                @keyup.esc="cancelEdit"
-            />
-          </li>
-        </ul>
+          <input
+              v-else
+              ref="titleInput"
+              v-model="updatedScenarioTitle"
+              class="new-title"
+              :placeholder="scenario.title"
+              @blur="cancelEdit"
+              @keyup.enter="saveTitle(scenario.id)"
+              @keyup.esc="cancelEdit"
+          />
+        </li>
+      </ul>
 
-        <!-- Вложенные папки -->
-        <FolderNode
-            v-if="isExpanded"
-            :folders="folder.children"
-            @select="handleSelectScenario"
-            @scenario-updated="handleScenarioUpdated"
-            @folder-updated="handleFolderUpdated"
-            @start-folder-drag="handleStartFolderDrag"
-            @start-scenario-drag="handleStartScenarioDrag"
-            @handle-drag-over="handleDragOver"
-            @handle-drag-leave="handleDragLeave"
-            @handle-drop="handleDrop"
-            @is-drag-over-target="handleIsDragOverTarget"
-            :dragged-item="draggedItem"
-            :drag-over-target="dragOverTarget"
-        />
-      </li>
-    </ul>
-  </div>
+      <!-- Вложенные папки -->
+      <FolderNode
+          v-if="isExpanded"
+          :folders="folder.children"
+          @select="handleSelectScenario"
+          @start-folder-drag="handleStartFolderDrag"
+          @start-scenario-drag="handleStartScenarioDrag"
+          @handle-drag-over="handleDragOver"
+          @handle-drag-leave="handleDragLeave"
+          @handle-drop="handleDrop"
+          @is-drag-over-target="handleIsDragOverTarget"
+          :dragged-item="draggedItem"
+          :drag-over-target="dragOverTarget"
+      />
+    </li>
+  </ul>
 </template>
 
 <script>
-import {FolderMethods} from "@/api/folderMethods.js";
 import FolderExpandedIcon from "@/components/UI/Icons/FolderExpandedIcon.vue";
-import FolderNode from "@/components/Scenario/Folder/FolderNode.vue";
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
-import FolderContextMenu from "@/components/Scenario/Folder/FolderContextMenu.vue";
+import {FolderMethods} from "@/api/folderMethods.js";
+import FolderContextMenu from "@/components/Folder/FolderContextMenu.vue";
 import FolderCollapsedIcon from "@/components/UI/Icons/FolderCollapsedIcon.vue";
 
 export default {
-  inject: ['showAlert'],
-  components: {FolderCollapsedIcon, FolderExpandedIcon, FolderContextMenu, FolderNode, },
+  name: 'FolderNode',
+  components: {FolderCollapsedIcon, FolderExpandedIcon, FolderContextMenu, },
+  props: {
+    folders: Array,
+    draggedItem: Object,
+    dragOverTarget: Object,
+  },
   data() {
     return {
       folderMethods: new FolderMethods(),
       scenarioMethods: new ScenarioMethods(),
-      localFolders: [],
       editedTitleID: 0,
       updatedScenarioTitle: '',
       editedFolderID: 0,
       updatedFolderTitle: '',
       activeContextMenuId: null,
       isExpanded: true,
-    };
-  },
-  props: {
-    folders: Array,
-    draggedItem: Object,
-    dragOverTarget: Object,
+    }
   },
   methods: {
     toggleFolder() {
@@ -165,27 +160,6 @@ export default {
       const max = this.maxTitleLength;
       if (!title || typeof title !== 'string') return '';
       return title.length > max ? title.slice(0, max) + '...' : title;
-    },
-    buildTree(flatList) {
-      const idMap = new Map();
-      const tree = [];
-
-      flatList.forEach(folder => {
-        idMap.set(folder.id, { ...folder, children: [] });
-      });
-
-      flatList.forEach(folder => {
-        if (folder.parent_id !== null) {
-          const parent = idMap.get(folder.parent_id);
-          if (parent) {
-            parent.children.push(idMap.get(folder.id));
-          }
-        } else {
-          tree.push(idMap.get(folder.id));
-        }
-      });
-
-      return tree;
     },
     startEditTitle(scenario) {
       this.editedTitleID = scenario.id;
@@ -225,8 +199,6 @@ export default {
       this.editedFolderID = folder.id;
       this.updatedFolderTitle = folder.title;
 
-      console.log(folder)
-
       this.$nextTick(() => {
         if (this.$refs.folderInput?.length) {
           const input = this.$refs.folderInput[0];
@@ -252,7 +224,7 @@ export default {
         this.handleFolderUpdated(id);
         this.cancelEditFolder();
       } catch (error) {
-        console.error("Update title error:" + error.message);
+        console.error("Update title error:" + error);
         this.showAlert('При попытке изменить название что-то пошло не так...');
       }
     },
@@ -268,82 +240,23 @@ export default {
     showContextMenu(folder) {
       this.activeContextMenuId = folder.id;
     },
-  },
-  mounted() {
-    this.buildTree(this.folders);
-  },
-  watch: {
-    folders: {
-      deep: true,
-      immediate: true,
-      handler(newFolders) {
-        this.localFolders = this.buildTree(newFolders);
-      },
-    },
-  },
+  }
 };
 </script>
 
 <style scoped>
-.tree-container {
-  padding: 18px 18px 0;
-  overflow-y: auto;
-  font-family: var(--font-primary);
-  font-size: 14px;
-}
-
-.root.folder {
-  border-left: 2px solid var(--border-color);
-  border-radius: 10px;
-  position: relative;
-}
-
-.root-folder-tree {
+.folder-node-tree {
   list-style: none;
-  padding: 18px;
+  padding-left: 10px;
   margin: 0;
 }
 
-.root.folder .content {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.folder.node {
+  border-left: 2px solid var(--border-color);
+  border-radius: 10px;
 }
 
-.root.folder .content:hover {
-  background-color: var(--hover-bg);
-}
-
-.root.folder .content {
-  padding: 5px 0;
-  padding-left: 20px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-}
-
-.root.folder .icon {
-  flex-shrink: 0;
-}
-
-.root.folder .title {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  flex: 1;
-}
-
-.root.folder .scenario-list {
-  list-style: none;
-  margin-top: 4px;
-  padding-left: 10px;
-}
-
-.root.folder .scenario.node .content {
+.folder.node .content {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -353,18 +266,56 @@ export default {
   transition: background-color 0.2s ease;
 }
 
-.root.folder .scenario.node .content:hover {
+.folder.node .content:hover {
   background-color: var(--hover-bg);
 }
 
-.root.folder .scenario.node .id {
+.folder.node .content {
+  padding: 5px 0;
+  padding-left: 20px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.folder.node .icon {
+  flex-shrink: 0;
+}
+
+.folder.node .title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.folder.node .scenario-list {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.folder.node .scenario.node .content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.folder.node .scenario.node .content:hover {
+  background-color: var(--hover-bg);
+}
+
+.folder.node .scenario.node .id {
   color: var(--id-color);
   min-width: 30px;
   text-align: right;
   flex-shrink: 0;
 }
 
-.root.folder .scenario.node .status {
+.folder.node .scenario.node .status {
   width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -372,7 +323,7 @@ export default {
   flex-shrink: 0;
 }
 
-.root.folder .scenario.node .title {
+.folder.node .scenario.node .title {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

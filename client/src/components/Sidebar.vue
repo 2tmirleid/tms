@@ -1,5 +1,8 @@
 <template>
-  <section class="sidebar container">
+  <section
+      class="sidebar container"
+      :style="{ width: collapsed ? '80px' : '130px' }"
+  >
     <div
         class="sidebar-toggle"
         @click="collapsed = !collapsed"
@@ -60,6 +63,7 @@ import LoginButton from "@/components/UI/Btn/LoginButton.vue";
 import LogoutButton from "@/components/UI/Btn/LogoutButton.vue";
 import UncollapseButton from "@/components/UI/Btn/UncollapseButton.vue";
 import CollapseButton from "@/components/UI/Btn/CollapseButton.vue";
+import TestPlanButton from "@/components/UI/Btn/TestPlanButton.vue";
 
 export default {
   components: {CollapseButton, UncollapseButton, LogoutButton, LoginButton},
@@ -71,7 +75,8 @@ export default {
       hoverToggle: false,
       buttonComponents: {
         Home: HomeButton,
-        Scenario: ScenarioButton
+        Scenario: ScenarioButton,
+        TestPlan: TestPlanButton,
       },
       isAuth: true,
     }
@@ -122,6 +127,7 @@ export default {
 .pages {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   list-style: none;
   padding: 0;
@@ -130,6 +136,7 @@ export default {
 
 .pages .page-item {
   transition: all var(--transition-speed) ease;
+  display: flex;
 }
 
 .pages .page-item a {
@@ -167,6 +174,7 @@ export default {
 
 .auth {
   margin: 0 auto;
+
   a {
     text-decoration: none;
   }

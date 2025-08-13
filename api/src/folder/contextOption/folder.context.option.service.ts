@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {FolderContextOptionEntity} from "../../entity/folder.context.option.entity";
+import {FolderContextOptionEntity} from "../../entity/folder/folder.context.option.entity";
 import {Repository} from "typeorm";
 
 @Injectable()

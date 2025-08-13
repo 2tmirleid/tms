@@ -48,8 +48,8 @@ import EditableField from "@/components/Scenario/EditableField.vue";
 import ScenarioEditor from "@/components/Scenario/ScenarioEditor.vue";
 import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
-import ScenarioViewerSidebar from "@/components/Scenario/ScenarioViewerSidebar.vue";
-import ScenarioViewerHeader from "@/components/Scenario/ScenarioViewerHeader.vue";
+import ScenarioViewerSidebar from "@/components/Scenario/Viewer/ScenarioViewerSidebar.vue";
+import ScenarioViewerHeader from "@/components/Scenario/Viewer/ScenarioViewerHeader.vue";
 
 export default {
   components: {ScenarioViewerHeader, ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},

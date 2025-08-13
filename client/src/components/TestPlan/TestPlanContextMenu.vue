@@ -1,7 +1,7 @@
 <template>
   <div
       class="context-menu"
-      v-if="folder"
+      v-if="testPlan"
   >
     <div
         class="dropdown-wrapper"
@@ -20,6 +20,7 @@
             v-for="option in options"
             :key="option.id"
             @click="sendEmitByAlias(option.alias)"
+            :class="{ 'delete' : option.alias === 'delete' }"
         >
           <span>{{ option.title }}</span>
         </li>
@@ -32,18 +33,19 @@
 import ScenarioContextMenuButton from "@/components/UI/Btn/ScenarioContextMenuButton.vue";
 import CloseButton from "@/components/UI/Btn/CloseButton.vue";
 import {FolderContextOptionMethods} from "@/api/folderContextOptionMethods.js";
+import {TestPlanContextOptionMethods} from "@/api/testPlanContextOptionMethods.js";
 
 export default {
   components: {CloseButton, ScenarioContextMenuButton},
   data() {
     return {
-      optionMethods: new FolderContextOptionMethods(),
+      optionMethods: new TestPlanContextOptionMethods(),
       options: [],
       showDropdown: false,
     };
   },
   props: {
-    folder: Object,
+    testPlan: Object,
   },
   methods: {
     async getOptions() {
@@ -58,7 +60,7 @@ export default {
       this.$emit('close');
     },
     async sendEmitByAlias(alias) {
-      this.$emit(`${alias}-folder`, this.folder);
+      this.$emit(`${alias}-test-plan`, this.testPlan);
       this.closeMenu();
     }
   },
@@ -74,7 +76,7 @@ export default {
 
 <style scoped>
 .context-menu {
-  position: fixed;
+  position: absolute;
   z-index: 9999;
 }
 
@@ -95,6 +97,11 @@ export default {
 
 .dropdown-wrapper:focus {
   outline: none;
+}
+
+.dropdown .dropdown-item.delete:hover {
+  background-color: var(--delete-color);
+  color: #FFFFFF;
 }
 
 .dropdown {

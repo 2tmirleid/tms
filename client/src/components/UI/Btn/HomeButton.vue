@@ -18,5 +18,7 @@ export default {
   background: none;
   border: none;
   cursor: pointer;
+  width: 32px;
+  height: 32px;
 }
 </style>

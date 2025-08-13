@@ -2,8 +2,8 @@ import {HttpException, HttpStatus, Injectable, NotFoundException} from "@nestjs/
 import {InjectRepository} from "@nestjs/typeorm";
 import {ScenarioTagEntity} from "../../entity/scenario.tag.entity";
 import {Repository} from "typeorm";
-import {CreateScenarioTagDto} from "../../dto/create.scenario.tag.dto";
-import {ScenarioEntity} from "../../entity/scenario.entity";
+import {CreateScenarioTagDto} from "../../dto/tag/create.scenario.tag.dto";
+import {ScenarioEntity} from "../../entity/scenario/scenario.entity";
 
 @Injectable()
 export class ScenarioTagService {

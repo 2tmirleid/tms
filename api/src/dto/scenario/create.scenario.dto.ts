@@ -1,9 +1,9 @@
 import {Type} from 'class-transformer';
-import {CreateScenarioStepDto} from "./create.scenario.step.dto";
+import {CreateScenarioStepDto} from "../scenarioStep/create.scenario.step.dto";
 import {IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
-import {CreateScenarioTagDto} from "./create.scenario.tag.dto";
+import {CreateScenarioTagDto} from "../tag/create.scenario.tag.dto";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {CreateScenarioAttachmentDto} from "./create.scenario.attachment.dto";
+import {CreateScenarioAttachmentDto} from "../attachment/create.scenario.attachment.dto";
 
 export class CreateScenarioDto {
     @IsNotEmpty({ message: 'Title cannot be empty' })

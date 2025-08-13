@@ -2,7 +2,7 @@ import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ScenarioAttachmentEntity} from "../../entity/scenario.attachment.entity";
 import {DataSource, Repository} from "typeorm";
-import {ScenarioEntity} from "../../entity/scenario.entity";
+import {ScenarioEntity} from "../../entity/scenario/scenario.entity";
 import * as fs from "node:fs";
 import * as path from "node:path";
 

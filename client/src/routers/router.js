@@ -2,6 +2,7 @@ import MainPage from "@/pages/MainPage.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import ScenariosPage from "@/pages/ScenariosPage.vue";
 import TestPlanPage from "@/pages/TestPlanPage.vue";
+import LaunchPage from "@/pages/LaunchPage.vue";
 
 const routes = [
     {
@@ -15,6 +16,10 @@ const routes = [
     {
         path: '/test-plans',
         component: TestPlanPage
+    },
+    {
+        path: '/launches',
+        component: LaunchPage
     }
 ]
 

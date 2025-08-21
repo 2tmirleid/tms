@@ -24,6 +24,7 @@ export class Createandseedtestplancontextoptiontable1755021446541 implements Mig
             VALUES ('Переименовать', 'rename'),
                    ('Изменить описание', 'edit-description'),
                    ('Изменить сценарии', 'edit-scenarios'),
+                   ('Запустить', 'launch'),
                    ('Удалить', 'delete')
         `);
     }

@@ -64,6 +64,7 @@ import LogoutButton from "@/components/UI/Btn/LogoutButton.vue";
 import UncollapseButton from "@/components/UI/Btn/UncollapseButton.vue";
 import CollapseButton from "@/components/UI/Btn/CollapseButton.vue";
 import TestPlanButton from "@/components/UI/Btn/TestPlanButton.vue";
+import LaunchButton from "@/components/UI/Btn/LaunchButton.vue";
 
 export default {
   components: {CollapseButton, UncollapseButton, LogoutButton, LoginButton},
@@ -77,6 +78,7 @@ export default {
         Home: HomeButton,
         Scenario: ScenarioButton,
         TestPlan: TestPlanButton,
+        Launch: LaunchButton,
       },
       isAuth: true,
     }

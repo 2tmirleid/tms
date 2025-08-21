@@ -2,7 +2,7 @@
   <section class="scenario-list" :style="{
     width: `${this.width}%`,
     minWidth: `${this.minWidth}%`,
-    maxWidth: `${this.maxWidth}%`,
+    maxWidth: `${this.maxWidth}%`
   }">
     <ScenarioListHeader
         @refresh-scenarios-list="refreshScenarios"

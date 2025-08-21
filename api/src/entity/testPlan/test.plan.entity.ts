@@ -8,6 +8,7 @@ import {
     UpdateDateColumn
 } from "typeorm";
 import {ScenarioEntity} from "../scenario/scenario.entity";
+import {LaunchEntity} from "../launch/launch.entity";
 
 @Entity({ name: 'test_plan' })
 export class TestPlanEntity {
@@ -30,7 +31,7 @@ export class TestPlanEntity {
 
     @ManyToMany(() => ScenarioEntity, scenario => scenario.test_plans, {
         cascade: true,
-        eager: true
+
     })
     @JoinTable({
         name: 'test_plan_scenarios',
@@ -44,6 +45,9 @@ export class TestPlanEntity {
         }
     })
     scenarios: ScenarioEntity[];
+
+    @OneToMany(() => LaunchEntity, launch => launch.testPlan)
+    launches: LaunchEntity[];
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

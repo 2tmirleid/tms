@@ -51,6 +51,30 @@ import {
 } from "./migration/1755021446541-createandseedtestplancontextoptiontable";
 import {Createtestplanscenariostable1755105236403} from "./migration/1755105236403-createtestplanscenariostable";
 
+import {LaunchModule} from "./launch/launch.module";
+import {LaunchEntity} from "./entity/launch/launch.entity";
+import {Createandseedlaunchstatustable1755195751060} from "./migration/1755195751060-createandseedlaunchstatustable";
+import {LaunchStatusModule} from "./launch/status/launch.status.module";
+import {LaunchStatusEntity} from "./entity/launch/launch.status.entity";
+import {Createlaunchtable1755352949379} from "./migration/1755352949379-createlaunchtable";
+import {LaunchStepResultEntity} from "./entity/launch/result/step/launch.step.result.entity";
+import {LaunchResultEntity} from "./entity/launch/result/launch.result.entity";
+
+import {LaunchStepResultModule} from "./launch/result/step/launch.step.result.module";
+import {LaunchResultModule} from "./launch/result/launch.result.module";
+import {LaunchResultStatusModule} from "./launch/result/status/launch.result.status.module";
+import {LaunchResultStatusEntity} from "./entity/launch/result/launch.result.status.entity";
+import {LaunchStepResultStatusModule} from "./launch/result/step/status/launch.step.result.status.module";
+import {LaunchStepResultStatusEntity} from "./entity/launch/result/step/launch.step.result.status.entity";
+import {
+    Createandseedlaunchresultstatustable1755359080451
+} from "./migration/1755359080451-createandseedlaunchresultstatustable";
+import {
+    Createandseedlaunchstepresultstatustable1755359226260
+} from "./migration/1755359226260-createandseedlaunchstepresultstatustable";
+import {Createlaunchresulttable1755359311310} from "./migration/1755359311310-createlaunchresulttable";
+import {Createlaunchstepresulttable1755359434140} from "./migration/1755359434140-createlaunchstepresulttable";
+
 
 @Module({
     imports: [
@@ -78,7 +102,13 @@ import {Createtestplanscenariostable1755105236403} from "./migration/17551052364
                 FolderEntity,
                 FolderContextOptionEntity,
                 TestPlanEntity,
-                TestPlanContextOptionEntity
+                TestPlanContextOptionEntity,
+                LaunchEntity,
+                LaunchStatusEntity,
+                LaunchStepResultEntity,
+                LaunchResultEntity,
+                LaunchResultStatusEntity,
+                LaunchStepResultStatusEntity
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -95,12 +125,24 @@ import {Createtestplanscenariostable1755105236403} from "./migration/17551052364
                 Createtestplantable1754826513754,
                 Createandseedtestplancontextoptiontable1755021446541,
                 Createtestplanscenariostable1755105236403,
+                Createlaunchtable1755352949379,
+                Createandseedlaunchstatustable1755195751060,
+                Createlaunchresulttable1755359311310,
+                Createlaunchstepresulttable1755359434140,
+                Createandseedlaunchresultstatustable1755359080451,
+                Createandseedlaunchstepresultstatustable1755359226260
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
         TestPlanContextOptionModule,
+        LaunchStepResultStatusModule,
+        LaunchResultStatusModule,
+        LaunchResultModule,
+        LaunchStepResultModule,
+        LaunchStatusModule,
+        LaunchModule,
         TestPlanModule,
         FolderModule,
         ScenarioAttachmentModule,

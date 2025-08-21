@@ -30,6 +30,7 @@ export default {
   background: #FFFFFF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-left: 11px;
+  z-index: 9999;
 
   cursor: pointer;
 }

@@ -9,7 +9,7 @@
     >
       <thead>
       <tr>
-        <th>ID</th>
+        <th>#</th>
         <th>Название</th>
         <th>Описание</th>
         <th>Кол-во сценариев</th>
@@ -47,8 +47,9 @@
               @close="activeContextMenuId = null"
               @rename-test-plan="startEditTitle"
               @edit-description-test-plan="startEditDescription"
-              @edit-scenarios-test-plan="showModal"
+              @edit-scenarios-test-plan="showScenariosModal"
               @delete-test-plan="deleteTestPlan"
+              @launch-test-plan="showLaunchModal(testPlan.id)"
           />
         </td>
         <td
@@ -77,13 +78,20 @@
       </tbody>
     </table>
 
-    <div class="overlay" v-if="editingScenarios"></div>
+    <div class="overlay" v-if="editingScenarios || launchModal"></div>
 
     <TestPlanScenariosModal
       v-if="editingScenarios"
       :testPlanID="modalTestPlanID"
       @close-modal="editingScenarios = false"
       @scenarios-updated="handleScenariosUpdated"
+    />
+
+    <CreateLaunchModal
+      v-if="launchModal"
+      :testPlanID="launchedTestPlanID"
+      @close-modal="launchModal = false"
+      @create-launch="handleLaunchCreated"
     />
 
     <TestPlanCreator
@@ -100,13 +108,18 @@ import TestPlanCreator from "@/components/TestPlan/TestPlanCreator.vue";
 import TestPlanContextMenu from "@/components/TestPlan/TestPlanContextMenu.vue";
 import FolderContextMenu from "@/components/Folder/FolderContextMenu.vue";
 import TestPlanScenariosModal from "@/components/TestPlan/Modal/TestPlanScenariosModal.vue";
+import CreateLaunchModal from "@/components/Launch/Modal/CreateLaunchModal.vue";
+import {LaunchMethods} from "@/api/launchMethods.js";
 
 export default {
-  components: {TestPlanScenariosModal, FolderContextMenu, TestPlanContextMenu, TestPlanCreator, TestPlanListHeader},
+  components: {
+    CreateLaunchModal,
+    TestPlanScenariosModal, FolderContextMenu, TestPlanContextMenu, TestPlanCreator, TestPlanListHeader},
   inject: ['showAlert'],
   data() {
     return {
       testPlanMethods: new TestPlanMethods(),
+      launchMethods: new LaunchMethods(),
       testPlans: [],
       activeContextMenuId: null,
       editedTitleID: null,
@@ -114,7 +127,9 @@ export default {
       editedDescriptionID: null,
       updatedTestPlanDescription: '',
       editingScenarios: false,
-      modalTestPlanID: null
+      modalTestPlanID: null,
+      launchModal: false,
+      launchedTestPlanID: null,
     }
   },
   methods: {
@@ -122,6 +137,28 @@ export default {
     handleScenariosUpdated() {
       this.refreshTestPlans();
       this.editingScenarios = false;
+    },
+
+    async handleLaunchCreated(launch) {
+      const body = {
+        "title": launch.title,
+        "description": launch.description,
+        "testPlanId": launch.testPlan
+      };
+
+      try {
+        await this.launchMethods.createLaunch(body);
+
+        this.launchModal = false;
+        this.launchedTestPlanID = null;
+
+        this.showAlert(`Запуск ${launch.title} успешно создан!`);
+
+        await this.refreshTestPlans();
+      } catch (error) {
+        this.showAlert('Что-то пошло не так...');
+        console.error(`Error while creating launch: ${error.message}`);
+      }
     },
 
     async refreshTestPlans() {
@@ -137,9 +174,14 @@ export default {
       this.activeContextMenuId = testPlan.id;
     },
 
-    async showModal(testPlan) {
+    async showScenariosModal(testPlan) {
       this.editingScenarios = true;
       this.modalTestPlanID = testPlan.id;
+    },
+
+    async showLaunchModal(id) {
+      this.launchModal = true;
+      this.launchedTestPlanID = id;
     },
 
     startEditTitle(testPlan) {
@@ -259,7 +301,7 @@ export default {
 .test-plan-table th,
 .test-plan-table td {
   padding: 12px 15px;
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   text-align: left;
   vertical-align: middle;
   white-space: nowrap;

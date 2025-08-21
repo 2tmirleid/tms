@@ -23,7 +23,8 @@ export class Createandseedpagetable1751357192213 implements MigrationInterface {
             INSERT INTO page ("title", "link", "alias")
             VALUES ('Главная', '/', 'Home'),
                    ('Сценарии', 'scenarios', 'Scenario'),
-                   ('Тест-планы', 'test-plans', 'TestPlan')
+                   ('Тест-планы', 'test-plans', 'TestPlan'),
+                   ('Запуски', 'launches', 'Launch')
         `);
     }
 

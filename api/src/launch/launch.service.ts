@@ -179,4 +179,57 @@ export class LaunchService {
             );
         }
     }
+
+    async findLaunch(filters: Record<string, string[]>) {
+        const allowedProps = ['id', 'title', 'status'];
+
+        const qb = this.launchRepository.createQueryBuilder('launch')
+            .leftJoinAndSelect('launch.testPlan', 'testPlan')
+            .leftJoinAndSelect('launch.status', 'status');
+
+        let firstCondition = true;
+
+        for (const [key, values] of Object.entries(filters)) {
+            if (!allowedProps.includes(key)) continue;
+            if (!Array.isArray(values) || values.length === 0) continue;
+
+            const paramName = `${key}_values`;
+            const conditionGroup: string[] = [];
+
+            values.forEach((_, index) => {
+                conditionGroup.push(`${getField(key)} LIKE :${paramName}${index}`);
+            });
+
+            const joinedGroup = `(${conditionGroup.join(" OR ")})`;
+
+            if (firstCondition) {
+                qb.where(joinedGroup);
+                firstCondition = false;
+            } else {
+                qb.andWhere(joinedGroup);
+            }
+
+            values.forEach((val, index) => {
+                qb.setParameter(`${paramName}${index}`, `%${val.toLowerCase()}%`);
+            });
+        }
+
+        qb.orderBy("launch.id", "ASC")
+            .addOrderBy("testPlan.id", "ASC");
+
+        return qb.getMany();
+
+        function getField(property: string): string {
+            switch (property) {
+                case 'id':
+                    return 'CAST(launch.id AS TEXT)';
+                case 'title':
+                    return 'LOWER(launch.title)';
+                case 'status':
+                    return 'LOWER(status.title)';
+                default:
+                    return '1=0';
+            }
+        }
+    }
 }

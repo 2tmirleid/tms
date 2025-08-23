@@ -17,4 +17,8 @@ export class TestPlanMethods extends BaseMethods {
     async deleteTestPlan(id) {
         return await axios.delete(`${this.BASE_URI}/test-plan/${id}`);
     }
+
+    async searchTestPlan(body) {
+        return await axios.post(`${this.BASE_URI}/test-plan/search`, body);
+    }
 }

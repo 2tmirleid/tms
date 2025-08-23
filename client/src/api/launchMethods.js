@@ -17,4 +17,8 @@ export class LaunchMethods extends BaseMethods {
     async updateLaunch(id, body) {
         return await axios.patch(`${this.BASE_URI}/launch/${id}`, body);
     }
+
+    async searchLaunch(body) {
+        return await axios.post(`${this.BASE_URI}/launch/search`, body);
+    }
 }

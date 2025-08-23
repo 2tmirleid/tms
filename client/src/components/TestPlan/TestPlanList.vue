@@ -2,7 +2,11 @@
   <section
       class="test-plan-list"
   >
-    <TestPlanListHeader/>
+    <TestPlanListHeader
+      @test-plan-sorted="handleSortTestPlan"
+      @found-test-plan="handleFoundTestPlan"
+      @refresh-test-plans-list="refreshTestPlans"
+    />
 
     <table
         class="test-plan-table"
@@ -134,6 +138,25 @@ export default {
   },
   methods: {
     convertDate,
+
+    async handleFoundTestPlan(testPlan) {
+      this.testPlans = Array.isArray(testPlan.data) ? testPlan.data : [testPlan.data];
+    },
+
+    async handleSortTestPlan(type) {
+      switch (type) {
+        case 'sort_asc':
+          this.testPlans = this.testPlans.sort((a, b) => a.id - b.id);
+          return;
+        case 'sort_desc':
+          this.testPlans = this.testPlans.sort((a, b) => b.id - a.id);
+          return;
+        case 'sort_alphabet':
+          this.testPlans.sort((a, b) => a.title.localeCompare(b.title));
+          return;
+      }
+    },
+
     handleScenariosUpdated() {
       this.refreshTestPlans();
       this.editingScenarios = false;

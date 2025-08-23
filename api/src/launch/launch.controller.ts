@@ -17,6 +17,32 @@ export class LaunchController {
         return await this.launchService.createLaunch(dto);
     }
 
+    @Post('search')
+    @ApiOperation({ summary: 'Searching launch' })
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                id: {
+                    type: 'array',
+                    items: { type: 'string' },
+                },
+                title: {
+                    type: 'array',
+                    items: { type: 'string' },
+                },
+                status: {
+                    type: 'array',
+                    items: { type: 'string' },
+                }
+            },
+            additionalProperties: false
+        }
+    })
+    async searchLaunch(@Body() filters: Record<string, string[]>) {
+        return this.launchService.findLaunch(filters);
+    }
+
     @Get()
     @ApiOperation({summary: 'Getting all launches'})
     async getLaunches() {

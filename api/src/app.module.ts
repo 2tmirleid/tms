@@ -74,6 +74,12 @@ import {
 } from "./migration/1755359226260-createandseedlaunchstepresultstatustable";
 import {Createlaunchresulttable1755359311310} from "./migration/1755359311310-createlaunchresulttable";
 import {Createlaunchstepresulttable1755359434140} from "./migration/1755359434140-createlaunchstepresulttable";
+import {TestPlanSortEntity} from "./entity/testPlan/test.plan.sort.entity";
+import {TestPlanSortModule} from "./testPlan/sort/test.plan.sort.module";
+import {Createandseedtestplansorttable1755949229323} from "./migration/1755949229323-createandseedtestplansorttable";
+import {Createandseedlaunchsorttable1755950273207} from "./migration/1755950273207-createandseedlaunchsorttable";
+import {LaunchSortModule} from "./launch/sort/launch.sort.module";
+import {LaunchSortEntity} from "./entity/launch/launch.sort.entity";
 
 
 @Module({
@@ -108,7 +114,9 @@ import {Createlaunchstepresulttable1755359434140} from "./migration/175535943414
                 LaunchStepResultEntity,
                 LaunchResultEntity,
                 LaunchResultStatusEntity,
-                LaunchStepResultStatusEntity
+                LaunchStepResultStatusEntity,
+                TestPlanSortEntity,
+                LaunchSortEntity,
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -130,12 +138,16 @@ import {Createlaunchstepresulttable1755359434140} from "./migration/175535943414
                 Createlaunchresulttable1755359311310,
                 Createlaunchstepresulttable1755359434140,
                 Createandseedlaunchresultstatustable1755359080451,
-                Createandseedlaunchstepresultstatustable1755359226260
+                Createandseedlaunchstepresultstatustable1755359226260,
+                Createandseedtestplansorttable1755949229323,
+                Createandseedlaunchsorttable1755950273207
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        LaunchSortModule,
+        TestPlanSortModule,
         TestPlanContextOptionModule,
         LaunchStepResultStatusModule,
         LaunchResultStatusModule,

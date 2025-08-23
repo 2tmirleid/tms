@@ -15,6 +15,28 @@ export class TestPlanController {
         return await this.testPlanService.createTestPlan(dto);
     }
 
+    @Post('search')
+    @ApiOperation({ summary: 'Searching test-plan' })
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                id: {
+                    type: 'array',
+                    items: { type: 'string' }
+                },
+                title: {
+                    type: 'array',
+                    items: { type: 'string' }
+                }
+            },
+            additionalProperties: false
+        }
+    })
+    async searchTestPlan(@Body() filters: Record<string, string[]>) {
+        return this.testPlanService.findTestPlan(filters);
+    }
+
     @Get(':id')
     @ApiOperation({ summary: 'Getting test-plan by it\'s id' })
     @ApiParam({

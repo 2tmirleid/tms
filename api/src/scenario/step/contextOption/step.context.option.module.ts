@@ -2,7 +2,7 @@ import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {StepContextOptionController} from "./step.context.option.controller";
 import {StepContextOptionService} from "./step.context.option.service";
-import {StepContextOptionEntity} from "../../../entity/step.context.option.entity";
+import {StepContextOptionEntity} from "../../../entity/scenarioStep/step.context.option.entity";
 
 @Module({
     imports: [

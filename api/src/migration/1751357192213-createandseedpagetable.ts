@@ -22,7 +22,9 @@ export class Createandseedpagetable1751357192213 implements MigrationInterface {
         await queryRunner.query(`
             INSERT INTO page ("title", "link", "alias")
             VALUES ('Главная', '/', 'Home'),
-                   ('Сценарии', 'scenarios', 'Scenario')
+                   ('Сценарии', 'scenarios', 'Scenario'),
+                   ('Тест-планы', 'test-plans', 'TestPlan'),
+                   ('Запуски', 'launches', 'Launch')
         `);
     }
 

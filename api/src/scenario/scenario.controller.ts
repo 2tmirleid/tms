@@ -11,8 +11,8 @@ import {
     UseInterceptors
 } from "@nestjs/common";
 import {ScenarioService} from "./scenario.service";
-import {CreateScenarioDto} from "../dto/create.scenario.dto";
-import {UpdateScenarioDto} from "../dto/update.scenario.dto";
+import {CreateScenarioDto} from "../dto/scenario/create.scenario.dto";
+import {UpdateScenarioDto} from "../dto/scenario/update.scenario.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {ApiBody, ApiConsumes, ApiOperation, ApiParam} from "@nestjs/swagger";
 

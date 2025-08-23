@@ -1,7 +1,7 @@
 <script setup>
 import {onUnmounted, ref} from 'vue'
 import ScenarioList from "@/components/Scenario/ScenarioList.vue"
-import ScenarioViewer from "@/components/Scenario/ScenarioViewer.vue"
+import ScenarioViewer from "@/components/Scenario/Viewer/ScenarioViewer.vue"
 import Sidebar from "@/components/Sidebar.vue";
 
 const selectedScenario = ref(null);

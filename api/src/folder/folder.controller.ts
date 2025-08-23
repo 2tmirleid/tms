@@ -1,8 +1,8 @@
 import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
 import {FolderService} from "./folder.service";
-import {CreateFolderDto} from "../dto/create.folder.dto";
+import {CreateFolderDto} from "../dto/folder/create.folder.dto";
 import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
-import {UpdateFolderDto} from "../dto/update.folder.dto";
+import {UpdateFolderDto} from "../dto/folder/update.folder.dto";
 
 @Controller('/folder')
 export class FolderController {

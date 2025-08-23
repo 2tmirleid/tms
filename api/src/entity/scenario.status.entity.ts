@@ -1,5 +1,5 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {ScenarioEntity} from "./scenario.entity";
+import {ScenarioEntity} from "./scenario/scenario.entity";
 
 @Entity({ name: 'scenario_status' })
 export class ScenarioStatusEntity {

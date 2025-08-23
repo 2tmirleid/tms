@@ -2,7 +2,7 @@ import {Module} from "@nestjs/common";
 import {ScenarioAttachmentService} from "./scenario.attachment.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ScenarioAttachmentEntity} from "../../entity/scenario.attachment.entity";
-import {ScenarioEntity} from "../../entity/scenario.entity";
+import {ScenarioEntity} from "../../entity/scenario/scenario.entity";
 import {ScenarioAttachmentController} from "./scenario.attachment.controller";
 
 @Module({

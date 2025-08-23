@@ -1,10 +1,10 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
-import {ScenarioEntity} from "../entity/scenario.entity";
-import {CreateScenarioDto} from "../dto/create.scenario.dto";
+import {ScenarioEntity} from "../entity/scenario/scenario.entity";
+import {CreateScenarioDto} from "../dto/scenario/create.scenario.dto";
 import {InjectRepository} from "@nestjs/typeorm";
 import {DataSource, Repository} from "typeorm";
-import {UpdateScenarioDto} from "../dto/update.scenario.dto";
-import {ScenarioStepEntity} from "../entity/scenario.step.entity";
+import {UpdateScenarioDto} from "../dto/scenario/update.scenario.dto";
+import {ScenarioStepEntity} from "../entity/scenarioStep/scenario.step.entity";
 import {ScenarioTagEntity} from "../entity/scenario.tag.entity";
 import {ScenarioStatusService} from "./status/scenario.status.service";
 import {parseScenarioSteps} from "../utils/parse.scenario.steps";
@@ -37,11 +37,34 @@ export class ScenarioService {
 
     async getScenarios() {
         try {
-            return await this.scenarioRepository.find();
+            return await this.scenarioRepository
+                .createQueryBuilder('scenario')
+                .leftJoinAndSelect('scenario.status', 'status')
+                .leftJoin('test_plan_scenarios', 'tps', 'tps.scenario_id = scenario.id')
+                .addSelect('tps.test_plan_id', 'test_plan_id')
+                .orderBy('scenario.id', 'ASC')
+                .getRawAndEntities()
+                .then(({ entities, raw }) => {
+                    const map = new Map<number, number[]>();
+                    raw.forEach(r => {
+                        if (!map.has(r.scenario_id)) {
+                            map.set(r.scenario_id, []);
+                        }
+                        if (r.test_plan_id) {
+                            map.get(r.scenario_id)!.push(r.test_plan_id);
+                        }
+                    });
+
+                    return entities.map(s => ({
+                        ...s,
+                        test_plan_ids: map.get(s.id) || []
+                    }));
+                });
         } catch (error) {
-            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     async getScenario(id: number) {
         try {

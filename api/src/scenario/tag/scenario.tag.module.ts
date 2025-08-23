@@ -3,7 +3,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {ScenarioTagEntity} from "../../entity/scenario.tag.entity";
 import {ScenarioTagController} from "./scenario.tag.controller";
 import {ScenarioTagService} from "./scenario.tag.service";
-import {ScenarioEntity} from "../../entity/scenario.entity";
+import {ScenarioEntity} from "../../entity/scenario/scenario.entity";
 
 @Module({
     imports: [

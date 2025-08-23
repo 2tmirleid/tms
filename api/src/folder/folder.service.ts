@@ -1,10 +1,10 @@
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {FolderEntity} from "../entity/folder.entity";
+import {FolderEntity} from "../entity/folder/folder.entity";
 import {Repository} from "typeorm";
-import {CreateFolderDto} from "../dto/create.folder.dto";
-import {ScenarioEntity} from "../entity/scenario.entity";
-import {UpdateFolderDto} from "../dto/update.folder.dto";
+import {CreateFolderDto} from "../dto/folder/create.folder.dto";
+import {ScenarioEntity} from "../entity/scenario/scenario.entity";
+import {UpdateFolderDto} from "../dto/folder/update.folder.dto";
 
 @Injectable()
 export class FolderService {

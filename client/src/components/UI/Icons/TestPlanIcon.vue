@@ -1,0 +1,13 @@
+<template>
+  <svg width="35" height="35" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Лист -->
+    <rect x="8" y="6" width="32" height="36" rx="2" stroke="#000" stroke-width="2" fill="none"/>
+
+    <!-- Галочки (успешные тесты) -->
+    <path d="M14 14l3 3 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M14 22l3 3 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Крестик (проваленный тест, на отдельной строке ниже) -->
+    <path d="M14 36l7-7m0 7l-7-7" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</template>

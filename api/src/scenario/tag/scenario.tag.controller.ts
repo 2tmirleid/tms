@@ -1,6 +1,6 @@
 import {Body, Controller, Delete, Param, Post} from "@nestjs/common";
 import {ScenarioTagService} from "./scenario.tag.service";
-import {CreateScenarioTagDto} from "../../dto/create.scenario.tag.dto";
+import {CreateScenarioTagDto} from "../../dto/tag/create.scenario.tag.dto";
 import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
 
 @Controller('/scenario/tag')

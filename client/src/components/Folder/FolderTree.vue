@@ -296,6 +296,7 @@ export default {
   border-left: 2px solid var(--border-color);
   border-radius: 10px;
   position: relative;
+  margin-bottom: 10px;
 }
 
 .root-folder-tree {

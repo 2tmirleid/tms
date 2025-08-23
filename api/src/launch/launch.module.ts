@@ -10,6 +10,7 @@ import {LaunchResultEntity} from "../entity/launch/result/launch.result.entity";
 import {LaunchResultModule} from "./result/launch.result.module";
 import {TestPlanModule} from "../testPlan/test.plan.module";
 import {LaunchStepResultModule} from "./result/step/launch.step.result.module";
+import {LaunchSortModule} from "./sort/launch.sort.module";
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import {LaunchStepResultModule} from "./result/step/launch.step.result.module";
         LaunchResultModule,
         TestPlanModule,
         LaunchStepResultModule,
+        LaunchSortModule
     ],
     controllers: [LaunchController],
     providers: [LaunchService],

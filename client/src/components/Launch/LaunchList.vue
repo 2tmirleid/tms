@@ -1,6 +1,10 @@
 <template>
   <section class="launch-list">
-    <LaunchListHeader/>
+    <LaunchListHeader
+      @launch-sorted="handleSortLaunch"
+      @refresh-launch-list="refreshLaunches"
+      @found-launch="handleFoundLaunch"
+    />
     <ul
         class="launches"
     >
@@ -65,6 +69,61 @@ export default {
     }
   },
   methods: {
+    async handleFoundLaunch(launch) {
+      const launches = Array.isArray(launch.data) ? launch.data : [launch.data];
+
+      for (const l of launches) {
+        const resultResponse = await this.launchResultMethods.getResults(l.id);
+        const results = resultResponse.data;
+
+        const summary = {};
+        const statusesMap = {};
+        const colorsMap = {};
+
+        const allStatuses = {
+          1: { title: 'В процессе', color: '#e1e8ed' },
+          2: { title: 'Пройден', color: '#28a745' },
+          3: { title: 'Не пройден', color: '#c00000' }
+        };
+
+        Object.keys(allStatuses).forEach(statusId => {
+          summary[statusId] = 0;
+          statusesMap[statusId] = allStatuses[statusId].title;
+          colorsMap[statusId] = allStatuses[statusId].color;
+        });
+
+        results.forEach(r => {
+          const id = r.status.id;
+          summary[id] = (summary[id] || 0) + 1;
+          statusesMap[id] = r.status.title;
+          colorsMap[id] = r.status.color;
+        });
+
+        l.resultsSummary = summary;
+        l.statusesMap = statusesMap;
+        l.colorsMap = colorsMap;
+      }
+
+      this.launches = launches;
+    },
+
+    async handleSortLaunch(type) {
+      switch (type) {
+        case 'sort_asc':
+          this.launches = this.launches.sort((a, b) => a.id - b.id);
+          return;
+        case 'sort_desc':
+          this.launches = this.launches.sort((a, b) => b.id - a.id);
+          return;
+        case 'sort_alphabet':
+          this.launches.sort((a, b) => a.title.localeCompare(b.title));
+          return;
+        case 'sort_status':
+          this.launches.sort((a, b) => a.status.id - b.status.id);
+          return;
+      }
+    },
+
     async refreshLaunches() {
       try {
         const launchResponse = await this.launchMethods.getLaunches();

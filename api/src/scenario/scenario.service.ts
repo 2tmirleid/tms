@@ -12,6 +12,7 @@ import {parseScenarioTags} from "../utils/parse.scenario.tags";
 import {Readable} from "stream";
 import * as csv from "csv-parser";
 import {ScenarioAttachmentEntity} from "../entity/scenario.attachment.entity";
+import {ProjectService} from "../project/project.service";
 
 @Injectable()
 export class ScenarioService {
@@ -20,14 +21,16 @@ export class ScenarioService {
         private scenarioRepository: Repository<ScenarioEntity>,
         private readonly scenarioStatusRepository: ScenarioStatusService,
         private readonly dataSource: DataSource,
+        private readonly projectService: ProjectService,
     ) {
     }
 
-    async createScenario(dto: CreateScenarioDto) {
+    async createScenario(projectID: number, dto: CreateScenarioDto) {
         try {
             const scenario = this.scenarioRepository.create(dto);
 
             scenario.status = await this.scenarioStatusRepository.getStatus(4);
+            scenario.project = await this.projectService.getProject(projectID);
 
             return await this.scenarioRepository.save(scenario);
         } catch (error) {
@@ -35,13 +38,14 @@ export class ScenarioService {
         }
     }
 
-    async getScenarios() {
+    async getScenarios(projectID: number) {
         try {
             return await this.scenarioRepository
                 .createQueryBuilder('scenario')
                 .leftJoinAndSelect('scenario.status', 'status')
                 .leftJoin('test_plan_scenarios', 'tps', 'tps.scenario_id = scenario.id')
                 .addSelect('tps.test_plan_id', 'test_plan_id')
+                .where('scenario.project_id = :projectId', { projectId: projectID })
                 .orderBy('scenario.id', 'ASC')
                 .getRawAndEntities()
                 .then(({ entities, raw }) => {
@@ -64,7 +68,6 @@ export class ScenarioService {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     async getScenario(id: number) {
         try {
@@ -193,7 +196,8 @@ export class ScenarioService {
         const qb = this.scenarioRepository.createQueryBuilder('scenario')
             .leftJoinAndSelect('scenario.steps', 'step')
             .leftJoinAndSelect('scenario.tags', 'tag')
-            .leftJoinAndSelect('scenario.status', 'status');
+            .leftJoinAndSelect('scenario.status', 'status')
+            .leftJoinAndSelect('scenario.project', 'project');
 
         let firstCondition = true;
 
@@ -243,7 +247,7 @@ export class ScenarioService {
         }
     }
 
-    async importScenario(scenario: Express.Multer.File) {
+    async importScenario(projectID: number, scenario: Express.Multer.File) {
         const results: any[] = [];
 
         const stream = Readable.from(scenario.buffer);
@@ -276,6 +280,7 @@ export class ScenarioService {
             const scenario = this.scenarioRepository.create(dto);
 
             scenario.status = await this.scenarioStatusRepository.getStatus(4);
+            scenario.project = await this.projectService.getProject(projectID);
 
             return await this.scenarioRepository.save(scenario);
         } catch (error) {

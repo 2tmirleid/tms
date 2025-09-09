@@ -80,6 +80,11 @@ import {Createandseedtestplansorttable1755949229323} from "./migration/175594922
 import {Createandseedlaunchsorttable1755950273207} from "./migration/1755950273207-createandseedlaunchsorttable";
 import {LaunchSortModule} from "./launch/sort/launch.sort.module";
 import {LaunchSortEntity} from "./entity/launch/launch.sort.entity";
+import {
+    Createprojecttable1000000000000,
+} from "./migration/1000000000000-createprojecttable";
+import {ProjectModule} from "./project/project.module";
+import {ProjectEntity} from "./entity/project/project.entity";
 
 
 @Module({
@@ -117,6 +122,7 @@ import {LaunchSortEntity} from "./entity/launch/launch.sort.entity";
                 LaunchStepResultStatusEntity,
                 TestPlanSortEntity,
                 LaunchSortEntity,
+                ProjectEntity
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -140,12 +146,14 @@ import {LaunchSortEntity} from "./entity/launch/launch.sort.entity";
                 Createandseedlaunchresultstatustable1755359080451,
                 Createandseedlaunchstepresultstatustable1755359226260,
                 Createandseedtestplansorttable1755949229323,
-                Createandseedlaunchsorttable1755950273207
+                Createandseedlaunchsorttable1755950273207,
+                Createprojecttable1000000000000
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        ProjectModule,
         LaunchSortModule,
         TestPlanSortModule,
         TestPlanContextOptionModule,

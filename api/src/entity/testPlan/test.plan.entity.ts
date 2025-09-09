@@ -1,14 +1,15 @@
 import {
     Column,
     CreateDateColumn,
-    Entity, JoinTable,
-    ManyToMany,
+    Entity, JoinColumn, JoinTable,
+    ManyToMany, ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
 import {ScenarioEntity} from "../scenario/scenario.entity";
 import {LaunchEntity} from "../launch/launch.entity";
+import {ProjectEntity} from "../project/project.entity";
 
 @Entity({ name: 'test_plan' })
 export class TestPlanEntity {
@@ -48,6 +49,13 @@ export class TestPlanEntity {
 
     @OneToMany(() => LaunchEntity, launch => launch.testPlan)
     launches: LaunchEntity[];
+
+    @ManyToOne(() => ProjectEntity, project => project.scenarios, {
+        eager: true,
+        nullable: false,
+    })
+    @JoinColumn({ name: 'project_id' })
+    project: ProjectEntity;
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

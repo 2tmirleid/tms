@@ -1,6 +1,6 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
 import {TestPlanService} from "./test.plan.service";
-import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
+import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {CreateTestPlanDto} from "../dto/testPlan/create.test.plan.dto";
 import {UpdateTestPlanDto} from "../dto/testPlan/update.test.plan.dto";
 
@@ -10,9 +10,18 @@ export class TestPlanController {
 
     @Post()
     @ApiOperation({ summary: 'Creating test-plan' })
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiBody({ type: CreateTestPlanDto })
-    async createTestPlan(@Body() dto: CreateTestPlanDto) {
-        return await this.testPlanService.createTestPlan(dto);
+    async createTestPlan(
+        @Query('projectID') projectID: number,
+        @Body() dto: CreateTestPlanDto
+    ) {
+        return await this.testPlanService.createTestPlan(projectID, dto);
     }
 
     @Post('search')
@@ -50,9 +59,15 @@ export class TestPlanController {
     }
 
     @Get()
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiOperation({ summary: 'Getting all test-plans' })
-    async getTestPlans() {
-        return await this.testPlanService.getTestPlans();
+    async getTestPlans(@Query('projectID') projectID: number) {
+        return await this.testPlanService.getTestPlans(projectID);
     }
 
     @Patch(':id')

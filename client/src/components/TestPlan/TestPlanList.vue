@@ -87,6 +87,7 @@
     <TestPlanScenariosModal
       v-if="editingScenarios"
       :testPlanID="modalTestPlanID"
+      :projectID="projectID"
       @close-modal="editingScenarios = false"
       @scenarios-updated="handleScenariosUpdated"
     />
@@ -94,12 +95,14 @@
     <CreateLaunchModal
       v-if="launchModal"
       :testPlanID="launchedTestPlanID"
+      :projectID="projectID"
       @close-modal="launchModal = false"
       @create-launch="handleLaunchCreated"
     />
 
     <TestPlanCreator
         @test-plan-created="refreshTestPlans"
+        :projectID="projectID"
     />
   </section>
 </template>
@@ -136,6 +139,9 @@ export default {
       launchedTestPlanID: null,
     }
   },
+  props: {
+    projectID: Number | String,
+  },
   methods: {
     convertDate,
 
@@ -170,7 +176,7 @@ export default {
       };
 
       try {
-        await this.launchMethods.createLaunch(body);
+        await this.launchMethods.createLaunch(this.projectID, body);
 
         this.launchModal = false;
         this.launchedTestPlanID = null;
@@ -186,7 +192,7 @@ export default {
 
     async refreshTestPlans() {
       try {
-        const response = await this.testPlanMethods.getTestPlans();
+        const response = await this.testPlanMethods.getTestPlans(this.projectID);
         this.testPlans = response.data.sort((a, b) => a.id - b.id);
       } catch (error) {
         this.showAlert('Что-то пошло не так...');

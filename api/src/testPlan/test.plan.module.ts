@@ -5,6 +5,7 @@ import {TestPlanService} from "./test.plan.service";
 import {TestPlanController} from "./test.plan.controller";
 import {ScenarioEntity} from "../entity/scenario/scenario.entity";
 import {TestPlanSortModule} from "./sort/test.plan.sort.module";
+import {ProjectModule} from "../project/project.module";
 
 @Module({
     imports: [
@@ -12,7 +13,8 @@ import {TestPlanSortModule} from "./sort/test.plan.sort.module";
             TestPlanEntity,
             ScenarioEntity
         ]),
-        TestPlanSortModule
+        TestPlanSortModule,
+        ProjectModule
     ],
     controllers: [
         TestPlanController

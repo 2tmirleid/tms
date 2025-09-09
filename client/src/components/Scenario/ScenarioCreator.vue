@@ -75,6 +75,9 @@ export default {
       folderMethods: new FolderMethods()
     };
   },
+  props: {
+    projectID: Number | String,
+  },
   methods: {
     activateNewScenario() {
       this.isNewScenario = true;
@@ -110,7 +113,7 @@ export default {
 
         const body = { "title": this.newScenarioName }
 
-        await this.scenarioMethods.createScenario(body);
+        await this.scenarioMethods.createScenario(this.projectID, body);
 
         this.$emit('scenario-created');
         this.cancelSavingScenario();
@@ -128,7 +131,7 @@ export default {
 
         const body = { "title": this.newFolderName };
 
-        await this.folderMethods.createFolder(body);
+        await this.folderMethods.createFolder(this.projectID, body);
         this.$emit('folder-created');
         this.cancelSavingFolder();
       } catch (e) {

@@ -1,8 +1,9 @@
 <script setup>
-import {onUnmounted, ref} from 'vue'
+import {onMounted, onUnmounted, ref} from 'vue'
 import ScenarioList from "@/components/Scenario/ScenarioList.vue"
 import ScenarioViewer from "@/components/Scenario/Viewer/ScenarioViewer.vue"
 import Sidebar from "@/components/Sidebar.vue";
+import {useRoute, useRouter} from "vue-router";
 
 const selectedScenario = ref(null);
 const scenarioListRef = ref(null);
@@ -13,7 +14,7 @@ const handleScenarioSelect = (scenario) => {
 
 const handleScenarioUpdated = (updatedScenarioId) => {
   if (selectedScenario.value?.id === updatedScenarioId) {
-    selectedScenario.value = { ...selectedScenario.value }
+    selectedScenario.value = {...selectedScenario.value}
   }
 
   scenarioListRef.value?.refreshScenarios?.();
@@ -27,6 +28,19 @@ const handleScenarioDeleted = () => {
 onUnmounted(() => {
   selectedScenario.value = null
 })
+
+const props = defineProps({
+  projectID: Number | String
+})
+
+onMounted(() => {
+  const route = useRoute();
+  const router = useRouter();
+
+  if (route.path !== `/project/${props.projectID}/scenarios`) {
+    router.replace(`/project/${props.projectID}/scenarios`);
+  }
+})
 </script>
 
 <template>
@@ -38,6 +52,7 @@ onUnmounted(() => {
         @select="handleScenarioSelect"
         @scenario-updated="handleScenarioUpdated"
         @folder-updated="handleScenarioUpdated"
+        :projectID="projectID"
     />
 
     <ScenarioViewer

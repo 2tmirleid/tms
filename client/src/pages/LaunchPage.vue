@@ -2,20 +2,23 @@
   <section class="launch-page container">
     <Sidebar/>
 
+    <!-- список -->
     <LaunchList
-        v-if="!viewLaunch"
+        v-if="!$route.params.launchID"
         @launch-selected="handleLaunchSelected"
+        :projectID="projectId"
     />
 
-    <LaunchScenarioList
+    <!-- сценарии -->
+    <router-view
+        v-else
         ref="scenarioList"
-        v-if="viewLaunch && viewedLaunchID !== null"
-        :launchID="viewedLaunchID"
         @scenario-selected="handleScenarioSelected"
     />
 
+    <!-- просмотр сценария -->
     <LaunchScenarioViewer
-        :key="viewedScenario.id"
+        :key="viewedScenario?.id"
         v-if="viewScenario && viewedScenario !== null"
         :scenario="viewedScenario"
         :launchResult="launchResult"
@@ -34,8 +37,6 @@ export default {
   components: {LaunchScenarioViewer, LaunchScenarioList, LaunchList, Sidebar},
   data() {
     return {
-      viewLaunch: false,
-      viewedLaunchID: null,
       viewScenario: false,
       viewedScenario: null,
       launchResult: {},
@@ -43,8 +44,9 @@ export default {
   },
   methods: {
     handleLaunchSelected(launch) {
-      this.viewLaunch = true;
-      this.viewedLaunchID = launch.id;
+      this.$router.push({
+        path: `/project/${this.projectId}/launches/${launch.id}`
+      })
     },
     handleScenarioSelected(array) {
       this.viewScenario = true;
@@ -53,6 +55,11 @@ export default {
     },
     handleResultUpdated(resultID) {
       this.$refs.scenarioList.refreshScenarios();
+    }
+  },
+  computed: {
+    projectId() {
+      return this.$route.params.id
     }
   }
 }

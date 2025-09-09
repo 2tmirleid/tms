@@ -10,15 +10,30 @@ export class FolderController {
 
     @Post()
     @ApiOperation({ summary: 'Creating folder' })
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiBody({ type: CreateFolderDto })
-    async createFolder(@Body() dto: CreateFolderDto) {
-        return await this.folderService.createFolder(dto);
+    async createFolder(
+        @Query('projectID') projectID: number,
+        @Body() dto: CreateFolderDto
+    ) {
+        return await this.folderService.createFolder(projectID, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'Getting all folders' })
-    async getFolders() {
-        return await this.folderService.getFolders();
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
+    async getFolders(@Query('projectID') projectID: number) {
+        return await this.folderService.getFolders(projectID);
     }
 
     @Post('/put/scenario')

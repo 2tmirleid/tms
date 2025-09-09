@@ -8,6 +8,7 @@ import {UpdateLaunchDto} from "../dto/launch/update.launch.dto";
 import {LaunchResultService} from "./result/launch.result.service";
 import {TestPlanService} from "../testPlan/test.plan.service";
 import {LaunchStepResultService} from "./result/step/launch.step.result.service";
+import {ProjectService} from "../project/project.service";
 
 @Injectable()
 export class LaunchService {
@@ -17,10 +18,12 @@ export class LaunchService {
         private readonly launchStatusService: LaunchStatusService,
         private readonly launchResultService: LaunchResultService,
         private readonly testPlanService: TestPlanService,
-        private readonly launchStepResultService: LaunchStepResultService
-    ) {}
+        private readonly launchStepResultService: LaunchStepResultService,
+        private readonly projectService: ProjectService,
+    ) {
+    }
 
-    async createLaunch(dto: CreateLaunchDto) {
+    async createLaunch(projectID: number, dto: CreateLaunchDto) {
         try {
             const testPlan = await this.testPlanService.getTestPlan(dto.testPlanId);
             if (!testPlan) {
@@ -37,6 +40,7 @@ export class LaunchService {
             });
 
             launch.status = await this.launchStatusService.getStatus(1);
+            launch.project = await this.projectService.getProject(projectID);
 
             const savedLaunch = await this.launchRepository.save(launch);
 
@@ -68,9 +72,10 @@ export class LaunchService {
         }
     }
 
-    async getLaunches() {
+    async getLaunches(projectID: number) {
         try {
             return await this.launchRepository.find({
+                where: {project: {id: projectID}},
                 relations: ['status', 'testPlan']
             });
         } catch (error) {
@@ -105,7 +110,7 @@ export class LaunchService {
     async updateLaunch(id: number, dto: UpdateLaunchDto) {
         try {
             const launch = await this.launchRepository.findOne({
-                where: { id },
+                where: {id},
                 relations: ['status', 'testPlan']
             });
 
@@ -122,7 +127,7 @@ export class LaunchService {
             }
 
             if (dto.testPlanId !== undefined) {
-                launch.testPlan = { id: dto.testPlanId } as any;
+                launch.testPlan = {id: dto.testPlanId} as any;
                 launch.updatedAt = new Date();
             }
 

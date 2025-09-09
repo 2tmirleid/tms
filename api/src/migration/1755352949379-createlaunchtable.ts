@@ -13,6 +13,7 @@ export class Createlaunchtable1755352949379 implements MigrationInterface {
                 description  VARCHAR(255),
                 status_id    INTEGER  REFERENCES launch_status (id) ON DELETE SET NULL,
                 test_plan_id INTEGER REFERENCES test_plan (id) ON DELETE CASCADE,
+                project_id   INTEGER REFERENCES project (id) ON DELETE CASCADE,
                 started_at   TIMESTAMP WITH TIME ZONE NULL,
                 finished_at  TIMESTAMP WITH TIME ZONE NULL,
                 created_at   TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,

@@ -2,12 +2,12 @@ import {BaseMethods} from "@/api/baseMethods.js";
 import axios from "axios";
 
 export class TestPlanMethods extends BaseMethods {
-    async getTestPlans() {
-        return await axios.get(`${this.BASE_URI}/test-plan`);
+    async getTestPlans(projectID) {
+        return await axios.get(`${this.BASE_URI}/test-plan?projectID=${projectID}`);
     }
 
-    async createTestPlan(body) {
-        return await axios.post(`${this.BASE_URI}/test-plan`, body);
+    async createTestPlan(projectID, body) {
+        return await axios.post(`${this.BASE_URI}/test-plan?projectID=${projectID}`, body);
     }
 
     async updateTestPlan(id, body) {

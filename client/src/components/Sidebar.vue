@@ -25,7 +25,9 @@
             class="page-item"
             :class="{ 'active' : $route.path.includes(page.alias.toLowerCase()) }"
         >
-          <router-link :to="page.link">
+          <router-link
+              :to="page.alias !== 'Home' ? `/project/${projectId}/${page.link}` : `${page.link}`"
+          >
             <span v-if="collapsed">
               <component :is="buttonComponents[page.alias]"/>
             </span>
@@ -81,16 +83,29 @@ export default {
         Launch: LaunchButton,
       },
       isAuth: true,
+      projectId: null,
     }
   },
   methods: {
     async getPages() {
       const response = await this.pageMethods.getPages();
       this.pages = response.data;
+    },
+    updateProjectId() {
+      this.projectId = this.$route.params.projectID || this.$route.params.id;
+    }
+  },
+  watch: {
+    '$route': {
+      immediate: true,
+      handler() {
+        this.updateProjectId();
+      }
     }
   },
   mounted() {
     this.getPages();
+    this.updateProjectId();
   }
 }
 </script>

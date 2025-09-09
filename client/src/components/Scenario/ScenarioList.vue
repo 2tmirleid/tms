@@ -47,11 +47,11 @@
             @dragstart="startScenarioDrag($event, scenario.id)"
         >
           <template v-if="editedTitleID !== scenario.id">
-          <span class="title">
-            <span class="id">#{{ scenario.id }}</span>
-            <span class="status" :style="{backgroundColor: scenario.status.color}"></span>
-            {{ getTrimmedTitle(scenario.title) }}
-          </span>
+            <span class="title">
+              <span class="id">#{{ scenario.id }}</span>
+              <span class="status" :style="{backgroundColor: scenario.status.color}"></span>
+              {{ getTrimmedTitle(scenario.title) }}
+            </span>
           </template>
 
           <input
@@ -81,6 +81,7 @@
     <ScenarioCreator
         @scenario-created="refreshScenarios"
         @folder-created="refreshFolders"
+        :projectID="projectID"
     />
 
     <div class="resizer" @mousedown="startResizing"></div>
@@ -125,6 +126,10 @@ export default {
     dragOverTarget: null,
     isDragOverRoot: false,
   }),
+
+  props: {
+    projectID: Number | String
+  },
 
   methods: {
     handleRootDragOver(event) {
@@ -250,17 +255,17 @@ export default {
     },
 
     async refreshFolders() {
-      const response = await this.folderMethods.getFolders();
+      const response = await this.folderMethods.getFolders(this.projectID);
       this.folders = response.data;
     },
 
     async refreshScenarios() {
       try {
-        const response = await this.scenarioMethods.getScenariosList();
+        const response = await this.scenarioMethods.getScenariosList(this.projectID);
         this.scenarios = response.data.sort((a, b) => a.id - b.id);
         await this.refreshFolders();
       } catch (error) {
-        console.error("Fetch scenarios error:" + error);
+        console.error("Fetch scenarios error:" + error.message);
         this.showAlert('При попытке получить список сценариев что-то пошло не так...');
       }
     },

@@ -11,6 +11,7 @@ export class Createtestplantable1754826513754 implements MigrationInterface {
                 id          SERIAL PRIMARY KEY,
                 title       VARCHAR(255)                           NOT NULL,
                 description VARCHAR(255),
+                project_id   INTEGER REFERENCES project (id) ON DELETE CASCADE,
                 created_at  TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
                 updated_at  TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
             );

@@ -43,10 +43,13 @@ export default {
       launchResultMethods: new LaunchResultMethods(),
       results: [],
       scenarios: [],
+      route: null,
+      router: null,
     }
   },
   props: {
     launchID: Number,
+    projectID: Number | String,
   },
   methods: {
     getTrimmedTitle(title) {
@@ -82,9 +85,27 @@ export default {
           return;
       }
     },
+    updateUrl() {
+      if (this.projectID && this.launchID && this.projectID !== 'undefined' && this.launchID !== 'undefined') {
+        const expectedPath = `/project/${this.projectID}/launches/${this.launchID}`;
+
+        if (this.$route.path !== expectedPath) {
+          window.history.replaceState({}, '', expectedPath);
+        }
+      }
+    }
   },
   mounted() {
     this.refreshScenarios();
+    this.updateUrl();
+  },
+  watch: {
+    projectID() {
+      this.updateUrl();
+    },
+    launchID() {
+      this.updateUrl();
+    }
   }
 }
 </script>

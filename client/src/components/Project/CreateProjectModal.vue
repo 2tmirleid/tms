@@ -1,5 +1,5 @@
 <template>
-  <div class="create-launch-modal">
+  <div class="create-project-modal">
     <div class="close">
       <CloseButton
           @click="this.$emit('close-modal')"
@@ -12,7 +12,7 @@
 
         <input
             type="text"
-            v-model="newLaunch.title"
+            v-model="newProject.title"
             required>
       </div>
 
@@ -21,62 +21,57 @@
 
         <input
             type="text"
-            v-model="newLaunch.description"
+            v-model="newProject.description"
         >
       </div>
     </div>
 
-    <CreateLaunchButton
-      @click="createLaunch"
+    <CreateProjectButton
+        @click="createProject"
     />
   </div>
 </template>
 
 <script>
 import CloseButton from "@/components/UI/Btn/CloseButton.vue";
-import CreateLaunchButton from "@/components/UI/Btn/CreateLaunchButton.vue";
+import CreateProjectButton from "@/components/Project/CreateProjectButton.vue";
 
 export default {
-  components: {CreateLaunchButton, CloseButton},
+  components: {CreateProjectButton, CloseButton},
   inject: ['showAlert'],
   data() {
     return {
-      newLaunch: {
+      newProject: {
         title: '',
         description: ''
       }
     }
   },
-  props: {
-    testPlanID: Number,
-    projectID: Number | String,
-  },
   methods: {
-    async createLaunch() {
-      if (!this.newLaunch.title.trim()) {
-        this.showAlert('Название запуска не может быть пустым');
+    async createProject() {
+      if (!this.newProject.title.trim()) {
+        this.showAlert('Название проекта не может быть пустым');
         return;
       }
 
-      if (this.newLaunch.title.length > 255) {
-        this.showAlert('Название запуска не может превышать 255 символов');
+      if (this.newProject.title.length > 255) {
+        this.showAlert('Название проекта не может превышать 255 символов');
         return;
       }
 
-      const launch = {
-        title: this.newLaunch.title,
-        description: this.newLaunch.description,
-        testPlan: this.testPlanID
+      const project = {
+        title: this.newProject.title,
+        description: this.newProject.description,
       }
 
-      this.$emit('create-launch', launch);
+      this.$emit('create-project', project);
     }
   }
 }
 </script>
 
 <style scoped>
-.create-launch-modal {
+.create-project-modal {
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;

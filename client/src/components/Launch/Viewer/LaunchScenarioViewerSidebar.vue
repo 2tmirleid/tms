@@ -67,6 +67,9 @@ export default {
   },
   methods: {
     convertDate,
+  },
+  mounted() {
+
   }
 }
 </script>

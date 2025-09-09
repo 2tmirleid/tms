@@ -10,6 +10,8 @@ import {ScenarioSortModule} from "./sort/scenario.sort.module";
 import {ScenarioAttachmentModule} from "./attachment/scenario.attachment.module";
 import {FolderEntity} from "../entity/folder/folder.entity";
 import {TestPlanModule} from "../testPlan/test.plan.module";
+import {ProjectService} from "../project/project.service";
+import {ProjectModule} from "../project/project.module";
 
 @Module({
     imports: [
@@ -22,7 +24,8 @@ import {TestPlanModule} from "../testPlan/test.plan.module";
         ScenarioTagModule,
         ScenarioStatusModule,
         FolderEntity,
-        TestPlanModule
+        TestPlanModule,
+        ProjectModule
     ],
     controllers: [
         ScenarioController

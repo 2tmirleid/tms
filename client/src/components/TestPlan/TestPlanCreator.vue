@@ -44,6 +44,9 @@ export default {
       testPlanMethods: new TestPlanMethods(),
     };
   },
+  props: {
+    projectID: Number | String,
+  },
   methods: {
     activateNewTestPlan() {
       this.isNewTestPlan = true;
@@ -69,7 +72,7 @@ export default {
 
         const body = { "title": this.newTestPlanName }
 
-        await this.testPlanMethods.createTestPlan(body);
+        await this.testPlanMethods.createTestPlan(this.projectID, body);
 
         this.$emit('test-plan-created');
         this.cancelSavingTestPlan();

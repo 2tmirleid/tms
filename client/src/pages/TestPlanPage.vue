@@ -2,7 +2,9 @@
   <section class="test-plans-page container">
     <Sidebar/>
 
-    <TestPlanList/>
+    <TestPlanList
+      :projectID="projectId"
+    />
   </section>
 </template>
 
@@ -11,8 +13,12 @@ import Sidebar from "@/components/Sidebar.vue";
 import TestPlanList from "@/components/TestPlan/TestPlanList.vue";
 
 export default {
-  components: {TestPlanList, Sidebar}
-
+  components: {TestPlanList, Sidebar},
+  computed: {
+    projectId() {
+      return this.$route.params.id
+    }
+  }
 }
 </script>
 

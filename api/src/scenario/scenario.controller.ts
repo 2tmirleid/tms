@@ -6,7 +6,7 @@ import {
     Param,
     ParseIntPipe,
     Patch,
-    Post,
+    Post, Query,
     UploadedFile,
     UseInterceptors
 } from "@nestjs/common";
@@ -14,7 +14,7 @@ import {ScenarioService} from "./scenario.service";
 import {CreateScenarioDto} from "../dto/scenario/create.scenario.dto";
 import {UpdateScenarioDto} from "../dto/scenario/update.scenario.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
-import {ApiBody, ApiConsumes, ApiOperation, ApiParam} from "@nestjs/swagger";
+import {ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 
 @Controller('/scenario')
 export class ScenarioController {
@@ -22,16 +22,29 @@ export class ScenarioController {
 
     @Post()
     @ApiOperation({ summary: 'Creating scenario' })
-    @ApiBody({
-        type: CreateScenarioDto
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
     })
-    async createScenario(@Body() dto: CreateScenarioDto) {
-        return await this.scenarioService.createScenario(dto);
+    @ApiBody({ type: CreateScenarioDto })
+    async createScenario(
+        @Query('projectID') projectID: number,
+        @Body() dto: CreateScenarioDto
+    ) {
+        return await this.scenarioService.createScenario(projectID, dto);
     }
 
     @Post('import')
     @ApiOperation({ summary: 'Import scenario' })
     @ApiConsumes('multipart/form-data')
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiBody({
         schema: {
             type: 'object',
@@ -43,14 +56,23 @@ export class ScenarioController {
         }
     })
     @UseInterceptors(FileInterceptor('scenario'))
-    async importScenario(@UploadedFile() scenario: Express.Multer.File) {
-        return await this.scenarioService.importScenario(scenario);
+    async importScenario(
+        @Query('projectID') projectID: number,
+        @UploadedFile() scenario: Express.Multer.File
+    ) {
+        return await this.scenarioService.importScenario(projectID, scenario);
     }
 
     @Get()
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiOperation({ summary: 'Getting all scenarios' })
-    async getScenarios() {
-        return await this.scenarioService.getScenarios();
+    async getScenarios(@Query('projectID') projectID: number,) {
+        return await this.scenarioService.getScenarios(projectID);
     }
 
     @Post('search')

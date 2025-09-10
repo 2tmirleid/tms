@@ -5,7 +5,6 @@
         :key="folder.id"
         class="folder node"
         @dblclick.stop="startEditFolderTitle(folder)"
-        @contextmenu.stop.prevent="showContextMenu(folder)"
         draggable="true"
         @dragstart.stop="$emit('start-folder-drag', $event, folder.id)"
         @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
@@ -14,7 +13,11 @@
         @click.stop="toggleFolder(folder)"
     >
       <!-- Папка -->
-      <div class="content" v-if="editedFolderID !== folder.id">
+      <div
+          class="content"
+          v-if="editedFolderID !== folder.id"
+          @contextmenu.prevent.stop="showContextMenu(folder)"
+      >
         <span class="icon">
           <FolderExpandedIcon
               v-if="isExpanded"

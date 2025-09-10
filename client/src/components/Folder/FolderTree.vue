@@ -7,7 +7,6 @@
           v-for="folder in localFolders"
           :key="folder.id"
           @dblclick="startEditFolderTitle(folder)"
-          @contextmenu.prevent="showContextMenu(folder)"
           draggable="true"
           @dragstart.stop="$emit('start-folder-drag', $event, folder.id)"
           @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
@@ -15,7 +14,11 @@
           @drop.prevent="$emit('handle-drop', $event, { type: 'folder', id: folder.id })"
           @click="toggleFolder(folder)"
       >
-        <div class="content" v-if="editedFolderID !== folder.id">
+        <div
+            class="content"
+            v-if="editedFolderID !== folder.id"
+            @contextmenu.prevent.stop="showContextMenu(folder)"
+        >
           <span class="icon">
             <FolderExpandedIcon
               v-if="isExpanded"

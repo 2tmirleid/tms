@@ -13,6 +13,7 @@
         tabindex="0"
         ref="dropdown"
         @blur="hideContextMenu"
+        @keyup.esc="hideContextMenu"
     >
       <div class="close-btn">
         <CloseButton @click.stop="hideContextMenu"/>
@@ -54,6 +55,12 @@ export default {
     scenarioID: Number,
   },
   methods: {
+    focus() {
+      this.showDropdown = true;
+      this.$nextTick(() => {
+        this.$refs.dropdown.focus();
+      });
+    },
     async getStatuses() {
       try {
         const statuses = await this.statusMethods.getStatuses();
@@ -65,6 +72,7 @@ export default {
     },
     showContextMenu() {
       this.showDropdown = true;
+      this.focus();
     },
     hideContextMenu() {
       this.showDropdown = false;
@@ -108,6 +116,7 @@ export default {
   transition: all 0.2s ease;
   min-width: 160px;
   z-index: 1000;
+  outline: none;
 }
 
 .dropdown {

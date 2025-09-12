@@ -9,6 +9,7 @@ export class Createfoldertable1754147102806 implements MigrationInterface {
             CREATE TABLE IF NOT EXISTS folder (
                 id         SERIAL PRIMARY KEY,
                 title      VARCHAR(255) NOT NULL,
+                project_id   INTEGER REFERENCES project (id) ON DELETE CASCADE,
                 parent_id  INTEGER REFERENCES folder(id) ON DELETE CASCADE
             );
 

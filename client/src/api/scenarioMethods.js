@@ -2,16 +2,16 @@ import axios from "axios";
 import {BaseMethods} from "@/api/baseMethods.js";
 
 export class ScenarioMethods extends BaseMethods {
-    getScenariosList() {
-        return axios.get(`${this.BASE_URI}/scenario`);
+    getScenariosList(projectID) {
+        return axios.get(`${this.BASE_URI}/scenario?projectID=${projectID}`);
     }
 
     getScenarioByID(id) {
         return axios.get(`${this.BASE_URI}/scenario/${id}`);
     }
 
-    async createScenario(body) {
-        await axios.post(`${this.BASE_URI}/scenario`, body);
+    async createScenario(projectID, body) {
+        await axios.post(`${this.BASE_URI}/scenario?projectID=${projectID}`, body);
     }
 
     async updateScenario(id, body) {
@@ -38,8 +38,8 @@ export class ScenarioMethods extends BaseMethods {
         return await axios.post(`${this.BASE_URI}/scenario/search`, body);
     }
 
-    async importScenario(formData) {
-        return await axios.post(`${this.BASE_URI}/scenario/import`, formData, {
+    async importScenario(projectID, formData) {
+        return await axios.post(`${this.BASE_URI}/scenario/import?projectID=${projectID}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }

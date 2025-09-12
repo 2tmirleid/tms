@@ -10,6 +10,7 @@ import {
 import {TestPlanEntity} from "../testPlan/test.plan.entity";
 import {LaunchStatusEntity} from "./launch.status.entity";
 import {LaunchResultEntity} from "./result/launch.result.entity";
+import {ProjectEntity} from "../project/project.entity";
 
 @Entity({ name: 'launch' })
 export class LaunchEntity {
@@ -40,6 +41,13 @@ export class LaunchEntity {
 
     @OneToMany(() => LaunchResultEntity, result => result.launch)
     results: LaunchResultEntity[];
+
+    @ManyToOne(() => ProjectEntity, project => project.scenarios, {
+        eager: true,
+        nullable: false,
+    })
+    @JoinColumn({ name: 'project_id' })
+    project: ProjectEntity;
 
     @Column({
         type: 'timestamp with time zone',

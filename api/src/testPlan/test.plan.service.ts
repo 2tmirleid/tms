@@ -5,6 +5,7 @@ import {In, Repository} from "typeorm";
 import {CreateTestPlanDto} from "../dto/testPlan/create.test.plan.dto";
 import {UpdateTestPlanDto} from "../dto/testPlan/update.test.plan.dto";
 import {ScenarioEntity} from "../entity/scenario/scenario.entity";
+import {ProjectService} from "../project/project.service";
 
 @Injectable()
 export class TestPlanService {
@@ -12,12 +13,15 @@ export class TestPlanService {
         @InjectRepository(TestPlanEntity)
         private readonly testPlanRepository: Repository<TestPlanEntity>,
         @InjectRepository(ScenarioEntity)
-        private readonly scenarioRepository: Repository<ScenarioEntity>
+        private readonly scenarioRepository: Repository<ScenarioEntity>,
+        private readonly projectService: ProjectService,
         ) {}
 
-    async createTestPlan(dto: CreateTestPlanDto) {
+    async createTestPlan(projectID: number, dto: CreateTestPlanDto) {
         try {
             const testPlan = this.testPlanRepository.create(dto);
+
+            testPlan.project = await this.projectService.getProject(projectID);
 
             return await this.testPlanRepository.save(testPlan);
         } catch (error) {
@@ -52,10 +56,11 @@ export class TestPlanService {
         }
     }
 
-    async getTestPlans() {
+    async getTestPlans(projectID: number) {
         try {
             return await this.testPlanRepository.find({
-                relations: ['scenarios']
+                where: { project: { id: projectID } },
+                relations: ['scenarios', 'project']
             });
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)

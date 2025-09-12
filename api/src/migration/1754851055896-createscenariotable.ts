@@ -14,6 +14,7 @@ export class Createscenariotable1754851055896 implements MigrationInterface {
                 precondition VARCHAR(255),
                 status_id    INTEGER REFERENCES scenario_status (id) ON DELETE SET NULL,
                 folder_id    INTEGER REFERENCES folder (id) ON DELETE SET NULL,
+                project_id   INTEGER REFERENCES project (id) ON DELETE CASCADE,
                 created_at   TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
                 updated_at   TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
             );

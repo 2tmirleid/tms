@@ -1,5 +1,6 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ScenarioEntity} from "../scenario/scenario.entity";
+import {ProjectEntity} from "../project/project.entity";
 
 @Entity({ name: 'folder' })
 export class FolderEntity {
@@ -12,6 +13,13 @@ export class FolderEntity {
         length: 255
     })
     title: string;
+
+    @ManyToOne(() => ProjectEntity, project => project.folders, {
+        eager: true,
+        nullable: false,
+    })
+    @JoinColumn({ name: 'project_id' })
+    project: ProjectEntity;
 
     @ManyToOne(() => FolderEntity, folder => folder.children, {
         nullable: true, onDelete: 'CASCADE'

@@ -2,12 +2,12 @@ import {BaseMethods} from "@/api/baseMethods.js";
 import axios from "axios";
 
 export class FolderMethods extends BaseMethods {
-    async getFolders() {
-        return await axios.get(`${this.BASE_URI}/folder`);
+    async getFolders(projectID) {
+        return await axios.get(`${this.BASE_URI}/folder?projectID=${projectID}`);
     }
 
-    async createFolder(body) {
-        return await axios.post(`${this.BASE_URI}/folder`, body);
+    async createFolder(projectID, body) {
+        return await axios.post(`${this.BASE_URI}/folder?projectID=${projectID}`, body);
     }
 
     async putScenario(scenarioID, folderID) {

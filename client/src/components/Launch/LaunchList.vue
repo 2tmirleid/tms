@@ -1,9 +1,9 @@
 <template>
   <section class="launch-list">
     <LaunchListHeader
-      @launch-sorted="handleSortLaunch"
-      @refresh-launch-list="refreshLaunches"
-      @found-launch="handleFoundLaunch"
+        @launch-sorted="handleSortLaunch"
+        @refresh-launch-list="refreshLaunches"
+        @found-launch="handleFoundLaunch"
     />
     <ul
         class="launches"
@@ -68,6 +68,9 @@ export default {
       activeLaunchId: null,
     }
   },
+  props: {
+    projectID: Number | String,
+  },
   methods: {
     async handleFoundLaunch(launch) {
       const launches = Array.isArray(launch.data) ? launch.data : [launch.data];
@@ -81,9 +84,9 @@ export default {
         const colorsMap = {};
 
         const allStatuses = {
-          1: { title: 'В процессе', color: '#e1e8ed' },
-          2: { title: 'Пройден', color: '#28a745' },
-          3: { title: 'Не пройден', color: '#c00000' }
+          1: {title: 'В процессе', color: '#e1e8ed'},
+          2: {title: 'Пройден', color: '#28a745'},
+          3: {title: 'Не пройден', color: '#c00000'}
         };
 
         Object.keys(allStatuses).forEach(statusId => {
@@ -126,14 +129,14 @@ export default {
 
     async refreshLaunches() {
       try {
-        const launchResponse = await this.launchMethods.getLaunches();
+        const launchResponse = await this.launchMethods.getLaunches(this.projectID);
         this.launches = launchResponse.data.sort((a, b) => a.id - b.id);
 
         // КОСТЫЛЬ
         const allStatuses = {
-          1: { title: 'В процессе', color: '#e1e8ed' },
-          2: { title: 'Пройден', color: '#28a745' },
-          3: { title: 'Не пройден', color: '#c00000' }
+          1: {title: 'В процессе', color: '#e1e8ed'},
+          2: {title: 'Пройден', color: '#28a745'},
+          3: {title: 'Не пройден', color: '#c00000'}
         };
 
         for (const launch of this.launches) {

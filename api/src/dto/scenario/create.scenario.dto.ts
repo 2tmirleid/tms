@@ -1,6 +1,6 @@
 import {Type} from 'class-transformer';
 import {CreateScenarioStepDto} from "../scenarioStep/create.scenario.step.dto";
-import {IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
+import {IsArray, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested} from "@nestjs/class-validator";
 import {CreateScenarioTagDto} from "../tag/create.scenario.tag.dto";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
 import {CreateScenarioAttachmentDto} from "../attachment/create.scenario.attachment.dto";

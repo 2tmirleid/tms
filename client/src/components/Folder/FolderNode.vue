@@ -5,7 +5,6 @@
         :key="folder.id"
         class="folder node"
         @dblclick.stop="startEditFolderTitle(folder)"
-        @contextmenu.stop.prevent="showContextMenu(folder)"
         draggable="true"
         @dragstart.stop="$emit('start-folder-drag', $event, folder.id)"
         @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
@@ -14,14 +13,18 @@
         @click.stop="toggleFolder(folder)"
     >
       <!-- Папка -->
-      <div class="content" v-if="editedFolderID !== folder.id">
+      <div
+          class="content"
+          v-if="editedFolderID !== folder.id"
+          @contextmenu.prevent.stop="showContextMenu(folder)"
+      >
         <span class="icon">
           <FolderExpandedIcon
-              v-if="isExpanded"
+              v-if="folder.expanded"
           />
 
           <FolderCollapsedIcon
-              v-if="!isExpanded"
+              v-if="!folder.expanded"
           />
         </span>
         <span class="title">{{ getTrimmedTitle(folder.title) }}</span>
@@ -49,7 +52,7 @@
       <!-- Сценарии этой папки -->
       <ul
           class="scenario-list"
-          v-if="isExpanded"
+          v-if="folder.expanded"
       >
         <li
             v-for="scenario in folder.scenarios"
@@ -81,7 +84,7 @@
 
       <!-- Вложенные папки -->
       <FolderNode
-          v-if="isExpanded"
+          v-if="folder.expanded"
           :folders="folder.children"
           @select="handleSelectScenario"
           @start-folder-drag="handleStartFolderDrag"
@@ -125,8 +128,8 @@ export default {
     }
   },
   methods: {
-    toggleFolder() {
-      this.isExpanded = !this.isExpanded;
+    toggleFolder(folder) {
+      folder.expanded = !folder.expanded;
     },
     handleStartFolderDrag(event, folder) {
       this.$emit('start-folder-drag', event, folder);

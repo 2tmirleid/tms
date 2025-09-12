@@ -1,6 +1,6 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
 import {LaunchService} from "./launch.service";
-import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
+import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {CreateLaunchDto} from "../dto/launch/create.launch.dto";
 import {UpdateLaunchDto} from "../dto/launch/update.launch.dto";
 
@@ -10,11 +10,20 @@ export class LaunchController {
 
     @Post()
     @ApiOperation({summary: 'Creating launch'})
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiBody({
         type: CreateLaunchDto
     })
-    async createLaunch(@Body() dto: CreateLaunchDto) {
-        return await this.launchService.createLaunch(dto);
+    async createLaunch(
+        @Query('projectID') projectID: number,
+        @Body() dto: CreateLaunchDto
+    ) {
+        return await this.launchService.createLaunch(projectID, dto);
     }
 
     @Post('search')
@@ -44,9 +53,15 @@ export class LaunchController {
     }
 
     @Get()
+    @ApiQuery({
+        name: 'projectID',
+        required: true,
+        type: Number,
+        description: 'Project id'
+    })
     @ApiOperation({summary: 'Getting all launches'})
-    async getLaunches() {
-        return await this.launchService.getLaunches();
+    async getLaunches(@Query('projectID') projectID: number) {
+        return await this.launchService.getLaunches(projectID);
     }
 
     @Get(':id')

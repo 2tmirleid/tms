@@ -7,7 +7,6 @@
           v-for="folder in localFolders"
           :key="folder.id"
           @dblclick="startEditFolderTitle(folder)"
-          @contextmenu.prevent="showContextMenu(folder)"
           draggable="true"
           @dragstart.stop="$emit('start-folder-drag', $event, folder.id)"
           @dragover.prevent="$emit('handle-drag-over', $event, { type: 'folder', id: folder.id })"
@@ -15,14 +14,18 @@
           @drop.prevent="$emit('handle-drop', $event, { type: 'folder', id: folder.id })"
           @click="toggleFolder(folder)"
       >
-        <div class="content" v-if="editedFolderID !== folder.id">
+        <div
+            class="content"
+            v-if="editedFolderID !== folder.id"
+            @contextmenu.prevent.stop="showContextMenu(folder)"
+        >
           <span class="icon">
             <FolderExpandedIcon
-              v-if="isExpanded"
+              v-if="folder.expanded"
             />
 
             <FolderCollapsedIcon
-              v-if="!isExpanded"
+              v-if="!folder.expanded"
             />
           </span>
           <span class="title">{{ getTrimmedTitle(folder.title) }}</span>
@@ -49,7 +52,7 @@
 
         <ul
             class="scenario-list"
-            v-if="isExpanded"
+            v-if="folder.expanded"
         >
           <li
               v-for="scenario in folder.scenarios"
@@ -81,7 +84,7 @@
 
         <!-- Вложенные папки -->
         <FolderNode
-            v-if="isExpanded"
+            v-if="folder.expanded"
             :folders="folder.children"
             @select="handleSelectScenario"
             @scenario-updated="handleScenarioUpdated"
@@ -130,8 +133,8 @@ export default {
     dragOverTarget: Object,
   },
   methods: {
-    toggleFolder() {
-      this.isExpanded = !this.isExpanded;
+    toggleFolder(folder) {
+      folder.expanded = !folder.expanded;
     },
     handleStartFolderDrag(event, folder) {
       this.$emit('start-folder-drag', event, folder);
@@ -171,7 +174,7 @@ export default {
       const tree = [];
 
       flatList.forEach(folder => {
-        idMap.set(folder.id, { ...folder, children: [] });
+        idMap.set(folder.id, { ...folder, children: [], expanded: true });
       });
 
       flatList.forEach(folder => {
@@ -296,11 +299,12 @@ export default {
   border-left: 2px solid var(--border-color);
   border-radius: 10px;
   position: relative;
+  margin-bottom: 10px;
 }
 
 .root-folder-tree {
   list-style: none;
-  padding: 18px;
+  padding: 0;
   margin: 0;
 }
 

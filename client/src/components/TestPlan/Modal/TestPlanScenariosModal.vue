@@ -69,6 +69,7 @@ export default {
   },
   props: {
     testPlanID: Number,
+    projectID: Number | String,
   },
   methods: {
     getTrimmedTitle(title) {
@@ -79,7 +80,7 @@ export default {
 
     async refreshScenarios() {
       try {
-        const response = await this.scenarioMethods.getScenariosList();
+        const response = await this.scenarioMethods.getScenariosList(this.projectID);
         this.scenarios = response.data.sort((a, b) => a.id - b.id);
 
         this.selectedScenarioIDs = this.scenarios

@@ -3,6 +3,8 @@ import {createRouter, createWebHistory} from "vue-router";
 import ScenariosPage from "@/pages/ScenariosPage.vue";
 import TestPlanPage from "@/pages/TestPlanPage.vue";
 import LaunchPage from "@/pages/LaunchPage.vue";
+import ProjectPage from "@/pages/ProjectPage.vue";
+import LaunchScenarioList from "@/components/Launch/Viewer/LaunchScenarioList.vue";
 
 const routes = [
     {
@@ -10,16 +12,28 @@ const routes = [
         component: MainPage
     },
     {
-        path: '/scenarios',
-        component: ScenariosPage
-    },
-    {
-        path: '/test-plans',
+        path: '/project/:id/test-plans',
         component: TestPlanPage
     },
     {
-        path: '/launches',
-        component: LaunchPage
+        path: '/project/:id/launches',
+        component: LaunchPage,
+        props: true,
+        children: [
+            {
+                path: ':launchID',
+                component: LaunchScenarioList,
+                props: true
+            }
+        ]
+    },
+    {
+        path: '/project/:id',
+        component: ProjectPage
+    },
+    {
+        path: '/project/:id/scenarios',
+        component: ProjectPage
     }
 ]
 

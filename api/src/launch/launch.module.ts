@@ -11,6 +11,7 @@ import {LaunchResultModule} from "./result/launch.result.module";
 import {TestPlanModule} from "../testPlan/test.plan.module";
 import {LaunchStepResultModule} from "./result/step/launch.step.result.module";
 import {LaunchSortModule} from "./sort/launch.sort.module";
+import {ProjectModule} from "../project/project.module";
 
 @Module({
     imports: [
@@ -24,7 +25,8 @@ import {LaunchSortModule} from "./sort/launch.sort.module";
         LaunchResultModule,
         TestPlanModule,
         LaunchStepResultModule,
-        LaunchSortModule
+        LaunchSortModule,
+        ProjectModule,
     ],
     controllers: [LaunchController],
     providers: [LaunchService],

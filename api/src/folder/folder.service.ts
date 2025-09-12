@@ -5,6 +5,7 @@ import {Repository} from "typeorm";
 import {CreateFolderDto} from "../dto/folder/create.folder.dto";
 import {ScenarioEntity} from "../entity/scenario/scenario.entity";
 import {UpdateFolderDto} from "../dto/folder/update.folder.dto";
+import {ProjectService} from "../project/project.service";
 
 @Injectable()
 export class FolderService {
@@ -12,12 +13,15 @@ export class FolderService {
         @InjectRepository(FolderEntity)
         private folderRepository: Repository<FolderEntity>,
         @InjectRepository(ScenarioEntity)
-        private scenarioRepository: Repository<ScenarioEntity>
+        private scenarioRepository: Repository<ScenarioEntity>,
+        private readonly projectService: ProjectService,
     ) {}
 
-    async createFolder(dto: CreateFolderDto) {
+    async createFolder(projectID: number, dto: CreateFolderDto) {
         try {
             const folder = this.folderRepository.create(dto);
+
+            folder.project = await this.projectService.getProject(projectID);
 
             return await this.folderRepository.save(folder);
         } catch (error) {
@@ -25,9 +29,10 @@ export class FolderService {
         }
     }
 
-    async getFolders() {
+    async getFolders(projectID: number,) {
         try {
             return await this.folderRepository.find({
+                where: {project: {id: projectID}},
                 relations: ['children', 'scenarios']
             });
         } catch (error) {

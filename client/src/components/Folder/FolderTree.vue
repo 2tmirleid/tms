@@ -21,11 +21,11 @@
         >
           <span class="icon">
             <FolderExpandedIcon
-              v-if="isExpanded"
+              v-if="folder.expanded"
             />
 
             <FolderCollapsedIcon
-              v-if="!isExpanded"
+              v-if="!folder.expanded"
             />
           </span>
           <span class="title">{{ getTrimmedTitle(folder.title) }}</span>
@@ -52,7 +52,7 @@
 
         <ul
             class="scenario-list"
-            v-if="isExpanded"
+            v-if="folder.expanded"
         >
           <li
               v-for="scenario in folder.scenarios"
@@ -84,7 +84,7 @@
 
         <!-- Вложенные папки -->
         <FolderNode
-            v-if="isExpanded"
+            v-if="folder.expanded"
             :folders="folder.children"
             @select="handleSelectScenario"
             @scenario-updated="handleScenarioUpdated"
@@ -133,8 +133,8 @@ export default {
     dragOverTarget: Object,
   },
   methods: {
-    toggleFolder() {
-      this.isExpanded = !this.isExpanded;
+    toggleFolder(folder) {
+      folder.expanded = !folder.expanded;
     },
     handleStartFolderDrag(event, folder) {
       this.$emit('start-folder-drag', event, folder);
@@ -174,7 +174,7 @@ export default {
       const tree = [];
 
       flatList.forEach(folder => {
-        idMap.set(folder.id, { ...folder, children: [] });
+        idMap.set(folder.id, { ...folder, children: [], expanded: true });
       });
 
       flatList.forEach(folder => {

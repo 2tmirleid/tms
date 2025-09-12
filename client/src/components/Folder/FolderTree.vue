@@ -304,7 +304,7 @@ export default {
 
 .root-folder-tree {
   list-style: none;
-  padding: 18px;
+  padding: 0;
   margin: 0;
 }
 

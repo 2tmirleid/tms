@@ -10,63 +10,65 @@
         @scenario-sorted="handleSortScenario"
     />
 
-    <FolderTree
-        @select="handleSelectScenario"
-        @scenario-updated="handleScenarioUpdated"
-        @folder-updated="handleFolderUpdated"
-        :folders="folders"
+    <div class="scenarios-wrapper">
+      <FolderTree
+          @select="handleSelectScenario"
+          @scenario-updated="handleScenarioUpdated"
+          @folder-updated="handleFolderUpdated"
+          :folders="folders"
 
-        @start-folder-drag="startFolderDrag"
-        @start-scenario-drag="startScenarioDrag"
-        @handle-drag-over="handleDragOver"
-        @handle-drag-leave="handleDragLeave"
-        @handle-drop="handleDrop"
-        @is-drag-over-target="isDragOverTarget"
-        :dragged-item="draggedItem"
-        :drag-over-target="dragOverTarget"
-    />
+          @start-folder-drag="startFolderDrag"
+          @start-scenario-drag="startScenarioDrag"
+          @handle-drag-over="handleDragOver"
+          @handle-drag-leave="handleDragLeave"
+          @handle-drop="handleDrop"
+          @is-drag-over-target="isDragOverTarget"
+          :dragged-item="draggedItem"
+          :drag-over-target="dragOverTarget"
+      />
 
-    <ul
-        class="scenarios dragover"
-        @dragover.prevent="handleDragOver($event, {type: 'root'})"
-        @drop.prevent="handleDrop($event, {type: 'root'})"
-    >
-      <transition-group
-          name="scenario"
-          tag="ul"
-          class="scenarios"
-          appear
+      <ul
+          class="scenarios dragover"
+          @dragover.prevent="handleDragOver($event, {type: 'root'})"
+          @drop.prevent="handleDrop($event, {type: 'root'})"
       >
-        <li
-            v-for="scenario in scenarios.filter(scenario => scenario.folder_id === null)"
-            :key="scenario.id"
-            class="scenario-preview"
-            @dblclick="startEditTitle(scenario)"
-            @click="handleSelectScenario(scenario)"
-            draggable="true"
-            @dragstart="startScenarioDrag($event, scenario.id)"
+        <transition-group
+            name="scenario"
+            tag="ul"
+            class="scenarios"
+            appear
         >
-          <template v-if="editedTitleID !== scenario.id">
+          <li
+              v-for="scenario in scenarios.filter(scenario => scenario.folder_id === null)"
+              :key="scenario.id"
+              class="scenario-preview"
+              @dblclick="startEditTitle(scenario)"
+              @click="handleSelectScenario(scenario)"
+              draggable="true"
+              @dragstart="startScenarioDrag($event, scenario.id)"
+          >
+            <template v-if="editedTitleID !== scenario.id">
             <span class="title">
               <span class="id">#{{ scenario.id }}</span>
               <span class="status" :style="{backgroundColor: scenario.status.color}"></span>
               {{ getTrimmedTitle(scenario.title) }}
             </span>
-          </template>
+            </template>
 
-          <input
-              v-else
-              ref="titleInput"
-              v-model="updatedScenarioTitle"
-              class="new-scenario-title"
-              :placeholder="scenario.title"
-              @blur="cancelEdit"
-              @keyup.enter="saveTitle(scenario.id)"
-              @keyup.esc="cancelEdit"
-          />
-        </li>
-      </transition-group>
-    </ul>
+            <input
+                v-else
+                ref="titleInput"
+                v-model="updatedScenarioTitle"
+                class="new-scenario-title"
+                :placeholder="scenario.title"
+                @blur="cancelEdit"
+                @keyup.enter="saveTitle(scenario.id)"
+                @keyup.esc="cancelEdit"
+            />
+          </li>
+        </transition-group>
+      </ul>
+    </div>
 
     <div
         class="root-drop-zone"
@@ -379,6 +381,12 @@ export default {
 
 
 <style scoped>
+.scenarios-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 18px 18px;
+}
+
 .resizer {
   width: 4px;
   height: calc(100vh - 60px);
@@ -403,10 +411,9 @@ export default {
 }
 
 .scenarios {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 18px 18px;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .scenario-preview {

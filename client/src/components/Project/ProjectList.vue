@@ -73,7 +73,7 @@ export default {
     },
     async createProject(project) {
       try {
-        this.projectMethods.createProject(project);
+        await this.projectMethods.createProject(project);
         this.creatingProject = false;
 
         await this.refreshProjects();

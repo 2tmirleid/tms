@@ -39,9 +39,9 @@
       <div class="auth">
         <transition name="fade" mode="out-in">
           <div v-if="isAuth" class="logout" key="logout">
-            <router-link to="/logout">
-              <LogoutButton v-if="collapsed"/>
-              <span v-else>Выйти</span>
+            <router-link to="/">
+              <LogoutButton v-if="collapsed" @click="logout"/>
+              <span v-else @click="logout">Выйти</span>
             </router-link>
           </div>
 
@@ -67,6 +67,7 @@ import UncollapseButton from "@/components/UI/Btn/UncollapseButton.vue";
 import CollapseButton from "@/components/UI/Btn/CollapseButton.vue";
 import TestPlanButton from "@/components/UI/Btn/TestPlanButton.vue";
 import LaunchButton from "@/components/UI/Btn/LaunchButton.vue";
+import {useAuthStore} from "@/stores/auth.js";
 
 export default {
   components: {CollapseButton, UncollapseButton, LogoutButton, LoginButton},
@@ -84,6 +85,7 @@ export default {
       },
       isAuth: true,
       projectId: null,
+      storage: useAuthStore(),
     }
   },
   methods: {
@@ -93,6 +95,9 @@ export default {
     },
     updateProjectId() {
       this.projectId = this.$route.params.projectID || this.$route.params.id;
+    },
+    logout() {
+      this.storage.logout();
     }
   },
   watch: {

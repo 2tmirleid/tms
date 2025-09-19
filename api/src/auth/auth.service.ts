@@ -32,7 +32,7 @@ export class AuthService {
 
     private async generateToken(user: UserEntity) {
         const payload = {
-            email: user.email
+            email: user.email,
         }
 
         return {
@@ -42,6 +42,11 @@ export class AuthService {
 
     private async validateUser(dto: CreateUserDto) {
         const user = await this.userService.getUserByEmail(dto.email);
+
+        if (!user) {
+            throw new UnauthorizedException({message: 'Uncorrected email or password'})
+        }
+
         // @ts-ignore
         const passEquals = await bcrypt.compare(dto.password, user.password);
 

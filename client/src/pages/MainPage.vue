@@ -1,18 +1,28 @@
 <template>
   <section class="main-page container">
-    <ProjectList/>
+    <template v-if="auth.isAuth">
+      <ProjectList/>
+    </template>
+
+    <AuthFormModal v-else/>
   </section>
 </template>
 
 <script>
-
-
 import ProjectList from "@/components/Project/ProjectList.vue";
+import AuthFormModal from "@/components/Auth/AuthFormModal.vue";
+import {useAuthStore} from "@/stores/auth";
 
 export default {
-  components: {ProjectList}
-}
+  components: {AuthFormModal, ProjectList },
+  setup() {
+    const auth = useAuthStore();
+    auth.loadUserFromToken();
+    return { auth };
+  },
+};
 </script>
+
 
 <style scoped>
 .main-page {

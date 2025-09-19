@@ -1,4 +1,5 @@
 <template>
+  <ProfilePreview/>
   <section class="launch-page container">
     <Sidebar/>
 
@@ -32,9 +33,10 @@ import Sidebar from "@/components/Sidebar.vue";
 import LaunchList from "@/components/Launch/LaunchList.vue";
 import LaunchScenarioList from "@/components/Launch/Viewer/LaunchScenarioList.vue";
 import LaunchScenarioViewer from "@/components/Launch/Viewer/LaunchScenarioViewer.vue";
+import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
 
 export default {
-  components: {LaunchScenarioViewer, LaunchScenarioList, LaunchList, Sidebar},
+  components: {ProfilePreview, LaunchScenarioViewer, LaunchScenarioList, LaunchList, Sidebar},
   data() {
     return {
       viewScenario: false,

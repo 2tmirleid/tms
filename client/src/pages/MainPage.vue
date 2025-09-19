@@ -1,4 +1,5 @@
 <template>
+  <ProfilePreview v-if="auth.isAuth"/>
   <section class="main-page container">
     <template v-if="auth.isAuth">
       <ProjectList/>
@@ -12,9 +13,10 @@
 import ProjectList from "@/components/Project/ProjectList.vue";
 import AuthFormModal from "@/components/Auth/AuthFormModal.vue";
 import {useAuthStore} from "@/stores/auth";
+import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
 
 export default {
-  components: {AuthFormModal, ProjectList },
+  components: {ProfilePreview, AuthFormModal, ProjectList },
   setup() {
     const auth = useAuthStore();
     auth.loadUserFromToken();

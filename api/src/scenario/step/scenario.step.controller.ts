@@ -1,9 +1,11 @@
-import {Controller, Param, Post, Body, Delete} from "@nestjs/common";
+import {Controller, Param, Post, Body, Delete, UseGuards} from "@nestjs/common";
 import {ScenarioStepService} from "./scenario.step.service";
 import {CreateScenarioStepDto} from "../../dto/scenarioStep/create.scenario.step.dto";
 import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
+import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 
 @Controller('/scenario/step')
+@UseGuards(JwtAuthGuard)
 export class ScenarioStepController {
     constructor(private readonly scenarioStepService: ScenarioStepService) {}
 

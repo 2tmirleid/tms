@@ -1,10 +1,12 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from "@nestjs/common";
 import {ProjectService} from "./project.service";
 import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
 import {CreateProjectDto} from "../dto/project/create.project.dto";
 import {UpdateProjectDto} from "../dto/project/update.project.dto";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('/project')
+@UseGuards(JwtAuthGuard)
 export class ProjectController {
     constructor(private readonly projectService: ProjectService) {
     }

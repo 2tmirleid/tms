@@ -5,12 +5,15 @@ import * as process from "node:process";
 import {UserModule} from "../user/user.module";
 import {AuthService} from "./auth.service";
 import {AuthController} from "./auth.controller";
+import {PassportModule} from "@nestjs/passport";
+import {JwtStrategy} from "./jwt.strategy";
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             envFilePath: '.env'
         }),
+        PassportModule,
         JwtModule.register({
             secret: process.env.PRIVATE_KEY,
             signOptions: {
@@ -20,7 +23,7 @@ import {AuthController} from "./auth.controller";
         UserModule
     ],
     controllers: [AuthController],
-    providers: [AuthService],
+    providers: [AuthService, JwtStrategy],
     exports: [AuthService]
 })
 export class AuthModule {}

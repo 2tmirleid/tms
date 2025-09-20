@@ -1,9 +1,11 @@
-import {Body, Controller, Delete, Param, Post} from "@nestjs/common";
+import {Body, Controller, Delete, Param, Post, UseGuards} from "@nestjs/common";
 import {ScenarioTagService} from "./scenario.tag.service";
 import {CreateScenarioTagDto} from "../../dto/tag/create.scenario.tag.dto";
 import {ApiBody, ApiOperation, ApiParam} from "@nestjs/swagger";
+import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 
 @Controller('/scenario/tag')
+@UseGuards(JwtAuthGuard)
 export class ScenarioTagController {
     constructor(private readonly scenarioTagService: ScenarioTagService) {}
 

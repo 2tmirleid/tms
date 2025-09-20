@@ -1,10 +1,12 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards} from "@nestjs/common";
 import {TestPlanService} from "./test.plan.service";
 import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {CreateTestPlanDto} from "../dto/testPlan/create.test.plan.dto";
 import {UpdateTestPlanDto} from "../dto/testPlan/update.test.plan.dto";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('/test-plan')
+@UseGuards(JwtAuthGuard)
 export class TestPlanController {
     constructor(private readonly testPlanService: TestPlanService) {}
 

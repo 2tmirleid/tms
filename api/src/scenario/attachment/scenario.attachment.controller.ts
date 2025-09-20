@@ -1,9 +1,21 @@
-import {Body, Controller, Delete, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors} from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Param,
+    ParseIntPipe,
+    Post,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from "@nestjs/common";
 import {ScenarioAttachmentService} from "./scenario.attachment.service";
 import {ApiBody, ApiConsumes, ApiOperation, ApiParam} from "@nestjs/swagger";
 import {FileInterceptor} from "@nestjs/platform-express";
+import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 
 @Controller('/scenario/attachment')
+@UseGuards(JwtAuthGuard)
 export class ScenarioAttachmentController {
     constructor(private readonly scenarioAttachmentService: ScenarioAttachmentService) {}
 

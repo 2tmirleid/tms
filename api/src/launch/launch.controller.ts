@@ -1,10 +1,12 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards} from "@nestjs/common";
 import {LaunchService} from "./launch.service";
 import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {CreateLaunchDto} from "../dto/launch/create.launch.dto";
 import {UpdateLaunchDto} from "../dto/launch/update.launch.dto";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('/launch')
+@UseGuards(JwtAuthGuard)
 export class LaunchController {
     constructor(private readonly launchService: LaunchService) {}
 

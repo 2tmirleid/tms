@@ -1,8 +1,10 @@
-import {Controller, Get} from "@nestjs/common";
+import {Controller, Get, UseGuards} from "@nestjs/common";
 import {PageService} from "./page.service";
 import {ApiOperation} from "@nestjs/swagger";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('/page')
+@UseGuards(JwtAuthGuard)
 export class PageController {
     constructor(readonly pageService: PageService) {}
 

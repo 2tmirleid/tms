@@ -7,7 +7,7 @@ import {
     ParseIntPipe,
     Patch,
     Post, Query,
-    UploadedFile,
+    UploadedFile, UseGuards,
     UseInterceptors
 } from "@nestjs/common";
 import {ScenarioService} from "./scenario.service";
@@ -15,8 +15,10 @@ import {CreateScenarioDto} from "../dto/scenario/create.scenario.dto";
 import {UpdateScenarioDto} from "../dto/scenario/update.scenario.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('/scenario')
+@UseGuards(JwtAuthGuard)
 export class ScenarioController {
     constructor(private readonly scenarioService: ScenarioService) {}
 

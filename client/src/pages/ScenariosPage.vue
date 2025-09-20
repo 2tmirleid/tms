@@ -4,6 +4,7 @@ import ScenarioList from "@/components/Scenario/ScenarioList.vue"
 import ScenarioViewer from "@/components/Scenario/Viewer/ScenarioViewer.vue"
 import Sidebar from "@/components/Sidebar.vue";
 import {useRoute, useRouter} from "vue-router";
+import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
 
 const selectedScenario = ref(null);
 const scenarioListRef = ref(null);
@@ -44,6 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <ProfilePreview/>
   <section class="scenarios-page container">
     <Sidebar/>
 

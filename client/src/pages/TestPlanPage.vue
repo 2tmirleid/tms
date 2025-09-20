@@ -1,4 +1,5 @@
 <template>
+  <ProfilePreview/>
   <section class="test-plans-page container">
     <Sidebar/>
 
@@ -11,9 +12,10 @@
 <script>
 import Sidebar from "@/components/Sidebar.vue";
 import TestPlanList from "@/components/TestPlan/TestPlanList.vue";
+import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
 
 export default {
-  components: {TestPlanList, Sidebar},
+  components: {ProfilePreview, TestPlanList, Sidebar},
   computed: {
     projectId() {
       return this.$route.params.id

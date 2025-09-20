@@ -1,10 +1,12 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards} from "@nestjs/common";
 import {FolderService} from "./folder.service";
 import {CreateFolderDto} from "../dto/folder/create.folder.dto";
 import {ApiBody, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {UpdateFolderDto} from "../dto/folder/update.folder.dto";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @Controller('/folder')
+@UseGuards(JwtAuthGuard)
 export class FolderController {
     constructor(private readonly folderService: FolderService) {}
 

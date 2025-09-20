@@ -85,6 +85,10 @@ import {
 } from "./migration/1000000000000-createprojecttable";
 import {ProjectModule} from "./project/project.module";
 import {ProjectEntity} from "./entity/project/project.entity";
+import {UserEntity} from "./entity/user/user.entity";
+import {UserModule} from "./user/user.module";
+import {Createusertable1758131756563} from "./migration/1758131756563-createusertable";
+import {AuthModule} from "./auth/auth.module";
 
 
 @Module({
@@ -122,7 +126,8 @@ import {ProjectEntity} from "./entity/project/project.entity";
                 LaunchStepResultStatusEntity,
                 TestPlanSortEntity,
                 LaunchSortEntity,
-                ProjectEntity
+                ProjectEntity,
+                UserEntity
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -147,12 +152,15 @@ import {ProjectEntity} from "./entity/project/project.entity";
                 Createandseedlaunchstepresultstatustable1755359226260,
                 Createandseedtestplansorttable1755949229323,
                 Createandseedlaunchsorttable1755950273207,
-                Createprojecttable1000000000000
+                Createprojecttable1000000000000,
+                Createusertable1758131756563
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        AuthModule,
+        UserModule,
         ProjectModule,
         LaunchSortModule,
         TestPlanSortModule,

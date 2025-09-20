@@ -1,18 +1,30 @@
 <template>
+  <ProfilePreview v-if="auth.isAuth"/>
   <section class="main-page container">
-    <ProjectList/>
+    <template v-if="auth.isAuth">
+      <ProjectList/>
+    </template>
+
+    <AuthFormModal v-else/>
   </section>
 </template>
 
 <script>
-
-
 import ProjectList from "@/components/Project/ProjectList.vue";
+import AuthFormModal from "@/components/Auth/AuthFormModal.vue";
+import {useAuthStore} from "@/stores/auth";
+import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
 
 export default {
-  components: {ProjectList}
-}
+  components: {ProfilePreview, AuthFormModal, ProjectList },
+  setup() {
+    const auth = useAuthStore();
+    auth.loadUserFromToken();
+    return { auth };
+  },
+};
 </script>
+
 
 <style scoped>
 .main-page {

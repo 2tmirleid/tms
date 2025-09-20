@@ -1,8 +1,10 @@
-import {Controller, Get} from "@nestjs/common";
+import {Controller, Get, UseGuards} from "@nestjs/common";
 import {FolderContextOptionService} from "./folder.context.option.service";
 import {ApiOperation} from "@nestjs/swagger";
+import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 
 @Controller('/folder/option')
+@UseGuards(JwtAuthGuard)
 export class FolderContextOptionController {
     constructor(private readonly folderContextOptionService: FolderContextOptionService) {}
 

@@ -35,6 +35,16 @@ async function start() {
         .setTitle('TMS API v2')
         .setDescription('TMS REST API docs.')
         .setVersion('2.0')
+        .addBearerAuth(
+            {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                name: 'Authorization',
+                in: 'header',
+            },
+            'JWT-auth',
+        )
         .build();
 
     const document = SwaggerModule.createDocument(app, config);

@@ -28,6 +28,5 @@ export class UserEntity {
     username?: string | null;
 
     @OneToOne(() => LaunchResultCommentEntity, comment => comment.user)
-    @JoinColumn({ name: 'launch_result_comment_id' })
     launch_result_comment: LaunchResultCommentEntity;
 }

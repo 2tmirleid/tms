@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 /*
  * Миграция, создающая таблицу launch_result_comment
  */
-export class Createlaunchresultcommenttable1758457478053 implements MigrationInterface {
+export class Createlaunchresultcommenttable1758464507820 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS launch_result_comment (

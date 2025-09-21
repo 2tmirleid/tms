@@ -3,43 +3,43 @@ import {BaseMethods} from "@/api/baseMethods.js";
 
 export class ScenarioMethods extends BaseMethods {
     getScenariosList(projectID) {
-        return axios.get(`${this.BASE_URI}/scenario?projectID=${projectID}`);
+        return this.instance.get(`${this.BASE_URI}/scenario?projectID=${projectID}`);
     }
 
     getScenarioByID(id) {
-        return axios.get(`${this.BASE_URI}/scenario/${id}`);
+        return this.instance.get(`${this.BASE_URI}/scenario/${id}`);
     }
 
     async createScenario(projectID, body) {
-        await axios.post(`${this.BASE_URI}/scenario?projectID=${projectID}`, body);
+        return await this.instance.post(`${this.BASE_URI}/scenario?projectID=${projectID}`, body);
     }
 
     async updateScenario(id, body) {
-        await axios.patch(`${this.BASE_URI}/scenario/${id}`, body);
+        return await this.instance.patch(`${this.BASE_URI}/scenario/${id}`, body);
     }
 
     async deleteScenario(id) {
-        await axios.delete(`${this.BASE_URI}/scenario/${id}`)
+        return await this.instance.delete(`${this.BASE_URI}/scenario/${id}`)
     }
 
     async deleteStep(id) {
-        await axios.delete(`${this.BASE_URI}/scenario/step/${id}`);
+        return await this.instance.delete(`${this.BASE_URI}/scenario/step/${id}`);
     }
 
     async deleteTag(id) {
-        await axios.delete(`${this.BASE_URI}/scenario/tag/${id}`);
+        return await this.instance.delete(`${this.BASE_URI}/scenario/tag/${id}`);
     }
 
     async deleteAttachment(id) {
-        await axios.delete(`${this.BASE_URI}/scenario/attachment/${id}`);
+        return await this.instance.delete(`${this.BASE_URI}/scenario/attachment/${id}`);
     }
 
     async searchScenario(body) {
-        return await axios.post(`${this.BASE_URI}/scenario/search`, body);
+        return await this.instance.post(`${this.BASE_URI}/scenario/search`, body);
     }
 
     async importScenario(projectID, formData) {
-        return await axios.post(`${this.BASE_URI}/scenario/import?projectID=${projectID}`, formData, {
+        return await this.instance.post(`${this.BASE_URI}/scenario/import?projectID=${projectID}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
@@ -47,7 +47,7 @@ export class ScenarioMethods extends BaseMethods {
     }
 
     async uploadAttachment(id, formData) {
-        return await axios.post(`${this.BASE_URI}/scenario/attachment/${id}`, formData, {
+        return await this.instance.post(`${this.BASE_URI}/scenario/attachment/${id}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }

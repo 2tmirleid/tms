@@ -87,11 +87,11 @@ import {ProjectModule} from "./project/project.module";
 import {ProjectEntity} from "./entity/project/project.entity";
 import {UserEntity} from "./entity/user/user.entity";
 import {UserModule} from "./user/user.module";
-import {Createusertable1758131756563} from "./migration/1758131756563-createusertable";
 import {AuthModule} from "./auth/auth.module";
-import {Createlaunchresultcommenttable1758457478053} from "./migration/1758457478053-createlaunchresultcommenttable";
 import {LaunchResultCommentEntity} from "./entity/launch/result/launch.result.comment.entity";
 import {LaunchResultCommentModule} from "./launch/result/comment/launch.result.comment.module";
+import {Createuserstable1758464212342} from "./migration/1758464212342-createuserstable";
+import {Createlaunchresultcommenttable1758464507820} from "./migration/1758464507820-createlaunchresultcommenttable";
 
 
 @Module({
@@ -157,8 +157,8 @@ import {LaunchResultCommentModule} from "./launch/result/comment/launch.result.c
                 Createandseedtestplansorttable1755949229323,
                 Createandseedlaunchsorttable1755950273207,
                 Createprojecttable1000000000000,
-                Createusertable1758131756563,
-                Createlaunchresultcommenttable1758457478053
+                Createuserstable1758464212342,
+                Createlaunchresultcommenttable1758464507820
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',

@@ -21,7 +21,6 @@ export class LaunchResultService {
         const result = this.launchResultRepository.create({
             launch: {id: dto.launchId} as LaunchEntity,
             scenario: {id: dto.scenarioId} as ScenarioEntity,
-            comment: dto.comment,
         });
 
         result.status = await this.launchResultStatusService.getStatus(1);
@@ -33,11 +32,6 @@ export class LaunchResultService {
         const result = await this.launchResultRepository.findOne({where: {id}});
         if (!result) {
             throw new NotFoundException(`LaunchResult with id ${id} not found`);
-        }
-
-        if (dto.comment !== undefined) {
-            result.comment = dto.comment;
-            result.updatedAt = new Date();
         }
 
         if (dto.statusId !== undefined) {

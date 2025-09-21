@@ -3,7 +3,7 @@
     <div
         class="avatar"
         v-if="!fullView"
-        @click="fullView = true"
+        @click="activateFullView"
     >
       <span v-if="userEmail">{{ userEmail.charAt(0).toUpperCase() }}</span>
     </div>
@@ -11,7 +11,11 @@
     <div
         class="full-view"
         v-else
-        @click="fullView = false"
+        tabindex="0"
+        ref="full-view"
+        @click="deactivateFullView"
+        @blur="deactivateFullView"
+        @keyup.esc="deactivateFullView"
     >
       <div class="wrapper">
         <span v-if="userEmail">{{ userEmail }}</span>
@@ -41,6 +45,17 @@ export default {
   methods: {
     logout() {
       this.storage.logout();
+    },
+    activateFullView() {
+      this.fullView = true;
+
+      this.showDropdown = true;
+      this.$nextTick(() => {
+        this.$refs["full-view"].focus();
+      });
+    },
+    deactivateFullView() {
+      this.fullView = false;
     }
   },
   mounted() {
@@ -87,6 +102,7 @@ export default {
   padding-left: 5px;
   padding-right: 5px;
   align-items: center;
+  outline: none;
 }
 
 .wrapper {

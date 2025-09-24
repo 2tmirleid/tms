@@ -164,6 +164,7 @@ import {Createlaunchresultcommenttable1758464507820} from "./migration/175846450
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        LaunchResultStatusModule,
         LaunchResultCommentModule,
         AuthModule,
         UserModule,
@@ -172,7 +173,6 @@ import {Createlaunchresultcommenttable1758464507820} from "./migration/175846450
         TestPlanSortModule,
         TestPlanContextOptionModule,
         LaunchStepResultStatusModule,
-        LaunchResultStatusModule,
         LaunchResultModule,
         LaunchStepResultModule,
         LaunchStatusModule,

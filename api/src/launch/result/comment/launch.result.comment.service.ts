@@ -5,19 +5,22 @@ import {Repository} from "typeorm";
 import {CreateLaunchResultCommentDto} from "../../../dto/launch/result/comment/create.launch.result.comment.dto";
 import {LaunchResultService} from "../launch.result.service";
 import {UpdateLaunchResultCommentDto} from "../../../dto/launch/result/comment/update.launch.result.comment.dto";
+import {UserService} from "../../../user/user.service";
 
 @Injectable()
 export class LaunchResultCommentService {
     constructor(
         @InjectRepository(LaunchResultCommentEntity)
         private readonly launchResultCommentRepository: Repository<LaunchResultCommentEntity>,
-        private readonly launchResultService: LaunchResultService
+        private readonly launchResultService: LaunchResultService,
+        private readonly userService: UserService
     ) {}
 
     async createComment(launchResultID: number, dto: CreateLaunchResultCommentDto) {
         try {
             const comment = this.launchResultCommentRepository.create(dto);
             comment.launch_result = await this.launchResultService.getResult(launchResultID);
+            comment.user = await this.userService.getUser(dto.user_id);
 
             return await this.launchResultCommentRepository.save(comment);
         } catch (error) {
@@ -29,24 +32,35 @@ export class LaunchResultCommentService {
     }
 
     async getComments(launchResultID: number) {
-        return await this.launchResultCommentRepository.find({
-            where: { launch_result: { id: launchResultID } },
-            relations: ['user', 'launch_result']
-        });
+        return await this.launchResultCommentRepository
+            .createQueryBuilder('comment')
+            .leftJoinAndSelect('comment.launch_result', 'launch_result')
+            .leftJoin('comment.user', 'user')
+            .addSelect(['user.email', 'user.id'])
+            .where('launch_result.id = :id', { id: launchResultID })
+            .getMany();
     }
 
+
     async getComment(id: number) {
-        const comment = await this.launchResultCommentRepository.findOne({
-            where: {id: id},
-            relations: ['user', 'launch_result']
-        });
+        const comment = await this.launchResultCommentRepository
+            .createQueryBuilder('comment')
+            .leftJoinAndSelect('comment.launch_result', 'launch_result')
+            .leftJoin('comment.user', 'user')
+            .addSelect(['user.email'])
+            .where('comment.id = :id', { id })
+            .getOne();
 
         if (!comment) {
-            throw new HttpException(`Comment with id ${id} not found`, HttpStatus.NOT_FOUND);
+            throw new HttpException(
+                `Comment with id ${id} not found`,
+                HttpStatus.NOT_FOUND,
+            );
         }
 
         return comment;
     }
+
 
     async updateComment(id: number, dto: UpdateLaunchResultCommentDto) {
         try {

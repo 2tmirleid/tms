@@ -21,6 +21,7 @@
           <div class="import">
             <ImportScenarioMenu
               @refresh-scenarios-list="$emit('refresh-scenarios-list')"
+              :projectID="projectID"
             />
           </div>
         </div>
@@ -48,8 +49,11 @@ export default {
   data() {
     return {
       scenarioMethods: new ScenarioMethods(),
-      scenario: ''
+      scenario: '',
     }
+  },
+  props: {
+    projectID: String | Number,
   },
   methods: {
     async handleSort(type) {

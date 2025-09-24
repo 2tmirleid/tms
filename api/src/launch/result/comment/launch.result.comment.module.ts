@@ -4,6 +4,7 @@ import {LaunchResultCommentEntity} from "../../../entity/launch/result/launch.re
 import {LaunchResultCommentService} from "./launch.result.comment.service";
 import {LaunchResultCommentController} from "./launch.result.comment.controller";
 import {LaunchResultModule} from "../launch.result.module";
+import {UserModule} from "../../../user/user.module";
 
 @Module({
     imports: [
@@ -11,6 +12,7 @@ import {LaunchResultModule} from "../launch.result.module";
             LaunchResultCommentEntity
         ]),
         LaunchResultModule,
+        UserModule,
     ],
     controllers: [LaunchResultCommentController],
     providers: [LaunchResultCommentService],

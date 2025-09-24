@@ -41,7 +41,7 @@ import {LaunchResultMethods} from "@/api/launchResultMethods.js";
 import LaunchScenarioViewerHeader from "@/components/Launch/Viewer/LaunchScenarioViewerHeader.vue";
 import LaunchScenarioViewerSidebar from "@/components/Launch/Viewer/LaunchScenarioViewerSidebar.vue";
 import ScenarioField from "@/components/Launch/Viewer/ScenarioField.vue";
-import LaunchScenarioRunner from "@/components/Launch/Viewer/LaunchScenarioRunner.vue";
+import LaunchScenarioRunner from "@/components/Launch/Viewer/Runner/LaunchScenarioRunner.vue";
 import {LaunchStepResultMethods} from "@/api/launchStepResultMethods.js";
 
 export default {

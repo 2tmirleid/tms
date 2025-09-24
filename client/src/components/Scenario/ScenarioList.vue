@@ -8,6 +8,7 @@
         @refresh-scenarios-list="refreshScenarios"
         @found-scenario="handleFoundScenario"
         @scenario-sorted="handleSortScenario"
+        :projectID="projectID"
     />
 
     <div class="scenarios-wrapper">

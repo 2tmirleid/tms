@@ -3,22 +3,22 @@ import axios from "axios";
 
 export class TestPlanMethods extends BaseMethods {
     async getTestPlans(projectID) {
-        return await axios.get(`${this.BASE_URI}/test-plan?projectID=${projectID}`);
+        return await this.instance.get(`${this.BASE_URI}/test-plan?projectID=${projectID}`);
     }
 
     async createTestPlan(projectID, body) {
-        return await axios.post(`${this.BASE_URI}/test-plan?projectID=${projectID}`, body);
+        return await this.instance.post(`${this.BASE_URI}/test-plan?projectID=${projectID}`, body);
     }
 
     async updateTestPlan(id, body) {
-        return await axios.patch(`${this.BASE_URI}/test-plan/${id}`, body);
+        return await this.instance.patch(`${this.BASE_URI}/test-plan/${id}`, body);
     }
 
     async deleteTestPlan(id) {
-        return await axios.delete(`${this.BASE_URI}/test-plan/${id}`);
+        return await this.instance.delete(`${this.BASE_URI}/test-plan/${id}`);
     }
 
     async searchTestPlan(body) {
-        return await axios.post(`${this.BASE_URI}/test-plan/search`, body);
+        return await this.instance.post(`${this.BASE_URI}/test-plan/search`, body);
     }
 }

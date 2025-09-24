@@ -3,6 +3,6 @@ import axios from "axios";
 
 export class PageMethods extends BaseMethods {
     async getPages() {
-        return axios.get(`${this.BASE_URI}/page`);
+        return await this.instance.get(`${this.BASE_URI}/page`);
     }
 }

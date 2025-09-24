@@ -42,6 +42,10 @@
         </tbody>
       </table>
     </div>
+
+    <LaunchScenarioRunnerComment
+      :resultID="launchResult.id"
+    />
   </div>
 </template>
 
@@ -51,10 +55,12 @@ import DeleteButton from "@/components/UI/Btn/DeleteButton.vue";
 import StepContextMenuButton from "@/components/UI/Btn/StepContextMenuButton.vue";
 import StepContextMenu from "@/components/Scenario/StepContextMenu.vue";
 import {LaunchStepResultMethods} from "@/api/launchStepResultMethods.js";
+import LaunchScenarioRunnerComment from "@/components/Launch/Viewer/Runner/LaunchScenarioRunnerComment.vue";
 
 export default {
   inject: ["showAlert"],
   components: {
+    LaunchScenarioRunnerComment,
     StepContextMenu,
     StepContextMenuButton,
     DeleteButton,

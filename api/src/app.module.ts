@@ -87,8 +87,11 @@ import {ProjectModule} from "./project/project.module";
 import {ProjectEntity} from "./entity/project/project.entity";
 import {UserEntity} from "./entity/user/user.entity";
 import {UserModule} from "./user/user.module";
-import {Createusertable1758131756563} from "./migration/1758131756563-createusertable";
 import {AuthModule} from "./auth/auth.module";
+import {LaunchResultCommentEntity} from "./entity/launch/result/launch.result.comment.entity";
+import {LaunchResultCommentModule} from "./launch/result/comment/launch.result.comment.module";
+import {Createuserstable1758464212342} from "./migration/1758464212342-createuserstable";
+import {Createlaunchresultcommenttable1758464507820} from "./migration/1758464507820-createlaunchresultcommenttable";
 
 
 @Module({
@@ -127,7 +130,8 @@ import {AuthModule} from "./auth/auth.module";
                 TestPlanSortEntity,
                 LaunchSortEntity,
                 ProjectEntity,
-                UserEntity
+                UserEntity,
+                LaunchResultCommentEntity,
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -153,12 +157,15 @@ import {AuthModule} from "./auth/auth.module";
                 Createandseedtestplansorttable1755949229323,
                 Createandseedlaunchsorttable1755950273207,
                 Createprojecttable1000000000000,
-                Createusertable1758131756563
+                Createuserstable1758464212342,
+                Createlaunchresultcommenttable1758464507820
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        LaunchResultStatusModule,
+        LaunchResultCommentModule,
         AuthModule,
         UserModule,
         ProjectModule,
@@ -166,7 +173,6 @@ import {AuthModule} from "./auth/auth.module";
         TestPlanSortModule,
         TestPlanContextOptionModule,
         LaunchStepResultStatusModule,
-        LaunchResultStatusModule,
         LaunchResultModule,
         LaunchStepResultModule,
         LaunchStatusModule,

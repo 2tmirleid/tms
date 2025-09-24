@@ -3,10 +3,10 @@ import axios from "axios";
 
 export class ProjectMethods extends BaseMethods {
     async getProjects() {
-        return await axios.get(`${this.BASE_URI}/project`);
+        return await this.instance.get(`${this.BASE_URI}/project`);
     }
 
     async createProject(body) {
-        return await axios.post(`${this.BASE_URI}/project`, body);
+        return await this.instance.post(`${this.BASE_URI}/project`, body);
     }
 }

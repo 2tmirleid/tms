@@ -3,6 +3,6 @@ import axios from "axios";
 
 export class TestPlanContextOptionMethods extends BaseMethods {
     async getOptions() {
-        return await axios.get(`${this.BASE_URI}/test-plan/option`);
+        return await this.instance.get(`${this.BASE_URI}/test-plan/option`);
     }
 }

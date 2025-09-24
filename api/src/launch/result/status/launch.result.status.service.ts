@@ -15,7 +15,7 @@ export class LaunchResultStatusService {
             return await this.launchResultStatusRepository.find();
         } catch (error) {
             throw new HttpException(
-                error,
+                error.message,
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

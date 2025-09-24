@@ -1,6 +1,5 @@
 <template>
   <section class="project-page container">
-    <!-- CREATING PROJECT -->
     <ScenariosPage
       :projectID="projectId"
     />

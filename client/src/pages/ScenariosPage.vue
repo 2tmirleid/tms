@@ -5,6 +5,7 @@ import ScenarioViewer from "@/components/Scenario/Viewer/ScenarioViewer.vue"
 import Sidebar from "@/components/Sidebar.vue";
 import {useRoute, useRouter} from "vue-router";
 import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
+import Header from "@/components/Header/Header.vue";
 
 const selectedScenario = ref(null);
 const scenarioListRef = ref(null);
@@ -45,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ProfilePreview/>
+  <Header/>
   <section class="scenarios-page container">
     <Sidebar/>
 
@@ -70,7 +71,6 @@ onMounted(() => {
 <style scoped>
 .scenarios-page {
   max-width: 100%;
-  padding-top: 48px;
   padding-right: 10px;
   padding-bottom: 10px;
   background-color: #f9fbfb;

@@ -9,4 +9,8 @@ export class ProjectMethods extends BaseMethods {
     async createProject(body) {
         return await this.instance.post(`${this.BASE_URI}/project`, body);
     }
+
+    async getProject(id) {
+        return await this.instance.get(`${this.BASE_URI}/project/${id}`);
+    }
 }

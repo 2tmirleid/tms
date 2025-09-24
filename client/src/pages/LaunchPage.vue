@@ -1,5 +1,5 @@
 <template>
-  <ProfilePreview/>
+  <Header/>
   <section class="launch-page container">
     <Sidebar/>
 
@@ -34,9 +34,10 @@ import LaunchList from "@/components/Launch/LaunchList.vue";
 import LaunchScenarioList from "@/components/Launch/Viewer/LaunchScenarioList.vue";
 import LaunchScenarioViewer from "@/components/Launch/Viewer/LaunchScenarioViewer.vue";
 import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
+import Header from "@/components/Header/Header.vue";
 
 export default {
-  components: {ProfilePreview, LaunchScenarioViewer, LaunchScenarioList, LaunchList, Sidebar},
+  components: {Header, ProfilePreview, LaunchScenarioViewer, LaunchScenarioList, LaunchList, Sidebar},
   data() {
     return {
       viewScenario: false,
@@ -70,7 +71,6 @@ export default {
 <style scoped>
 .launch-page {
   max-width: 100%;
-  padding-top: 48px;
   padding-right: 10px;
   padding-bottom: 10px;
   background-color: #f9fbfb;

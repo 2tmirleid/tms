@@ -72,9 +72,6 @@ export default {
 
 <style scoped>
 .profile-preview {
-  position: absolute;
-  right: 0;
-  padding: 10px;
   font-family: var(--font-primary);
   cursor: pointer;
 }

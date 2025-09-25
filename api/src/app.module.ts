@@ -92,6 +92,9 @@ import {LaunchResultCommentEntity} from "./entity/launch/result/launch.result.co
 import {LaunchResultCommentModule} from "./launch/result/comment/launch.result.comment.module";
 import {Createuserstable1758464212342} from "./migration/1758464212342-createuserstable";
 import {Createlaunchresultcommenttable1758464507820} from "./migration/1758464507820-createlaunchresultcommenttable";
+import {ScenarioCommentEntity} from "./entity/scenario/scenario.comment.entity";
+import {ScenarioCommentModule} from "./scenario/comment/scenario.comment.module";
+import {Createscenariocommenttable1758825152146} from "./migration/1758825152146-createscenariocommenttable";
 
 
 @Module({
@@ -132,6 +135,7 @@ import {Createlaunchresultcommenttable1758464507820} from "./migration/175846450
                 ProjectEntity,
                 UserEntity,
                 LaunchResultCommentEntity,
+                ScenarioCommentEntity
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -158,12 +162,17 @@ import {Createlaunchresultcommenttable1758464507820} from "./migration/175846450
                 Createandseedlaunchsorttable1755950273207,
                 Createprojecttable1000000000000,
                 Createuserstable1758464212342,
-                Createlaunchresultcommenttable1758464507820
+                Createlaunchresultcommenttable1758464507820,
+                Createscenariocommenttable1758825152146
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        ScenarioContextOptionModule,
+        ScenarioStatusModule,
+        ScenarioSortModule,
+        ScenarioCommentModule,
         LaunchResultStatusModule,
         LaunchResultCommentModule,
         AuthModule,
@@ -180,9 +189,6 @@ import {Createlaunchresultcommenttable1758464507820} from "./migration/175846450
         TestPlanModule,
         FolderModule,
         ScenarioAttachmentModule,
-        ScenarioSortModule,
-        ScenarioStatusModule,
-        ScenarioContextOptionModule,
         StepContextOptionModule,
         ScenarioModule,
         PageModule,

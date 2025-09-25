@@ -22,7 +22,7 @@
 
       <EditableField
           :id="localScenario.id"
-          name="precondition" 
+          name="precondition"
           label="Предусловие"
           :value="localScenario.precondition"
           @scenario-updated="handleScenarioUpdated"
@@ -38,6 +38,10 @@
           />
         </div>
       </div>
+
+      <ScenarioComment
+          :scenarioID="localScenario.id"
+      />
     </div>
   </section>
 </template>
@@ -50,9 +54,12 @@ import AddStepButton from "@/components/UI/Btn/AddStepButton.vue";
 import ContextMenu from "@/components/Scenario/ScenarioContextMenu.vue";
 import ScenarioViewerSidebar from "@/components/Scenario/Viewer/ScenarioViewerSidebar.vue";
 import ScenarioViewerHeader from "@/components/Scenario/Viewer/ScenarioViewerHeader.vue";
+import ScenarioComment from "@/components/Scenario/Viewer/ScenarioComment.vue";
 
 export default {
-  components: {ScenarioViewerHeader, ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
+  components: {
+    ScenarioComment,
+    ScenarioViewerHeader, ScenarioViewerSidebar, ContextMenu, AddStepButton, ScenarioEditor, EditableField},
   inject: ["showAlert"],
   props: {
     scenario: {

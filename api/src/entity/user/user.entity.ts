@@ -1,5 +1,6 @@
 import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {LaunchResultCommentEntity} from "../launch/result/launch.result.comment.entity";
+import {ScenarioCommentEntity} from "../scenario/scenario.comment.entity";
 
 @Entity({name: 'users'})
 export class UserEntity {
@@ -29,4 +30,7 @@ export class UserEntity {
 
     @OneToOne(() => LaunchResultCommentEntity, comment => comment.user)
     launch_result_comment: LaunchResultCommentEntity;
+
+    @OneToOne(() => ScenarioCommentEntity, comment => comment.user)
+    scenario_comment: ScenarioCommentEntity;
 }

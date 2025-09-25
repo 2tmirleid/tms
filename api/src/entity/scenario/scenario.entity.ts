@@ -16,6 +16,7 @@ import {ScenarioAttachmentEntity} from "../scenario.attachment.entity";
 import {FolderEntity} from "../folder/folder.entity";
 import {TestPlanEntity} from "../testPlan/test.plan.entity";
 import {ProjectEntity} from "../project/project.entity";
+import {ScenarioCommentEntity} from "./scenario.comment.entity";
 
 
 @Entity({ name: 'scenario' })
@@ -85,6 +86,12 @@ export class ScenarioEntity {
     })
     @JoinColumn({ name: 'project_id' })
     project: ProjectEntity;
+
+    @OneToMany(() => ScenarioCommentEntity, comment => comment.scenario, {
+        eager: true,
+        nullable: true
+    })
+    comment: ScenarioCommentEntity[];
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

@@ -1,5 +1,5 @@
 <template>
-  <ProfilePreview/>
+  <Header/>
   <section class="test-plans-page container">
     <Sidebar/>
 
@@ -13,9 +13,10 @@
 import Sidebar from "@/components/Sidebar.vue";
 import TestPlanList from "@/components/TestPlan/TestPlanList.vue";
 import ProfilePreview from "@/components/Profile/ProfilePreview.vue";
+import Header from "@/components/Header/Header.vue";
 
 export default {
-  components: {ProfilePreview, TestPlanList, Sidebar},
+  components: {Header, ProfilePreview, TestPlanList, Sidebar},
   computed: {
     projectId() {
       return this.$route.params.id
@@ -27,7 +28,6 @@ export default {
 <style scoped>
 .test-plans-page {
   max-width: 100%;
-  padding-top: 48px;
   padding-right: 10px;
   padding-bottom: 10px;
   background-color: #f9fbfb;

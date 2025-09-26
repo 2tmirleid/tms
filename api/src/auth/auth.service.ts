@@ -32,6 +32,7 @@ export class AuthService {
 
     private async generateToken(user: UserEntity) {
         const payload = {
+            id: user.id,
             email: user.email,
         }
 

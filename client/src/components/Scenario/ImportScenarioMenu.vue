@@ -42,6 +42,9 @@ export default {
       importMenu: false,
     }
   },
+  props: {
+    projectID: String | Number,
+  },
   methods: {
     showImportMenu() {
       this.importMenu = true;
@@ -73,7 +76,7 @@ export default {
         const formData = new FormData();
         formData.append("scenario", scenario);
 
-        await this.scenarioMethods.importScenario(formData);
+        await this.scenarioMethods.importScenario(this.projectID, formData);
       } catch (error) {
         console.error(`Error while import scenario: ${error}`);
         this.showAlert('При попытке импортировать сценарий что-то пошло не так...');

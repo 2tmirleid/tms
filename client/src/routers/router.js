@@ -6,6 +6,7 @@ import LaunchPage from "@/pages/LaunchPage.vue";
 import ProjectPage from "@/pages/ProjectPage.vue";
 import LaunchScenarioList from "@/components/Launch/Viewer/LaunchScenarioList.vue";
 import {useAuthStore} from "@/stores/auth.js";
+import StatPage from "@/pages/StatPage.vue";
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
                 path: ':launchID',
                 component: LaunchScenarioList,
                 props: true
+            },
+            {
+                path: ':launchID/stat',
+                component: StatPage,
+                props: true
             }
         ]
     },
@@ -35,7 +41,7 @@ const routes = [
     {
         path: '/project/:id/scenarios',
         component: ProjectPage
-    }
+    },
 ]
 
 const router = createRouter({

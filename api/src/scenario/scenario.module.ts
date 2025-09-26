@@ -32,6 +32,7 @@ import {ProjectModule} from "../project/project.module";
     ],
     providers: [
         ScenarioService
-    ]
+    ],
+    exports: [ScenarioService]
 })
 export class ScenarioModule {}

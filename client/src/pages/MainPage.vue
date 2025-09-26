@@ -1,5 +1,5 @@
 <template>
-  <ProfilePreview v-if="auth.isAuth"/>
+  <ProfilePreview v-if="auth.isAuth" class="profile-absolute"/>
   <section class="main-page container">
     <template v-if="auth.isAuth">
       <ProjectList/>
@@ -40,5 +40,11 @@ export default {
   border-radius: 20px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
   font-family: var(--font-primary);
+}
+
+.profile-absolute {
+  position: absolute;
+  right: 0;
+  padding: 8px;
 }
 </style>

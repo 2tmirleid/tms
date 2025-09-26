@@ -3,6 +3,6 @@ import axios from "axios";
 
 export class SortMethods extends BaseMethods {
     async getSortOptions() {
-        return await axios.get(`${this.BASE_URI}/scenario/sort`);
+        return await this.instance.get(`${this.BASE_URI}/scenario/sort`);
     }
 }

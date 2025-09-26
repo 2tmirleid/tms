@@ -12,6 +12,7 @@ import {ScenarioEntity} from "../../scenario/scenario.entity";
 import {LaunchEntity} from "../launch.entity";
 import {LaunchStepResultEntity} from "./step/launch.step.result.entity";
 import {LaunchResultStatusEntity} from "./launch.result.status.entity";
+import {LaunchResultCommentEntity} from "./launch.result.comment.entity";
 
 @Entity({ name: 'launch_result' })
 export class LaunchResultEntity {
@@ -30,8 +31,12 @@ export class LaunchResultEntity {
     @JoinColumn({ name: 'status_id' })
     status: LaunchResultStatusEntity;
 
-    @Column({ type: 'text', nullable: true })
-    comment: string;
+    @OneToMany(() => LaunchResultCommentEntity, comment => comment.launch_result, {
+        eager: true,
+        nullable: true
+    })
+    @JoinColumn({ name: 'launch_result_comment_id' })
+    comment: LaunchResultCommentEntity[];
 
     @Column({ type: 'timestamp with time zone', name: 'started_at', nullable: true })
     startedAt: Date;

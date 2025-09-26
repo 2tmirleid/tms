@@ -24,7 +24,8 @@ export class Createandseedpagetable1751357192213 implements MigrationInterface {
             VALUES ('Главная', '/', 'Home'),
                    ('Сценарии', 'scenarios', 'Scenario'),
                    ('Тест-планы', 'test-plans', 'TestPlan'),
-                   ('Запуски', 'launches', 'Launch')
+                   ('Запуски', 'launches', 'Launch'),
+                   ('Статистика', 'stats', 'Stat')
         `);
     }
 

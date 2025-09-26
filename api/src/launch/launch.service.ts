@@ -20,8 +20,7 @@ export class LaunchService {
         private readonly testPlanService: TestPlanService,
         private readonly launchStepResultService: LaunchStepResultService,
         private readonly projectService: ProjectService,
-    ) {
-    }
+    ) {}
 
     async createLaunch(projectID: number, dto: CreateLaunchDto) {
         try {

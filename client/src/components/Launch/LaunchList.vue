@@ -14,22 +14,32 @@
           :key="launch.id"
       >
         <div class="launch__header">
-          <span class="id">#{{ launch.id }}</span>
+          <div class="info">
+            <span class="id">#{{ launch.id }}</span>
 
-          <LaunchStatusContextMenu
-              :status="launch.status"
-              :launchID="launch.id"
-              :activeLaunchId="activeLaunchId"
-              @open="activeLaunchId = launch.id"
-              @close="activeLaunchId = null"
-              @launch-updated="refreshLaunches"
-          />
+            <LaunchStatusContextMenu
+                :status="launch.status"
+                :launchID="launch.id"
+                :activeLaunchId="activeLaunchId"
+                @open="activeLaunchId = launch.id"
+                @close="activeLaunchId = null"
+                @launch-updated="refreshLaunches"
+            />
 
-          <span
-              class="title"
-              @click.stop="this.$emit('launch-selected', launch)"
-          >
+            <span
+                class="title"
+                @click.stop="this.$emit('launch-selected', launch)"
+            >
             {{ launch.title }}</span>
+          </div>
+
+          <div class="options">
+            <div class="stat">
+              <router-link :to="`launches/${launch.id}/stat`">
+                <StatButton/>
+              </router-link>
+            </div>
+          </div>
         </div>
 
         <div class="launch__content">
@@ -56,9 +66,10 @@ import {LaunchMethods} from "@/api/launchMethods.js";
 import {LaunchResultMethods} from "@/api/launchResultMethods.js";
 import LaunchListHeader from "@/components/Launch/LaunchListHeader.vue";
 import LaunchStatusContextMenu from "@/components/Launch/LaunchStatusContextMenu.vue";
+import StatButton from "@/components/UI/Btn/StatButton.vue";
 
 export default {
-  components: {LaunchStatusContextMenu, LaunchListHeader},
+  components: {StatButton, LaunchStatusContextMenu, LaunchListHeader},
   inject: ['showAlert'],
   data() {
     return {
@@ -230,7 +241,12 @@ export default {
 }
 
 .launch__header {
+  display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
+}
+
+.launch__header .info {
   padding-bottom: 10px;
   display: flex;
   gap: 15px;

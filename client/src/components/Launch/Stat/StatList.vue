@@ -1,16 +1,21 @@
 <template>
   <section class="stat-list">
     <PercentStat
-      :launchID="launchID"
+        :launchID="launchID"
+    />
+
+    <FailedStat
+        :launchID="launchID"
     />
   </section>
 </template>
 
 <script>
 import PercentStat from "@/components/Launch/Stat/PercentStat.vue";
+import FailedStat from "@/components/Launch/Stat/FailedStat.vue";
 
 export default {
-  components: {PercentStat},
+  components: {FailedStat, PercentStat},
   props: {
     launchID: String | Number
   },
@@ -26,5 +31,7 @@ export default {
   border-radius: 20px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
   font-family: var(--font-primary);
+
+  display: flex;
 }
 </style>

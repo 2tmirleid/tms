@@ -169,6 +169,8 @@ import {Createscenariocommenttable1758825152146} from "./migration/1758825152146
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
+        TestPlanSortModule,
+        TestPlanContextOptionModule,
         ScenarioContextOptionModule,
         ScenarioStatusModule,
         ScenarioSortModule,
@@ -179,8 +181,6 @@ import {Createscenariocommenttable1758825152146} from "./migration/1758825152146
         UserModule,
         ProjectModule,
         LaunchSortModule,
-        TestPlanSortModule,
-        TestPlanContextOptionModule,
         LaunchStepResultStatusModule,
         LaunchResultModule,
         LaunchStepResultModule,

@@ -1,9 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-/*
- * Миграция, создающая временную таблицу test_plan_scenarios
- */
-export class Createtestplanscenariostable1755105236403 implements MigrationInterface {
+export class Createtestplanscenariostable1767650184576 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS test_plan_scenarios

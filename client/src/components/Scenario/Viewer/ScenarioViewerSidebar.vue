@@ -15,6 +15,45 @@
         </div>
       </div>
 
+      <div class="related-tasks field">
+        <h4>Связанные задачи</h4>
+
+        <ul class="tasks">
+          <li
+              class="ticket"
+              v-for="ticket in scenario.related_tickets"
+              :key="ticket.id"
+          >
+            <CloseButton
+                @click="deleteRelatedTicket(ticket.id)"
+            />
+
+            <JiraIcon v-if="ticket.target === 'jira'"/>
+            <a :href="ticket.link">{{ ticket.link.split('/browse/')[1] }}</a>
+          </li>
+
+          <li class="add">
+            <AddButton
+                v-if="!addRelatedTicket"
+                @click="toggleAddRelatedTicket"
+            />
+          </li>
+
+          <li class="related-ticket-add-input">
+            <input
+                v-if="addRelatedTicket"
+                class="new-related-ticket"
+                type="text"
+                placeholder="Ссылка"
+                ref="relatedTicketInput"
+                v-model="newRelatedTicket"
+                @blur="toggleAddRelatedTicket"
+                @keyup.enter="submitRelatedTicket"
+            >
+          </li>
+        </ul>
+      </div>
+
       <div class="tag field">
         <h4>Теги</h4>
 
@@ -102,10 +141,11 @@ import AddIcon from "@/components/UI/Icons/AddIcon.vue";
 import CloseButton from "@/components/UI/Btn/CloseButton.vue";
 import {ScenarioMethods} from "@/api/scenarioMethods.js";
 import AddButton from "@/components/UI/Btn/AddButton.vue";
+import JiraIcon from "@/components/UI/Icons/JiraIcon.vue";
 
 export default {
   inject: ["showAlert"],
-  components: {AddButton, CloseButton, AddIcon},
+  components: {JiraIcon, AddButton, CloseButton, AddIcon},
   data() {
     return {
       localScenario: {},
@@ -113,6 +153,8 @@ export default {
       newTag: '',
       addTag: false,
       addAttachment: false,
+      addRelatedTicket: false,
+      newRelatedTicket: ''
     }
   },
   props: {
@@ -124,6 +166,12 @@ export default {
       this.addTag = !this.addTag;
       this.addTag ? this.$nextTick(() => {
         this.$refs.tagInput.focus();
+      }) : '';
+    },
+    toggleAddRelatedTicket() {
+      this.addRelatedTicket = !this.addRelatedTicket;
+      this.addRelatedTicket ? this.$nextTick(() => {
+        this.$refs.relatedTicketInput.focus();
       }) : '';
     },
     async submitTag() {
@@ -214,6 +262,41 @@ export default {
         this.showAlert('При попытке удалить вложение что-то пошло не так...');
         console.error(`Error while deleting attachment: ${error}`);
       }
+    },
+
+    async submitRelatedTicket() {
+      try {
+        const link = this.newRelatedTicket;
+
+        if (!link.trim()) {
+          this.showAlert("Ссылка не может быть пустой.");
+          return;
+        }
+
+        const body = {
+          link: link
+        };
+
+        await this.scenarioMethods.createRelatedTicket(this.scenario.id, body);
+
+        this.newRelatedTicket = '';
+        this.addRelatedTicket = false;
+
+        this.$emit('scenario-updated', this.scenario.id);
+      } catch (error) {
+        this.showAlert('При попытке создать связанную задачу что-то пошло не так...');
+        console.error(`Error while creating related_ticket: ${error}`);
+      }
+    },
+
+    async deleteRelatedTicket(id) {
+      try {
+        await this.scenarioMethods.deleteRelatedTicket(id);
+        this.$emit('scenario-updated', this.scenario.id);
+      } catch (error) {
+        this.showAlert('При попытке удалить связанную задачу что-то пошло не так...');
+        console.error(`Error while deleting related_ticket: ${error}`);
+      }
     }
   },
   watch: {
@@ -224,6 +307,9 @@ export default {
         this.localScenario = newScenario;
       }
     }
+  },
+  mounted() {
+    console.log(this.scenario)
   }
 }
 </script>
@@ -290,8 +376,6 @@ h4 {
   background-color: #f9f9f9;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-
-
 
 .tags .tag-item {
   font-family: var(--font-primary);
@@ -427,5 +511,70 @@ h4 {
 
 .attachment-add-input {
   margin-top: -15px;
+}
+
+.related-tasks .tasks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .ticket {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    font-family: var(--font-primary);
+    font-size: 12px;
+    padding: 4px;
+    border-radius: 5px;
+    border: 2px solid var(--border-color);
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    a {
+      font-size: 14px;
+    }
+
+    button {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background-color: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+  }
+
+  .add {
+    align-self: flex-start;
+  }
+
+  .ticket:hover button {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .related-ticket-add-input .new-related-ticket {
+    font-family: var(--font-primary);
+    width: 50px;
+    padding: 3px;
+    outline: none;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 }
 </style>

@@ -1,4 +1,4 @@
-import {Module} from "@nestjs/common";
+import {forwardRef, Module} from "@nestjs/common";
 import {ScenarioService} from "./scenario.service";
 import {ScenarioController} from "./scenario.controller";
 import {TypeOrmModule} from "@nestjs/typeorm";
@@ -12,12 +12,14 @@ import {FolderEntity} from "../entity/folder/folder.entity";
 import {TestPlanModule} from "../testPlan/test.plan.module";
 import {ProjectService} from "../project/project.service";
 import {ProjectModule} from "../project/project.module";
+import {ScenarioRelatedTicketModule} from "./relatedTicket/scenario.related.ticket.module";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             ScenarioEntity,
         ]),
+        forwardRef(() => ScenarioRelatedTicketModule),
         ScenarioAttachmentModule,
         ScenarioSortModule,
         ScenarioStepModule,

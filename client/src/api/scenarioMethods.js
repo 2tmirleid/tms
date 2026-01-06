@@ -53,4 +53,12 @@ export class ScenarioMethods extends BaseMethods {
             }
         });
     }
+
+    async createRelatedTicket(id, body) {
+        return await this.instance.post(`${this.BASE_URI}/scenario/related_ticket/${id}`, body);
+    }
+
+    async deleteRelatedTicket(id) {
+        return await this.instance.delete(`${this.BASE_URI}/scenario/related_ticket/${id}`);
+    }
 }

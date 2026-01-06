@@ -11,7 +11,6 @@ import {parseScenarioSteps} from "../utils/parse.scenario.steps";
 import {parseScenarioTags} from "../utils/parse.scenario.tags";
 import {Readable} from "stream";
 import * as csv from "csv-parser";
-import {ScenarioAttachmentEntity} from "../entity/scenario.attachment.entity";
 import {ProjectService} from "../project/project.service";
 
 @Injectable()
@@ -43,6 +42,7 @@ export class ScenarioService {
             return await this.scenarioRepository
                 .createQueryBuilder('scenario')
                 .leftJoinAndSelect('scenario.status', 'status')
+                .leftJoinAndSelect('scenario.related_tickets', 'related_tickets')
                 .leftJoin('test_plan_scenarios', 'tps', 'tps.scenario_id = scenario.id')
                 .addSelect('tps.test_plan_id', 'test_plan_id')
                 .where('scenario.project_id = :projectId', { projectId: projectID })
@@ -71,7 +71,10 @@ export class ScenarioService {
 
     async getScenario(id: number) {
         try {
-            const scenario = await this.scenarioRepository.findOneBy({id});
+            const scenario = await this.scenarioRepository.findOne({
+                where: {id},
+                relations: ['related_tickets']
+            });
 
             if (!scenario) {
                 throw new HttpException(

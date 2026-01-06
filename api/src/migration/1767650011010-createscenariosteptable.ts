@@ -1,9 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-/*
- * Миграция, создающая таблицу scenario_step
- */
-export class Createscenariosteptable1754851125783 implements MigrationInterface {
+export class Createscenariosteptable1767650011010 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             create table if not exists scenario_step

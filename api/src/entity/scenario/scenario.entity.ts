@@ -3,7 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn, ManyToMany,
+    JoinColumn, JoinTable, ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -17,6 +17,7 @@ import {FolderEntity} from "../folder/folder.entity";
 import {TestPlanEntity} from "../testPlan/test.plan.entity";
 import {ProjectEntity} from "../project/project.entity";
 import {ScenarioCommentEntity} from "./scenario.comment.entity";
+import {ScenarioRelatedTicketEntity} from "./scenario.related.ticket.entity";
 
 
 @Entity({ name: 'scenario' })
@@ -92,6 +93,11 @@ export class ScenarioEntity {
         nullable: true
     })
     comment: ScenarioCommentEntity[];
+
+    @OneToMany(() => ScenarioRelatedTicketEntity, related_tickets => related_tickets.scenario, {
+
+    })
+    related_tickets: ScenarioRelatedTicketEntity[];
 
     @CreateDateColumn({
         type: 'timestamp with time zone',

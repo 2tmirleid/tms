@@ -40,17 +40,11 @@ import {
 import {TestPlanModule} from "./testPlan/test.plan.module";
 import {TestPlanEntity} from "./entity/testPlan/test.plan.entity";
 import {Createtestplantable1754826513754} from "./migration/1754826513754-createtestplantable";
-import {Createscenariotable1754851055896} from "./migration/1754851055896-createscenariotable";
-import {Createscenariosteptable1754851125783} from "./migration/1754851125783-createscenariosteptable";
-import {Createscenariotagtable1754851186070} from "./migration/1754851186070-createscenariotagtable";
-import {Createscenarioattachmenttable1754851244187} from "./migration/1754851244187-createscenarioattachmenttable";
 import {TestPlanContextOptionEntity} from "./entity/testPlan/test.plan.context.option.entity";
 import {TestPlanContextOptionModule} from "./testPlan/contextOption/test.plan.context.option.module";
 import {
     Createandseedtestplancontextoptiontable1755021446541
 } from "./migration/1755021446541-createandseedtestplancontextoptiontable";
-import {Createtestplanscenariostable1755105236403} from "./migration/1755105236403-createtestplanscenariostable";
-
 import {LaunchModule} from "./launch/launch.module";
 import {LaunchEntity} from "./entity/launch/launch.entity";
 import {Createandseedlaunchstatustable1755195751060} from "./migration/1755195751060-createandseedlaunchstatustable";
@@ -72,8 +66,6 @@ import {
 import {
     Createandseedlaunchstepresultstatustable1755359226260
 } from "./migration/1755359226260-createandseedlaunchstepresultstatustable";
-import {Createlaunchresulttable1755359311310} from "./migration/1755359311310-createlaunchresulttable";
-import {Createlaunchstepresulttable1755359434140} from "./migration/1755359434140-createlaunchstepresulttable";
 import {TestPlanSortEntity} from "./entity/testPlan/test.plan.sort.entity";
 import {TestPlanSortModule} from "./testPlan/sort/test.plan.sort.module";
 import {Createandseedtestplansorttable1755949229323} from "./migration/1755949229323-createandseedtestplansorttable";
@@ -91,10 +83,22 @@ import {AuthModule} from "./auth/auth.module";
 import {LaunchResultCommentEntity} from "./entity/launch/result/launch.result.comment.entity";
 import {LaunchResultCommentModule} from "./launch/result/comment/launch.result.comment.module";
 import {Createuserstable1758464212342} from "./migration/1758464212342-createuserstable";
-import {Createlaunchresultcommenttable1758464507820} from "./migration/1758464507820-createlaunchresultcommenttable";
 import {ScenarioCommentEntity} from "./entity/scenario/scenario.comment.entity";
 import {ScenarioCommentModule} from "./scenario/comment/scenario.comment.module";
-import {Createscenariocommenttable1758825152146} from "./migration/1758825152146-createscenariocommenttable";
+import {ScenarioRelatedTicketEntity} from "./entity/scenario/scenario.related.ticket.entity";
+import {Createscenariotable1767649949671} from "./migration/1767649949671-createscenariotable";
+import {Createscenariosteptable1767650011010} from "./migration/1767650011010-createscenariosteptable";
+import {Createscenariotagtable1767650059319} from "./migration/1767650059319-createscenariotagtable";
+import {Createscenarioattachmenttable1767650107985} from "./migration/1767650107985-createscenarioattachmenttable";
+import {Createtestplanscenariostable1767650184576} from "./migration/1767650184576-createtestplanscenariostable";
+import {Createlaunchresulttable1767650251214} from "./migration/1767650251214-createlaunchresulttable";
+import {Createlaunchstepresulttable1767650309907} from "./migration/1767650309907-createlaunchstepresulttable";
+import {Createlaunchresultcommenttable1767650363657} from "./migration/1767650363657-createlaunchresultcommenttable";
+import {Createscenariocommenttable1767650412602} from "./migration/1767650412602-createscenariocommenttable";
+import {ScenarioRelatedTicketModule} from "./scenario/relatedTicket/scenario.related.ticket.module";
+import {
+    Createscenariorelatedticketstable1767694629844
+} from "./migration/1767694629844-createscenariorelatedticketstable";
 
 
 @Module({
@@ -135,7 +139,8 @@ import {Createscenariocommenttable1758825152146} from "./migration/1758825152146
                 ProjectEntity,
                 UserEntity,
                 LaunchResultCommentEntity,
-                ScenarioCommentEntity
+                ScenarioCommentEntity,
+                ScenarioRelatedTicketEntity
             ],
             migrations: [
                 Createfoldertable1754147102806,
@@ -145,41 +150,43 @@ import {Createscenariocommenttable1758825152146} from "./migration/1758825152146
                 Createandseedpagetable1751357192213,
                 Createandseedscenariosorttable1751542148667,
                 Createandseedfoldercontextoptiontable1754055334376,
-                Createscenariotable1754851055896,
-                Createscenariosteptable1754851125783,
-                Createscenariotagtable1754851186070,
-                Createscenarioattachmenttable1754851244187,
+                Createscenariotable1767649949671,
+                Createscenariosteptable1767650011010,
+                Createscenariotagtable1767650059319,
+                Createscenarioattachmenttable1767650107985,
                 Createtestplantable1754826513754,
                 Createandseedtestplancontextoptiontable1755021446541,
-                Createtestplanscenariostable1755105236403,
+                Createtestplanscenariostable1767650184576,
                 Createlaunchtable1755352949379,
                 Createandseedlaunchstatustable1755195751060,
-                Createlaunchresulttable1755359311310,
-                Createlaunchstepresulttable1755359434140,
+                Createlaunchresulttable1767650251214,
+                Createlaunchstepresulttable1767650309907,
                 Createandseedlaunchresultstatustable1755359080451,
                 Createandseedlaunchstepresultstatustable1755359226260,
                 Createandseedtestplansorttable1755949229323,
                 Createandseedlaunchsorttable1755950273207,
                 Createprojecttable1000000000000,
                 Createuserstable1758464212342,
-                Createlaunchresultcommenttable1758464507820,
-                Createscenariocommenttable1758825152146
+                Createlaunchresultcommenttable1767650363657,
+                Createscenariocommenttable1767650412602,
+                Createscenariorelatedticketstable1767694629844,
             ],
             migrationsRun: process.env.IS_PROD === 'true',
             synchronize: process.env.IS_PROD === 'false',
             logging: true
         }),
-        TestPlanSortModule,
-        TestPlanContextOptionModule,
         ScenarioContextOptionModule,
         ScenarioStatusModule,
         ScenarioSortModule,
         ScenarioCommentModule,
+        ScenarioRelatedTicketModule,
+        ProjectModule,
+        TestPlanSortModule,
+        TestPlanContextOptionModule,
         LaunchResultStatusModule,
         LaunchResultCommentModule,
         AuthModule,
         UserModule,
-        ProjectModule,
         LaunchSortModule,
         LaunchStepResultStatusModule,
         LaunchResultModule,

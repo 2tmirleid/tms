@@ -1,9 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-/*
- * Миграция, создающая таблицу launch_result
- */
-export class Createlaunchresulttable1755359311310 implements MigrationInterface {
+export class Createlaunchresulttable1767650251214 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS launch_result
